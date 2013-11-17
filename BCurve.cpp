@@ -59,16 +59,3 @@ Vector3 BCurve::getTangent(GLfloat t)
   temp[5] = cp[3].scale(3 * t * t);
   return (temp[0] + temp[1] + temp[2] + temp[3] + temp[4] + temp[5]);
 }
-
-BCurve BCurve::rotateY(GLfloat angle)
-{
-  Vector3 tempCP[4];
-  Matrix4 r = Matrix4::rotateY(angle);
-  for (int i = 0; i < 4; i++)
-  {
-    Vector4 tempV = Vector4(cp[i][0], cp[i][1], cp[i][2], 1);
-    tempV = r * tempV;
-    tempCP[i] = Vector3(tempV[0], tempV[1], tempV[2]);
-  }
-  return BCurve(tempCP[0], tempCP[1], tempCP[2], tempCP[3]);
-}
