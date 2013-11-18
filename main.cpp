@@ -22,18 +22,21 @@ void displayCallback(void);
 Track * track = new Track();
 
 //just the DEFAULT track shape, no objects
+//add params later to make more flexible, or different control pts, etc.
+// currently 5 x 10 track, multiply values to get bigger track
+// currently, track spans the x,y plane, eventually span x,z plane?
 void makeTrack() {
   track->addCurve(new BCurve(Vector3(-2.5f, 2.5f, 0.0f),
-                    Vector3(-2.5f, 5.0f , 0.0f),
-                    Vector3(2.5f, 5.0f, 0.0f),
+                    Vector3(-2.5f, 6.5f , 0.0f),
+                    Vector3(2.5f, 6.5f, 0.0f),
                     Vector3(2.5f, 2.5f, 0.0f)));
   track->addCurve(new BCurve(Vector3(2.5f, 2.5f, 0.0f),
                     Vector3(2.5f, 0.83f , 0.0f),
                     Vector3(2.5f, -0.83f, 0.0f),
                     Vector3(2.5f, -2.5f, 0.0f)));
   track->addCurve(new BCurve(Vector3(2.5f, -2.5f, 0.0f),
-                    Vector3(2.5f, -5.0f , 0.0f),
-                    Vector3(-2.5f, -5.0f, 0.0f),
+                    Vector3(2.5f, -6.5f , 0.0f),
+                    Vector3(-2.5f, -6.5f, 0.0f),
                     Vector3(-2.5f, -2.5f, 0.0f)));
   track->addCurve(new BCurve(Vector3(-2.5f, -2.5f, 0.0f),
                     Vector3(-2.5f, -0.83f , 0.0f),
@@ -64,8 +67,10 @@ void displayCallback(void)
   glMatrixMode(GL_MODELVIEW);
   //glLoadMatrixd();
 
+  glDisable(GL_LIGHTING);
   track->drawPoints(); 
   track->drawCurves();
+  glEnable(GL_LIGHTING);
  
   glFlush();
   glutSwapBuffers();
