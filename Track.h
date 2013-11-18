@@ -19,6 +19,7 @@ public:
   Track();
   void addCurve(BCurve*);
   void drawCurves();
+  void drawPoints();
 };
 
 #endif /* defined(__cse167kart__Track__) */

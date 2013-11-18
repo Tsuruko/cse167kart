@@ -27,3 +27,16 @@ void Track::drawCurves() {
   }
   glEnd();
 }
+
+void Track::drawPoints() {
+  glPointSize(10);
+  glColor3f(0, 0, 1);
+
+  for (int i = 0; i < curves.size(); i++) {
+    for (GLfloat j = 0; j < 4; j += 0.01) {
+      glVertex3fv(curves[i]->getCPointer(j));
+    }
+  }
+  glEnd();
+
+}
