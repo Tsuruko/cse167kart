@@ -15,11 +15,11 @@
 
 class BCurve {
 private:
-  Vector3 cp[4];
+  Vector3 *cp[4];
   
 public:
   BCurve();
-  BCurve(Vector3, Vector3, Vector3, Vector3);
+  BCurve(Vector3*, Vector3*, Vector3*, Vector3*);
   Vector3 getPoint(GLfloat);
   Vector3 getTangent(GLfloat);
   GLfloat* getCPointer(int);
