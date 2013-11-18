@@ -55,7 +55,6 @@ void Track::drawTrack() {
 	glVertex3f(temp4[1]+(curves[i]->getPoint(j))[0], 
 		   -temp4[0]+(curves[i]->getPoint(j))[1],
 		   curves[i]->getPoint(j)[2]);
-
     }
   }
   glEnd();
