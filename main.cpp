@@ -32,25 +32,25 @@ Track * track = new Track();
 // currently 5 x 13 track, multiply values to get bigger track
 // currently, track spans the x,y plane, eventually span x,z plane?
 void makeTrack() {
-  Vector3 * start = new Vector3(-2.5f, 2.5f, 0.0f);
-  Vector3 * middle1 = new Vector3(2.5f, 2.5f, 0.0f);
+  Vector3 * start = new Vector3(-2.5f, 0.0f, 2.5f);
+  Vector3 * middle1 = new Vector3(2.5f, 0.0f, 2.5f);
   track->addCurve(new BCurve(start,
-             	    new Vector3(-2.5f, 6.5f , 0.0f),
-                    new Vector3(2.5f, 6.5f, 0.0f),
+             	    new Vector3(-2.5f, 0.0f, 6.5f ),
+                    new Vector3(2.5f, 0.0f, 6.5f),
 		    middle1));
-  Vector3 * middle2 = new Vector3(2.5f, -2.5f, 0.0f);
+  Vector3 * middle2 = new Vector3(2.5f, 0.0f, -2.5f);
   track->addCurve(new BCurve(middle1,
-                    new Vector3(2.5f, 0.83f , 0.0f),
-                    new Vector3(2.5f, -0.83f, 0.0f),
+                    new Vector3(2.5f, 0.0f, 0.83f ),
+                    new Vector3(2.5f, 0.0f, -0.83f),
 		    middle2));
-  Vector3 * end = new Vector3(-2.5f, -2.5f, 0.0f);
+  Vector3 * end = new Vector3(-2.5f, 0.0f, -2.5f);
   track->addCurve(new BCurve(middle2,
-                    new Vector3(2.5f, -6.5f , 0.0f),
-                    new Vector3(-2.5f, -6.5f, 0.0f),
+                    new Vector3(2.5f, 0.0f, -6.5f ),
+                    new Vector3(-2.5f, 0.0f, -6.5f),
 		    end));
   track->addCurve(new BCurve(end,
-                    new Vector3(-2.5f, -0.83f , 0.0f),
-                    new Vector3(-2.5f, 0.83f, 0.0f),
+                    new Vector3(-2.5f,  0.0f, -0.83f ),
+                    new Vector3(-2.5f,  0.0f, 0.83f),
 		    start));
 }
 

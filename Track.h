@@ -21,6 +21,7 @@ public:
   void addCurve(BCurve*);
   void drawCurves();
   void drawPoints();
+  void drawTrack();
 };
 
 #endif /* defined(__cse167kart__Track__) */
