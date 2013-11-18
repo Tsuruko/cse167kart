@@ -12,6 +12,12 @@
 
 using namespace std;
 
+Matrix4 world;
+Matrix4 mouse;  //for trackball rotating
+//trackball capability
+int clickx, clicky = 0;
+bool lrb = true;
+
 int width  = 512;   // set window width in pixels here
 int height = 512;   // set window height in pixels here
 
@@ -46,6 +52,8 @@ void makeTrack() {
 
 void idleCallback(void)
 {
+  world.identity();
+  world = world * mouse;
   displayCallback();  // call display routine to re-draw cube
 }
 
@@ -65,7 +73,7 @@ void displayCallback(void)
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
   glMatrixMode(GL_MODELVIEW);
-  //glLoadMatrixd();
+  glLoadMatrixf(world.getPointer());
 
   glDisable(GL_LIGHTING);
   track->drawPoints(); 
@@ -74,6 +82,33 @@ void displayCallback(void)
  
   glFlush();
   glutSwapBuffers();
+}
+
+void mouseButton(int button, int state, int x, int y) {
+  if (button == GLUT_LEFT_BUTTON) {
+    lrb = true;
+  } else if (button == GLUT_RIGHT_BUTTON) {
+    lrb = false;
+  }
+  clickx = x;
+  clicky = y;
+}
+
+void mouseMotion(int x, int y) {
+  mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);
+  mouse.print();
+
+/*
+  if (lrb) mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);
+  else  {
+  //currently doesn't work with this type of matrix/vector setup
+    Vector4 s;
+    if (clicky > y) s.set(1.1, 1.1, 1.1, 1);
+    else if (clicky < y) s.set(.9, .9, .9, 1);
+    else s.set(1,1,1,1);
+    mouse.scale(s);
+  }
+*/
 }
 
 int main(int argc, char *argv[])
@@ -110,7 +145,13 @@ int main(int argc, char *argv[])
   glutDisplayFunc(displayCallback);
   glutReshapeFunc(reshapeCallback);
   glutIdleFunc(idleCallback);
- 
+
+  //process mouse press and motion
+  glutMouseFunc(mouseButton);
+  glutMotionFunc(mouseMotion);
+
+  world.identity();
+  mouse.identity(); 
   makeTrack(); 
  
   glutMainLoop();

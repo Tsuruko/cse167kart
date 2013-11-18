@@ -5,6 +5,7 @@
 //  Created by Nick Troast on 11/12/13.
 //  Copyright (c) 2013 Nick Troast. All rights reserved.
 //
+//  Trackball rotation function added.  rotate() did not work corretly.  fixed
 
 #include <iostream>
 #include <iomanip>
@@ -119,7 +120,27 @@ Matrix4 Matrix4::scale(GLfloat x, GLfloat y, GLfloat z)
 
 Matrix4 Matrix4::rotate(GLfloat angle, Vector3 &u)
 {
-	return Matrix4(1 + (1 - cos(angle)) * ((u[0] * u[0]) - 1),
+  double t1 = (1 - cos(angle));
+    
+  return Matrix4 (
+		 GLfloat(cos(angle) + (pow(u[0],2)*t1)), 
+		 GLfloat((u[0] * u[1] * t1) - (u[2] * sin(angle))),
+		 GLfloat((u[0] * u[2] * t1) + (u[1] * sin(angle))),
+		 GLfloat(0.0),
+		 GLfloat((u[1] * u[0] * t1) + (u[2] * sin(angle))),
+		 GLfloat(cos(angle) + (pow(u[1], 2) * t1)),
+		 GLfloat((u[1] * u[2] * t1) - (u[0] * sin(angle))),
+		 GLfloat(0.0),
+		 GLfloat((u[2] * u[0] * t1) - (u[1] * sin(angle))),
+		 GLfloat((u[2] * u[1] * t1) + (u[0] * sin(angle))),
+		 GLfloat(cos(angle) + (pow(u[2], 2) * t1)),
+		 GLfloat(0.0),
+		 GLfloat(0.0),
+		 GLfloat(0.0),
+                 GLfloat(0.0),
+		 GLfloat(1.0) );
+/*
+    return Matrix4(1 + (1 - cos(angle)) * ((u[0] * u[0]) - 1),
                  -u[2] * sin(angle) + (1 - cos(angle)) * u[0] * u[1],
                  u[1] * sin(angle) + (1 - cos(angle)) * u[0] * u[2], 0.0,
                  u[2] * sin(angle) + (1 - cos(angle)) * u[1] * u[0],
@@ -129,6 +150,7 @@ Matrix4 Matrix4::rotate(GLfloat angle, Vector3 &u)
                  u[0] * sin(angle) + (1 - cos(angle)) * u[2] * u[1],
                  1 + (1 - cos(angle)) * ((u[2] * u[2]) - 1), 0.0,
                  0.0, 0.0, 0.0, 1.0);
+*/
 }
 
 Matrix4 Matrix4::rotateY(GLfloat angle)
@@ -138,6 +160,44 @@ Matrix4 Matrix4::rotateY(GLfloat angle)
                  0, 1, 0, 0,
                  -sin(angle), 0, cos(angle), 0,
                  0, 0, 0, 1);
+}
+
+Matrix4 Matrix4::trackballRotation(int width, int height, int fromX, int fromY, int toX, int toY)
+{
+  const float TRACKBALL_SIZE = 1.3f; // virtual trackball size (empirical value)
+  //Matrix4 mInv;                    // inverse of ObjectView matrix
+  GLfloat arr1[3], arr2[3];
+
+  float smallSize;              // smaller window size between width and height
+  float halfWidth, halfHeight;                    // half window sizes
+  GLfloat angle;                                   // rotational angle
+  GLfloat d;                                        // distance
+
+  // Compute mouse coordinates in window and normalized to -1..1
+  // ((0,0)=window center, (-1,-1) = bottom left, (1,1) = top right)
+  halfWidth   = (float)width  / 2.0f;
+  halfHeight  = (float)height / 2.0f;
+  smallSize   = (halfWidth < halfHeight) ? halfWidth : halfHeight;
+  arr1[0]       = ((float)fromX - halfWidth)  / smallSize;
+  arr1[1]      = ((float)(height-fromY) - halfHeight) / smallSize;
+  arr2[0]       = ((float)toX   - halfWidth)  / smallSize;
+  arr2[1]       = ((float)(height-toY)   - halfHeight) / smallSize;
+
+  // Compute z-coordinates on Gaussian trackball:
+  d       = sqrtf(arr1[0] * arr1[0] + arr1[1] * arr1[1]);
+  arr1[2]   = expf(-TRACKBALL_SIZE * d * d);
+  d       = sqrtf(arr2[0] * arr2[0] + arr2[1] * arr2[1]);
+  arr2[2]   = expf(-TRACKBALL_SIZE * d * d);
+
+  Vector3 v1 = Vector3(arr1[0], arr1[1], arr1[2]);
+  Vector3 v2 = Vector3(arr2[0], arr2[1], arr2[2]);
+    // Compute rotational angle:
+    angle = v1.angle(v2);                   // angle = angle between v1 and v2
+    // Compute rotational axis:
+  v2.cross(v1);
+  v2.normalize();
+  // Perform acutal model view matrix modification:
+  return rotate(-angle, v2);      // rotate model view matrix
 }
 
 void Matrix4::print()
