@@ -80,7 +80,7 @@ void displayCallback(void)
   glLoadMatrixf(world.getPointer());
 
   glDisable(GL_LIGHTING);
-  track->drawPoints(); 
+  //track->drawPoints(); 
   track->drawCurves();
   glEnable(GL_LIGHTING);
  
