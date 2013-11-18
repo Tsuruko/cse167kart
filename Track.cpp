@@ -28,18 +28,7 @@ void Track::drawCurves() {
     }
   }
   glEnd();
-/*
-  glBegin(GL_LINE_STRIP);
-  for (int i = 0; i < curves.size(); i++) {
-    for (GLfloat j = 0; j <= 1; j += stacks) {
-      glVertex3f(1.3*curves[i]->getPoint(j)[0], 1.3*curves[i]->getPoint(j)[1],
-                        1.3*curves[i]->getPoint(j)[2]);
-    }
-  }
-  glEnd();
-*/
 }
-
 
 void Track::drawPoints() {
   glPointSize(10);
@@ -54,12 +43,20 @@ void Track::drawPoints() {
 }
 
 void Track::drawTrack() {
-  //glBegin(??)
+  glColor3f(1,1,1);
+  glBegin(GL_QUAD_STRIP);
   for (int i = 0; i < curves.size(); i++) {
-    for (GLfloat j = 0; j <=1; j+= stacks) {
-   //   glVertex3f();
-   //   glNormal3f();
+    for (GLfloat j = 0; j <= 1+stacks; j += stacks) {
+      Vector3 temp4((curves[i]->getTangent(j)));
+        temp4.normalize();
+	glVertex3f(-temp4[1]+(curves[i]->getPoint(j))[0], 
+		   temp4[0]+(curves[i]->getPoint(j))[1], 
+		   curves[i]->getPoint(j)[2]);
+	glVertex3f(temp4[1]+(curves[i]->getPoint(j))[0], 
+		   -temp4[0]+(curves[i]->getPoint(j))[1],
+		   curves[i]->getPoint(j)[2]);
+
     }
   }
-  //glEnd();
+  glEnd();
 }
