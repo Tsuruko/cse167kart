@@ -28,7 +28,7 @@ void makeTrack() {
                     Vector3(2.5f, 5.0f, 0.0f),
                     Vector3(2.5f, 2.5f, 0.0f)));
   track->addCurve(new BCurve(Vector3(2.5f, 2.5f, 0.0f),
-                    Vector3(1.0f, 0.83f , 0.0f),
+                    Vector3(2.5f, 0.83f , 0.0f),
                     Vector3(2.5f, -0.83f, 0.0f),
                     Vector3(2.5f, -2.5f, 0.0f)));
   track->addCurve(new BCurve(Vector3(2.5f, -2.5f, 0.0f),
