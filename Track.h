@@ -17,6 +17,7 @@ private:
   std::vector<BCurve> curves;
 public:
   Track();
+  void addCurve(BCurve);
 };
 
 #endif /* defined(__cse167kart__Track__) */

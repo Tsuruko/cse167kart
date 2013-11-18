@@ -10,5 +10,8 @@
 
 Track::Track()
 {
-  
+}
+
+void Track::addCurve(BCurve c) {
+  curves.push_back(c);
 }

@@ -7,6 +7,7 @@
 #include <GL/glut.h>
 #endif
 #include "Matrix4.h"
+#include "Track.h"
 
 using namespace std;
 
@@ -16,6 +17,19 @@ int height = 512;   // set window height in pixels here
 void idleCallback(void);
 void reshapeCallback(int, int);
 void displayCallback(void);
+
+Track track;
+
+BCurve *curve1 = new BCurve(Vector3(3.0f, 3.0f, 0.0f),
+                    Vector3(2.0f, 2.0f , 0.0f),
+                    Vector3(3.0f, 1.0f, 0.0f),
+                    Vector3(2.0f, 0.0f, 0.0f));
+
+BCurve *curve2 = new BCurve(Vector3(2.0f, 0.0f, 0.0f),
+                    Vector3(1.0f, -1.0f , 0.0f),
+                    Vector3(0.1f, -2.0f, 0.0f),
+                    Vector3(2.0f, -3.0f, 0.0f));
+
 
 //----------------------------------------------------------------------------
 // Callback method called when system is idle.
