@@ -14,10 +14,11 @@
 class Track
 {
 private:
-  std::vector<BCurve> curves;
+  std::vector<BCurve*> curves;
 public:
   Track();
-  void addCurve(BCurve);
+  void addCurve(BCurve*);
+  void drawCurves();
 };
 
 #endif /* defined(__cse167kart__Track__) */

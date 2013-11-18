@@ -19,23 +19,26 @@ void idleCallback(void);
 void reshapeCallback(int, int);
 void displayCallback(void);
 
-Track track;
-
-BCurve *c1 = new BCurve(Vector3(3.0f, 3.0f, 0.0f),
-                    Vector3(2.0f, 2.0f , 0.0f),
-                    Vector3(3.0f, 1.0f, 0.0f),
-                    Vector3(2.0f, 0.0f, 0.0f));
-
-track.addCurve(*c1);
-
-c1 = new BCurve(Vector3(2.0f, 0.0f, 0.0f),
-                    Vector3(1.0f, -1.0f , 0.0f),
-                    Vector3(0.1f, -2.0f, 0.0f),
-                    Vector3(2.0f, -3.0f, 0.0f));
-track.addCurve(*c1);
+Track * track = new Track();
 
 //just the DEFAULT track shape, no objects
-void drawTrackCurve() {
+void makeTrack() {
+  track->addCurve(new BCurve(Vector3(-2.5f, 2.5f, 0.0f),
+                    Vector3(-2.5f, 5.0f , 0.0f),
+                    Vector3(2.5f, 5.0f, 0.0f),
+                    Vector3(2.5f, 2.5f, 0.0f)));
+  track->addCurve(new BCurve(Vector3(2.5f, 2.5f, 0.0f),
+                    Vector3(1.0f, 0.83f , 0.0f),
+                    Vector3(2.5f, -0.83f, 0.0f),
+                    Vector3(2.5f, -2.5f, 0.0f)));
+  track->addCurve(new BCurve(Vector3(2.5f, -2.5f, 0.0f),
+                    Vector3(2.5f, -5.0f , 0.0f),
+                    Vector3(-2.5f, -5.0f, 0.0f),
+                    Vector3(-2.5f, -2.5f, 0.0f)));
+  track->addCurve(new BCurve(Vector3(-2.5f, -2.5f, 0.0f),
+                    Vector3(-2.5f, -0.83f , 0.0f),
+                    Vector3(-2.5f, 0.83f, 0.0f),
+                    Vector3(-2.5f, 2.5f, 0.0f)));
 }
 
 void idleCallback(void)
@@ -60,7 +63,9 @@ void displayCallback(void)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
   glMatrixMode(GL_MODELVIEW);
   //glLoadMatrixd();
-  
+ 
+  track->drawCurves();
+ 
   glFlush();
   glutSwapBuffers();
 }
@@ -99,7 +104,9 @@ int main(int argc, char *argv[])
   glutDisplayFunc(displayCallback);
   glutReshapeFunc(reshapeCallback);
   glutIdleFunc(idleCallback);
-  
+ 
+  makeTrack(); 
+ 
   glutMainLoop();
   return 0;
 }
