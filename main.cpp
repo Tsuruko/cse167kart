@@ -8,6 +8,7 @@
 #endif
 #include "Matrix4.h"
 #include "Track.h"
+#include "BCurve.h"
 
 using namespace std;
 
@@ -20,26 +21,28 @@ void displayCallback(void);
 
 Track track;
 
-BCurve *curve1 = new BCurve(Vector3(3.0f, 3.0f, 0.0f),
+BCurve *c1 = new BCurve(Vector3(3.0f, 3.0f, 0.0f),
                     Vector3(2.0f, 2.0f , 0.0f),
                     Vector3(3.0f, 1.0f, 0.0f),
                     Vector3(2.0f, 0.0f, 0.0f));
 
-BCurve *curve2 = new BCurve(Vector3(2.0f, 0.0f, 0.0f),
+track.addCurve(*c1);
+
+c1 = new BCurve(Vector3(2.0f, 0.0f, 0.0f),
                     Vector3(1.0f, -1.0f , 0.0f),
                     Vector3(0.1f, -2.0f, 0.0f),
                     Vector3(2.0f, -3.0f, 0.0f));
+track.addCurve(*c1);
 
+//just the DEFAULT track shape, no objects
+void drawTrackCurve() {
+}
 
-//----------------------------------------------------------------------------
-// Callback method called when system is idle.
 void idleCallback(void)
 {
   displayCallback();  // call display routine to re-draw cube
 }
 
-//----------------------------------------------------------------------------
-// Callback method called when window is resized.
 void reshapeCallback(int w, int h)
 {
   width = w;
@@ -52,61 +55,11 @@ void reshapeCallback(int w, int h)
   glMatrixMode(GL_MODELVIEW);
 }
 
-//----------------------------------------------------------------------------
-// Callback method called when window readraw is necessary or
-// when glutPostRedisplay() was called.
 void displayCallback(void)
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
   glMatrixMode(GL_MODELVIEW);
   //glLoadMatrixd();
-  
-  // Draw sides of cube in object coordinate system:
-  glBegin(GL_QUADS);
-  glColor3f(0.0, 1.0, 0.0);
-  
-  // Draw front face:
-  glNormal3f(0.0, 0.0, 1.0);
-  glVertex3f(-5.0,  5.0,  5.0);
-  glVertex3f( 5.0,  5.0,  5.0);
-  glVertex3f( 5.0, -5.0,  5.0);
-  glVertex3f(-5.0, -5.0,  5.0);
-  
-  // Draw left side:
-  glNormal3f(-1.0, 0.0, 0.0);
-  glVertex3f(-5.0,  5.0,  5.0);
-  glVertex3f(-5.0,  5.0, -5.0);
-  glVertex3f(-5.0, -5.0, -5.0);
-  glVertex3f(-5.0, -5.0,  5.0);
-  
-  // Draw right side:
-  glNormal3f(1.0, 0.0, 0.0);
-  glVertex3f( 5.0,  5.0,  5.0);
-  glVertex3f( 5.0,  5.0, -5.0);
-  glVertex3f( 5.0, -5.0, -5.0);
-  glVertex3f( 5.0, -5.0,  5.0);
-  
-  // Draw back face:
-  glNormal3f(0.0, 0.0, -1.0);
-  glVertex3f(-5.0,  5.0, -5.0);
-  glVertex3f( 5.0,  5.0, -5.0);
-  glVertex3f( 5.0, -5.0, -5.0);
-  glVertex3f(-5.0, -5.0, -5.0);
-  
-  // Draw top side:
-  glNormal3f(0.0, 1.0, 0.0);
-  glVertex3f(-5.0,  5.0,  5.0);
-  glVertex3f( 5.0,  5.0,  5.0);
-  glVertex3f( 5.0,  5.0, -5.0);
-  glVertex3f(-5.0,  5.0, -5.0);
-  
-  // Draw bottom side:
-  glNormal3f(0.0, -1.0, 0.0);
-  glVertex3f(-5.0, -5.0, -5.0);
-  glVertex3f( 5.0, -5.0, -5.0);
-  glVertex3f( 5.0, -5.0,  5.0);
-  glVertex3f(-5.0, -5.0,  5.0);
-  glEnd();
   
   glFlush();
   glutSwapBuffers();
