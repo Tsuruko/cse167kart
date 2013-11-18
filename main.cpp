@@ -29,7 +29,7 @@ Track * track = new Track();
 
 //just the DEFAULT track shape, no objects
 //add params later to make more flexible, or different control pts, etc.
-// currently 5 x 10 track, multiply values to get bigger track
+// currently 5 x 13 track, multiply values to get bigger track
 // currently, track spans the x,y plane, eventually span x,z plane?
 void makeTrack() {
   track->addCurve(new BCurve(Vector3(-2.5f, 2.5f, 0.0f),
@@ -96,7 +96,6 @@ void mouseButton(int button, int state, int x, int y) {
 
 void mouseMotion(int x, int y) {
   mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);
-  mouse.print();
 
 /*
   if (lrb) mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);

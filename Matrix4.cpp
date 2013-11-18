@@ -165,7 +165,6 @@ Matrix4 Matrix4::rotateY(GLfloat angle)
 Matrix4 Matrix4::trackballRotation(int width, int height, int fromX, int fromY, int toX, int toY)
 {
   const float TRACKBALL_SIZE = 1.3f; // virtual trackball size (empirical value)
-  //Matrix4 mInv;                    // inverse of ObjectView matrix
   GLfloat arr1[3], arr2[3];
 
   float smallSize;              // smaller window size between width and height
@@ -191,9 +190,9 @@ Matrix4 Matrix4::trackballRotation(int width, int height, int fromX, int fromY, 
 
   Vector3 v1 = Vector3(arr1[0], arr1[1], arr1[2]);
   Vector3 v2 = Vector3(arr2[0], arr2[1], arr2[2]);
-    // Compute rotational angle:
+  // Compute rotational angle:
     angle = v1.angle(v2);                   // angle = angle between v1 and v2
-    // Compute rotational axis:
+  // Compute rotational axis:
   v2.cross(v1);
   v2.normalize();
   // Perform acutal model view matrix modification:
