@@ -16,6 +16,7 @@ class Track
 private:
   std::vector<BCurve*> curves;
   GLfloat stacks;
+  GLfloat width;
 public:
   Track();
   void addCurve(BCurve*);
