@@ -12,11 +12,17 @@
 
 using namespace std;
 
-Matrix4 world;
+Matrix4 model;
+Matrix4 trackSize;
+Matrix4 translate;
 Matrix4 mouse;  //for trackball rotating
 //trackball capability
 int clickx, clicky = 0;
 bool lrb = true;
+
+//track size and position adjustment constants
+const float trackRot = 1.5;
+const float trackScale = 2.0;
 
 int width  = 512;   // set window width in pixels here
 int height = 512;   // set window height in pixels here
@@ -56,8 +62,10 @@ void makeTrack() {
 
 void idleCallback(void)
 {
-  world.identity();
-  world = world * mouse;
+  model.identity();
+  model.rotateX(trackRot);
+  model = model * trackSize;
+  model = model * mouse;
   displayCallback();  // call display routine to re-draw cube
 }
 
@@ -77,7 +85,10 @@ void displayCallback(void)
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
   glMatrixMode(GL_MODELVIEW);
-  glLoadMatrixf(world.getPointer());
+  glLoadMatrixf(model.getPointer());
+
+  //gluLookAt( e1, e2, e3, c1, c2, c3, u1, u2, u3);
+  //gluLookAt(0, 0, -5, 0, 0, 0, 1, 1, 1);
 
   //track->drawPoints(); 
   track->drawCurves();
@@ -85,6 +96,28 @@ void displayCallback(void)
  
   glFlush();
   glutSwapBuffers();
+}
+
+
+void processKeys (unsigned char key, int x, int y) {
+    if (key == 'r') {
+      mouse.identity();
+  }
+}
+
+void processSpecialKeys(int key, int x, int y) {
+  switch(key) {
+    case GLUT_KEY_UP:
+      break;
+    case GLUT_KEY_DOWN:
+      break;
+    case GLUT_KEY_LEFT:
+      break;
+    case GLUT_KEY_RIGHT:
+      break;
+    default:
+      break;
+  }
 }
 
 void mouseButton(int button, int state, int x, int y) {
@@ -152,8 +185,17 @@ int main(int argc, char *argv[])
   glutMouseFunc(mouseButton);
   glutMotionFunc(mouseMotion);
 
-  world.identity();
+  //process keystrokes
+  glutKeyboardFunc(processKeys);
+  glutSpecialFunc(processSpecialKeys);
+
+  //initialize matrices
+  model.identity();
+  model.rotateX(trackRot);
+  translate.identity();
   mouse.identity(); 
+  trackSize.identity();
+  trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack(); 
  
   glutMainLoop();

@@ -50,6 +50,7 @@ public:
   static Matrix4 scale(GLfloat, GLfloat, GLfloat);
   static Matrix4 rotate(GLfloat, Vector3&);
   static Matrix4 rotateY(GLfloat);
+  void rotateX(GLfloat);
   Matrix4 trackballRotation(int, int, int, int, int, int);
   void print();
 };

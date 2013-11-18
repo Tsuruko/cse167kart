@@ -162,6 +162,26 @@ Matrix4 Matrix4::rotateY(GLfloat angle)
                  0, 0, 0, 1);
 }
 
+void Matrix4::rotateX(GLfloat angle) {
+
+	m[0][0] = m[0][0]*1;;
+	m[0][1] = 0.0;
+	m[0][2] = 0.0;
+	m[0][3] = 0.0;
+	m[1][0] = 0.0;
+	m[1][1] = cos(angle);
+	m[1][2] = -sin(angle);
+	m[1][3] = 0.0;
+	m[2][0] = 0.0;
+	m[2][1] = sin(angle);
+	m[2][2] = cos(angle);
+	m[2][3] = 0.0;
+	m[3][0] = 0.0;
+	m[3][1] = 0.0;
+	m[3][2] = 0.0;
+	m[3][3] = 1.0;
+}
+
 Matrix4 Matrix4::trackballRotation(int width, int height, int fromX, int fromY, int toX, int toY)
 {
   const float TRACKBALL_SIZE = 1.3f; // virtual trackball size (empirical value)
