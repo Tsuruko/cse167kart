@@ -79,11 +79,9 @@ void displayCallback(void)
   glMatrixMode(GL_MODELVIEW);
   glLoadMatrixf(world.getPointer());
 
-  glDisable(GL_LIGHTING);
   //track->drawPoints(); 
   track->drawCurves();
   track->drawTrack();
-  glEnable(GL_LIGHTING);
  
   glFlush();
   glutSwapBuffers();
@@ -119,7 +117,7 @@ int main(int argc, char *argv[])
 {
   float specular[]  = {1.0, 1.0, 1.0, 1.0};
   float shininess[] = {100.0};
-  float position[]  = {0.0, 10.0, 1.0, 0.0};	// lightsource position
+  float position[]  = {0.0, 0.0, -1.0, 0.0};	// lightsource position
   
   glutInit(&argc, argv);      	      	      // initialize GLUT
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);   // open an OpenGL context with double buffering, RGB colors, and depth buffering

@@ -49,9 +49,11 @@ void Track::drawTrack() {
     for (GLfloat j = 0; j <= 1+stacks; j += stacks) {
       Vector3 temp4((curves[i]->getTangent(j)));
         temp4.normalize();
+      glNormal3f(0, 0, -1);
 	glVertex3f(-temp4[1]+(curves[i]->getPoint(j))[0], 
 		   temp4[0]+(curves[i]->getPoint(j))[1], 
 		   curves[i]->getPoint(j)[2]);
+      glNormal3f(0, 0, -1);
 	glVertex3f(temp4[1]+(curves[i]->getPoint(j))[0], 
 		   -temp4[0]+(curves[i]->getPoint(j))[1],
 		   curves[i]->getPoint(j)[2]);
