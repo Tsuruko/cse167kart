@@ -5,6 +5,8 @@
 //  Created by Nick Troast on 11/17/13.
 //  Copyright (c) 2013 Nick Troast. All rights reserved.
 //
+//  Co-Authors Monica Liu, Andrew Lin
+//
 
 #include "Track.h"
 
