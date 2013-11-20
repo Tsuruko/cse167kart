@@ -1,3 +1,10 @@
+//
+//  main.cpp
+//  cse167kart
+//
+//  Nick Troast, Monica Liu, Andrew Lin
+//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>

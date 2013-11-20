@@ -2,10 +2,8 @@
 //  Matrix4.cpp
 //  cse167p6
 //
-//  Created by Nick Troast on 11/12/13.
-//  Copyright (c) 2013 Nick Troast. All rights reserved.
+//  Nick Troast, Monica Liu, Andrew Lin
 //
-//  Trackball rotation function added.  rotate() did not work corretly.  fixed
 
 #include <iostream>
 #include <iomanip>

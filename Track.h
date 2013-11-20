@@ -2,10 +2,7 @@
 //  Track.h
 //  cse167kart
 //
-//  Created by Nick Troast on 11/17/13.
-//  Copyright (c) 2013 Nick Troast. All rights reserved.
-//
-//  Co-Authors Monica Liu, Andrew Lin
+//  Nick Troast, Monica Liu, Andrew Lin
 //
 
 #ifndef __cse167kart__Track__

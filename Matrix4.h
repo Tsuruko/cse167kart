@@ -2,8 +2,7 @@
 //  Matrix4.h
 //  cse167p6
 //
-//  Created by Nick Troast on 11/12/13.
-//  Copyright (c) 2013 Nick Troast. All rights reserved.
+//  Nick Troast, Monica Liu, Andrew Lin
 //
 
 #ifndef __cse167p6__Matrix4__
