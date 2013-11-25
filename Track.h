@@ -16,7 +16,9 @@ private:
   std::vector<BCurve*> curves;
   GLfloat stacks;
   GLfloat width;
+  
 public:
+  bool texture;
   Track();
   void addCurve(BCurve*);
   void drawCurves();
