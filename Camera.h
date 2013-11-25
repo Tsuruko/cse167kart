@@ -19,7 +19,15 @@ private:
 public:
   Camera();
   Camera(Vector3, Vector3, Vector3);
-  
+  Vector3& getEye();
+  Vector3& getCenter();
+  Vector3& getUp();
+  void setEye(GLfloat, GLfloat, GLfloat);
+  void setCenter(GLfloat, GLfloat, GLfloat);
+  void setUp(GLfloat, GLfloat, GLfloat);
+  void setEye(Vector3);
+  void setCenter(Vector3);
+  void setUp(Vector3);
 };
 
 #endif /* defined(__cse167p6__Camera__) */

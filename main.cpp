@@ -16,6 +16,7 @@
 #include "Matrix4.h"
 #include "Track.h"
 #include "BCurve.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -28,6 +29,7 @@ int clickx, clicky = 0;
 bool lrb = true;
 //toggle between default perspective and simulation perspective
 bool mode = true;
+Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
 //track size and position adjustment constants
 const float trackRot = 1.5;
@@ -77,7 +79,7 @@ void idleCallback(void)
   if (mode) model.rotateX(trackRot);
   model = model * mouse;
   if (mode) model = model * trackSize;
-  model = model * translate;
+  //model = model * translate;
   displayCallback();  // call display routine to re-draw cube
 }
 
@@ -99,8 +101,9 @@ void displayCallback(void)
   glMatrixMode(GL_MODELVIEW);
   glLoadMatrixf(model.getPointer());
 
-  //gluLookAt( e1, e2, e3, c1, c2, c3, u1, u2, u3);
-  //gluLookAt(0, 0, -5, 0, 0, 0, 1, 1, 1);
+  gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
+            cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
+            cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
 
   //track->drawPoints(); 
   track->drawCurves();
@@ -131,6 +134,8 @@ void processSpecialKeys(int key, int x, int y) {
     case GLUT_KEY_UP:
       trans[2] = trans[2] + 1;
       trans[1] = trans[1] - 1/(trackScale);
+      cam.setCenter(track->getNext(0.4));
+      cam.setEye(track->getNext(0.2));
       break;
     case GLUT_KEY_DOWN:
       trans[2] = trans[2] - 1;
@@ -215,7 +220,7 @@ int main(int argc, char *argv[])
   mouse.identity(); 
   trackSize.identity();
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
-  makeTrack(); 
+  makeTrack();
  
   glutMainLoop();
   return 0;
