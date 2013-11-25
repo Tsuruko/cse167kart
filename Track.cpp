@@ -13,7 +13,7 @@ Track::Track()
   stacks = 0.05;
   width = 0.5;
   t = 0;
-  currentCurve = nullptr;
+  currentCurve = NULL;
 }
 
 void Track::addCurve(BCurve * c) {
@@ -69,7 +69,7 @@ void Track::drawTrack() {
 
 Vector3 Track::getNext(GLfloat step)
 {
-  if (currentCurve == nullptr) {
+  if (currentCurve == NULL) {
     currentCurve = curves[0];
   }
   if (t + step > 1) {

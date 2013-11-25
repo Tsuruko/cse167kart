@@ -16,6 +16,7 @@
 #include "Matrix4.h"
 #include "Track.h"
 #include "BCurve.h"
+#include "Texture.h"
 #include "Camera.h"
 
 using namespace std;
