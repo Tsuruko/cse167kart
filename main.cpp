@@ -31,6 +31,9 @@ bool lrb = true;
 bool mode = true;
 Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
+//toggle texture
+bool texture = false;
+
 //track size and position adjustment constants
 const float trackRot = 1.5;
 const float trackScale = 10.0;
@@ -127,6 +130,17 @@ void processKeys (unsigned char key, int x, int y) {
     if (mode) mode = false;
     else mode = true;
   }
+  if (key == 't') {
+    if (texture){
+		texture = false;
+		glDisable(GL_TEXTURE_2D); 
+		track->texture = false;
+	}else{
+		texture = true;
+		glEnable(GL_TEXTURE_2D); 
+		track->texture = true;
+	}
+  }
 }
 
 void processSpecialKeys(int key, int x, int y) {
@@ -186,7 +200,9 @@ int main(int argc, char *argv[])
   glDisable(GL_CULL_FACE);     // disable backface culling to render both sides of polygons
   glShadeModel(GL_SMOOTH);             	      // set shading to smooth
   glMatrixMode(GL_PROJECTION);
-  
+  glDisable(GL_TEXTURE_2D);						// disable texture
+  track->texture = false;
+
   // Generate material properties:
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
@@ -222,6 +238,8 @@ int main(int argc, char *argv[])
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack();
  
+  loadTexture();
+
   glutMainLoop();
   return 0;
 }

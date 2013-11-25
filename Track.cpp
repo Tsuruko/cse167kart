@@ -52,10 +52,12 @@ void Track::drawTrack() {
       Vector3 temp4((curves[i]->getTangent(j)));
         temp4.normalize();
       temp4 = temp4.scale(width);
+	  if(texture) glTexCoord2f(0, (i)/(curves.size()));
       glNormal3f(0, 0, -1);
 	glVertex3f(-temp4[1]+(curves[i]->getPoint(j))[0], 
 		   temp4[0]+(curves[i]->getPoint(j))[1], 
 		   curves[i]->getPoint(j)[2]);
+	  if(texture) glTexCoord2f(1, (i)/(curves.size()));
       glNormal3f(0, 0, -1);
 	glVertex3f(temp4[1]+(curves[i]->getPoint(j))[0], 
 		   -temp4[0]+(curves[i]->getPoint(j))[1],

@@ -20,6 +20,7 @@ private:
   BCurve* currentCurve; // The curve we are currently on
   
 public:
+  bool texture;
   Track();
   void addCurve(BCurve*);
   void drawCurves();

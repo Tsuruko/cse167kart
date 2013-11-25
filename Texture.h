@@ -101,7 +101,7 @@ void loadTexture()
   unsigned char* tdata;  // texture pixel data
   
   // Load image file
-  tdata = loadPPM("image.ppm", twidth, theight);
+  tdata = loadPPM("road.ppm", twidth, theight);
   if (tdata==NULL) return;
   
   // Create ID for texture
@@ -118,33 +118,20 @@ void loadTexture()
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
+/*
 int main(int argc, char** argv)
 {
   glutInit(&argc, argv);
   
-  /* set the window size to 512 x 512 */
   glutInitWindowSize(512, 512);
   
-  /* set the display mode to Red, Green, Blue and Alpha
-   allocate a depth buffer
-   enable double buffering
-   */
   glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
   
-  /* create the window */
+
   glutCreateWindow("Texturing Example");
-  
-  /* set the glut display callback function
-   this is the function GLUT will call every time
-   the window needs to be drawn
-   */
+
   glutDisplayFunc(display);
-  
-  /* set the glut reshape callback function
-   this is the function GLUT will call whenever
-   the window is resized, including when it is
-   first created
-   */
+
   glutReshapeFunc(reshape);
   
   glutIdleFunc(idle);
@@ -153,13 +140,10 @@ int main(int argc, char** argv)
   
   initGL();
   
-  /* enter the main event loop so that GLUT can process
-   all of the window event messages
-   */
   glutMainLoop();
   
   return 0;
-}
+}*/
 
 /*! glut display callback function.  Every time the window needs to be drawn,
  glut will call this function.  This includes when the window size
