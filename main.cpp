@@ -80,7 +80,7 @@ void makeTrack() {
 void idleCallback(void)
 {
   model.identity();
-  if (mode) model.rotateX(trackRot);
+  //if (mode) model.rotateX(trackRot);
   model = model * mouse;
   if (mode) model = model * trackSize;
   //model = model * translate;
@@ -149,8 +149,8 @@ void processSpecialKeys(int key, int x, int y) {
     case GLUT_KEY_UP:
       trans[2] = trans[2] + 1;
       trans[1] = trans[1] - 1/(trackScale);
-      cam.setCenter(track->getNext(0.4));
-      cam.setEye(track->getNext(0.2));
+      cam.setCenter(track->getNext(0.02));
+      cam.setEye(track->getNext(0.01));
       break;
     case GLUT_KEY_DOWN:
       trans[2] = trans[2] - 1;

@@ -58,7 +58,7 @@ void Camera::setCenter(Vector3 d)
 void Camera::setEye(Vector3 e)
 {
   this->e = e;
-  e[2] = e[2] + 0.1; // Move the eye to the 3rd person
+  e[2] = e[2] + 1; // Move the eye to the 3rd person
 }
 
 void Camera::setUp(Vector3 up)
