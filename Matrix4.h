@@ -12,6 +12,7 @@
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
+#define M_PI 3.1415
 #endif
 
 #include "Vector3.h"
