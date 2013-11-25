@@ -17,7 +17,7 @@ private:
   GLfloat stacks;
   GLfloat width;
   GLfloat t; // Where we are on the curve
-  BCurve* currentCurve; // The curve we are currently on
+  int currentCurve; // The curve we are currently on
   
 public:
   bool texture;
