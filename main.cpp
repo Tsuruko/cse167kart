@@ -137,8 +137,6 @@ void processKeys (unsigned char key, int x, int y) {
 void processSpecialKeys(int key, int x, int y) {
   switch(key) {
     case GLUT_KEY_UP:
-      trans[2] = trans[2] + 1;
-      trans[1] = trans[1] - 1/(trackScale);
       cam.setEye(track->getNext(0.01));
       cam.setCenter(track->getNext(0.01));
       break;
