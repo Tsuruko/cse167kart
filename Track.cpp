@@ -71,7 +71,7 @@ Vector3 Track::getNext(GLfloat step)
 {
 
   if (t + step > 1) {
-    if (currentCurve == 3) {
+    if (currentCurve == curves.size() - 1) {
       currentCurve = 0;
     }
     else
