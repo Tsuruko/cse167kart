@@ -48,16 +48,19 @@ void Track::drawTrack() {
   glColor3f(1,1,1);
   glBegin(GL_QUAD_STRIP);
   for (int i = 0; i < curves.size(); i++) {
+	  int count = 0;
     for (GLfloat j = 0; j <= 1+stacks; j += stacks) {
+		count++;
+		count%=2;
       Vector3 temp4((curves[i]->getTangent(j)));
         temp4.normalize();
       temp4 = temp4.scale(width);
-	  if(texture) glTexCoord2f(0, (j/2));
+	  if(texture) glTexCoord2f(0, (count));
       glNormal3f(0, 0, -1);
 	glVertex3f(-temp4[1]+(curves[i]->getPoint(j))[0], 
 		   temp4[0]+(curves[i]->getPoint(j))[1], 
 		   curves[i]->getPoint(j)[2]);
-	  if(texture) glTexCoord2f(2, (j/2));
+	  if(texture) glTexCoord2f(4, (count));
       glNormal3f(0, 0, -1);
 	glVertex3f(temp4[1]+(curves[i]->getPoint(j))[0], 
 		   -temp4[0]+(curves[i]->getPoint(j))[1],
