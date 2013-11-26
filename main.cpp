@@ -23,7 +23,6 @@ using namespace std;
 
 Matrix4 model;
 Matrix4 trackSize;
-Matrix4 translate;
 Matrix4 mouse;  //for trackball rotating
 //trackball capability
 int clickx, clicky = 0;
@@ -36,9 +35,10 @@ Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,-1));
 bool texture = false;
 
 //track size and position adjustment constants
-const float trackRot = 2.5;
 const float trackScale = 10.0;
 const float transRatio = -2.5;
+
+Track * track = new Track();
 
 int width  = 512;   // set window width in pixels here
 int height = 512;   // set window height in pixels here
@@ -46,9 +46,6 @@ int height = 512;   // set window height in pixels here
 void idleCallback(void);
 void reshapeCallback(int, int);
 void displayCallback(void);
-
-Track * track = new Track();
-GLfloat trans[3] = {transRatio * trackScale, 0.0, 0.0};
 
 //just the DEFAULT track shape, no objects
 //add params later to make more flexible, or different control pts, etc.
@@ -80,10 +77,8 @@ void makeTrack() {
 void idleCallback(void)
 {
   model.identity();
-  //if (mode) model.rotateX(trackRot);
   model = model * mouse;
   if (mode) model = model * trackSize;
-  //model = model * translate;
   displayCallback();  // call display routine to re-draw cube
 }
 
@@ -121,11 +116,6 @@ void displayCallback(void)
 void processKeys (unsigned char key, int x, int y) {
   if (key == 'r') {
     mouse.identity();
-    translate.identity();
-    trans[0] = (transRatio * trackScale);
-    trans[1] = trans[2] = 0.0;
-    translate.translate(trans[0], trans[1], trans[2]);
-    translate.transpose();
   }
   if (key == 'd') {
     if (mode) mode = false;
@@ -136,37 +126,31 @@ void processKeys (unsigned char key, int x, int y) {
 		texture = false;
 		glDisable(GL_TEXTURE_2D); 
 		track->texture = false;
-	}else{
+    } else {
 		texture = true;
 		glEnable(GL_TEXTURE_2D); 
 		track->texture = true;
-	}
+    }
   }
 }
 
 void processSpecialKeys(int key, int x, int y) {
   switch(key) {
     case GLUT_KEY_UP:
-      trans[2] = trans[2] + 1;
-      trans[1] = trans[1] - 1/(trackScale);
       cam.setCenter(track->getNext(0.02));
       cam.setEye(track->getNext(0.01));
       break;
     case GLUT_KEY_DOWN:
-      trans[2] = trans[2] - 1;
-      trans[1] = trans[1] + 1/(trackScale);
       break;
     case GLUT_KEY_LEFT:
-      trans[0] = trans[0] + 1;
+      //camera x + 1;
       break;
     case GLUT_KEY_RIGHT:
-      trans[0] = trans[0] - 1;
+      //camera x - 1;
       break;
     default:
       break;
   }
-  translate = Matrix4::translate(trans[0], trans[1], trans[2]);
-  translate.transpose();
 }
 
 void mouseButton(int button, int state, int x, int y) {
@@ -230,10 +214,6 @@ int main(int argc, char *argv[])
 
   //initialize matrices
   model.identity();
-  if (mode) model.rotateX(trackRot);
-  translate.identity();
-  translate = Matrix4::translate(trans[0], trans[1], trans[2]);
-  translate.transpose();
   mouse.identity(); 
   trackSize.identity();
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
