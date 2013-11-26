@@ -47,25 +47,31 @@ void Track::drawPoints() {
 void Track::drawTrack() {
   glColor3f(1,1,1);
   glBegin(GL_QUAD_STRIP);
+  if(texture){
+	  glEnable(GL_TEXTURE_2D); 
+  }
   for (int i = 0; i < curves.size(); i++) {
-	  int count = 0;
+	  int texHeight = 0;
     for (GLfloat j = 0; j <= 1+stacks; j += stacks) {
-		count++;
-		count%=2;
+	  texHeight++;
+	  texHeight%=2;
       Vector3 temp4((curves[i]->getTangent(j)));
         temp4.normalize();
       temp4 = temp4.scale(width);
-	  if(texture) glTexCoord2f(0, (count));
+	  if(texture) glTexCoord2f(0, (texHeight));
       glNormal3f(0, 0, -1);
 	glVertex3f(-temp4[1]+(curves[i]->getPoint(j))[0], 
 		   temp4[0]+(curves[i]->getPoint(j))[1], 
 		   curves[i]->getPoint(j)[2]);
-	  if(texture) glTexCoord2f(4, (count));
+	  if(texture) glTexCoord2f(4, (texHeight));
       glNormal3f(0, 0, -1);
 	glVertex3f(temp4[1]+(curves[i]->getPoint(j))[0], 
 		   -temp4[0]+(curves[i]->getPoint(j))[1],
 		   curves[i]->getPoint(j)[2]);
     }
+	if(texture){
+		glDisable(GL_TEXTURE_2D); 
+	}
   }
   glEnd();
 }
@@ -73,9 +79,10 @@ void Track::drawTrack() {
 void Track::drawRoadLines() {
   glColor3f(1,0,0);
   glLineWidth(10.0);
-  glBegin(GL_LINES);
+  glBegin(GL_LINE_STRIP);
   for (int i = 0; i < curves.size(); i++) {
-    for (GLfloat j = 0; j <= 1+stacks; j += stacks) {
+    for (GLfloat j = 0; j <= 1+.02; j += .02) {
+		 glNormal3f(0, 0, -1);
       glVertex3f(curves[i]->getPoint(j)[0], curves[i]->getPoint(j)[1],
                         curves[i]->getPoint(j)[2]);
     }
