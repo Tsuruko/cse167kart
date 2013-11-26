@@ -14,6 +14,7 @@ Track::Track()
   width = 0.5;
   t = 0;
   currentCurve = 0;
+  laneCount = 2;
 }
 
 void Track::addCurve(BCurve * c) {
@@ -55,16 +56,16 @@ void Track::drawTrack() {
 	  
     for (GLfloat j = 0; j <= 1+stacks; j += stacks) {
 	  texHeight++;
-	  if(texHeight>21) texHeight%=20;
+	  if(texHeight>11) texHeight%=10;
       Vector3 temp4((curves[i]->getTangent(j)));
         temp4.normalize();
       temp4 = temp4.scale(width);
-	  if(texture) glTexCoord2f(0, (texHeight/20.0));
+	  if(texture) glTexCoord2f(0, (texHeight/10.0));
       glNormal3f(0, 0, -1);
 	glVertex3f(-temp4[1]+(curves[i]->getPoint(j))[0], 
 		   temp4[0]+(curves[i]->getPoint(j))[1], 
 		   curves[i]->getPoint(j)[2]);
-	  if(texture) glTexCoord2f(1, (texHeight/20.0));
+	  if(texture) glTexCoord2f(laneCount, (texHeight/10.0));
       glNormal3f(0, 0, -1);
 	glVertex3f(temp4[1]+(curves[i]->getPoint(j))[0], 
 		   -temp4[0]+(curves[i]->getPoint(j))[1],

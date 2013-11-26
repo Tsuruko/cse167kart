@@ -18,6 +18,7 @@ private:
   GLfloat width;
   GLfloat t; // Where we are on the curve
   int currentCurve; // The curve we are currently on
+  int laneCount;
   
 public:
   bool texture;
