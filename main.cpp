@@ -29,7 +29,7 @@ int clickx, clicky = 0;
 bool lrb = true;
 //toggle between default perspective and simulation perspective
 bool mode = true;
-Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,-1));
+Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
 //toggle texture
 bool texture = false;
@@ -141,8 +141,8 @@ void processKeys (unsigned char key, int x, int y) {
 void processSpecialKeys(int key, int x, int y) {
   switch(key) {
     case GLUT_KEY_UP:
-      cam.setCenter(track->getNext(0.02));
       cam.setEye(track->getNext(0.01));
+      cam.setCenter(track->getNext(0.01));
       break;
     case GLUT_KEY_DOWN:
       break;
