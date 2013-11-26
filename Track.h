@@ -26,6 +26,7 @@ public:
   void drawCurves();
   void drawPoints();
   void drawTrack();
+  void drawRoadLines();
   Vector3 getNext(GLfloat step);
 };
 

@@ -104,9 +104,13 @@ void displayCallback(void)
             cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
             cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
 
-  //track->drawPoints(); 
-  track->drawCurves();
-  track->drawTrack();
+  if (mode) {
+    track->drawTrack();
+    track->drawRoadLines();
+  } else {
+    track->drawPoints(); 
+    track->drawCurves();
+  }
  
   glFlush();
   glutSwapBuffers();

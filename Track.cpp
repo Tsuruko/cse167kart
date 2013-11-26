@@ -70,6 +70,19 @@ void Track::drawTrack() {
   glEnd();
 }
 
+void Track::drawRoadLines() {
+  glColor3f(1,1,1);
+  glLineWidth(2.0);
+  glBegin(GL_LINES);
+  for (int i = 0; i < curves.size(); i++) {
+    for (GLfloat j = 0; j <= 1+stacks; j += stacks) {
+      glVertex3f(curves[i]->getPoint(j)[0], curves[i]->getPoint(j)[1],
+                        curves[i]->getPoint(j)[2]);
+    }
+  }
+  glEnd();
+}
+
 Vector3 Track::getNext(GLfloat step)
 {
 
