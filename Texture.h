@@ -101,7 +101,7 @@ void loadTexture()
   unsigned char* tdata;  // texture pixel data
   
   // Load image file
-  tdata = loadPPM("road.ppm", twidth, theight);
+  tdata = loadPPM("road2.ppm", twidth, theight);
   if (tdata==NULL) return;
   
   // Create ID for texture
@@ -116,6 +116,9 @@ void loadTexture()
   // Set bi-linear filtering for both minification and magnification
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  // Repeat
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
 
 /*
