@@ -30,13 +30,13 @@ int clickx, clicky = 0;
 bool lrb = true;
 //toggle between default perspective and simulation perspective
 bool mode = true;
-Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
+Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,-1));
 
 //toggle texture
 bool texture = false;
 
 //track size and position adjustment constants
-const float trackRot = 1.5;
+const float trackRot = 2.5;
 const float trackScale = 10.0;
 const float transRatio = -2.5;
 
@@ -56,24 +56,24 @@ GLfloat trans[3] = {transRatio * trackScale, 0.0, 0.0};
 // currently, track spans the x,y plane, eventually span x,z plane?
 void makeTrack() {
   Vector3 * start = new Vector3(-2.5f, 2.5f, 0.0f);
-  Vector3 * middle1 = new Vector3(2.5f, 2.5f, 0.0f);
-  track->addCurve(new BCurve(start,
-             	    new Vector3(-2.5f, 6.5f, 0.0f),
-                    new Vector3(2.5f, 6.5f, 0.0f),
+  Vector3 * middle1 = new Vector3(-2.5f, -2.5f, 0.0f);
+  track->addCurve(new BCurve(start, 
+                    new Vector3(-2.5f,  0.83f, 0.0f),
+                    new Vector3(-2.5f,  -0.83f, 0.0f),
 		    middle1));
   Vector3 * middle2 = new Vector3(2.5f, -2.5f, 0.0f);
   track->addCurve(new BCurve(middle1,
-                    new Vector3(2.5f, 0.83f, 0.0f),
-                    new Vector3(2.5f, -0.83f, 0.0f),
-		    middle2));
-  Vector3 * end = new Vector3(-2.5f, -2.5f, 0.0f);
-  track->addCurve(new BCurve(middle2,
-                    new Vector3(2.5f, -6.5f, 0.0f),
                     new Vector3(-2.5f, -6.5f, 0.0f),
+                    new Vector3(2.5f, -6.5f, 0.0f),
+		    middle2));
+  Vector3 * end = new Vector3(2.5f, 2.5f, 0.0f);
+  track->addCurve(new BCurve(middle2,
+                   new Vector3(2.5f,  -0.83f, 0.0f),
+		   new Vector3(2.5f, 0.83f, 0.0f),
 		    end));
   track->addCurve(new BCurve(end,
-                    new Vector3(-2.5f,  -0.83f, 0.0f),
-                    new Vector3(-2.5f,  0.83f, 0.0f),
+	            new Vector3(2.5f, 6.5f, 0.0f),
+		    new Vector3(-2.5f, 6.5f, 0.0f),
 		    start));
 }
 
