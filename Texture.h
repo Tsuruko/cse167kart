@@ -101,7 +101,7 @@ void loadTexture()
   unsigned char* tdata;  // texture pixel data
   
   // Load image file
-  tdata = loadPPM("road2.ppm", twidth, theight);
+  tdata = loadPPM("road3.ppm", twidth, theight);
   if (tdata==NULL) return;
   
   // Create ID for texture
