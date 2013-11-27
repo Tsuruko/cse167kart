@@ -175,7 +175,6 @@ int main(int argc, char *argv[])
 {
   float specular[]  = {1.0, 1.0, 1.0, 1.0};
   float shininess[] = {100.0};
-  float position[]  = {0.0, 0.0, -1.0, 0.0};	// lightsource position
   
   glutInit(&argc, argv);      	      	      // initialize GLUT
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);   // open an OpenGL context with double buffering, RGB colors, and depth buffering
@@ -199,7 +198,8 @@ int main(int argc, char *argv[])
   glEnable(GL_COLOR_MATERIAL);
   
   // Generate light source:
-  glLightfv(GL_LIGHT0, GL_POSITION, position);
+  float ambLight0[4] = {0.4f, 0.4f, 0.4f, 1.0f};
+  glLightfv(GL_LIGHT0, GL_AMBIENT, ambLight0);
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
   

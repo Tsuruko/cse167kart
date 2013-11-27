@@ -61,12 +61,12 @@ void Track::drawTrack() {
         temp4.normalize();
       temp4 = temp4.scale(width);
 	  if(texture) glTexCoord2f(0, (texHeight/10.0));
-      glNormal3f(0, 0, -1);
+      glNormal3f(0, 0, 1);
 	glVertex3f(-temp4[1]+(curves[i]->getPoint(j))[0], 
 		   temp4[0]+(curves[i]->getPoint(j))[1], 
 		   curves[i]->getPoint(j)[2]);
 	  if(texture) glTexCoord2f(laneCount, (texHeight/10.0));
-      glNormal3f(0, 0, -1);
+      glNormal3f(0, 0, 1);
 	glVertex3f(temp4[1]+(curves[i]->getPoint(j))[0], 
 		   -temp4[0]+(curves[i]->getPoint(j))[1],
 		   curves[i]->getPoint(j)[2]);
