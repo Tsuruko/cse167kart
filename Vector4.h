@@ -25,6 +25,8 @@ public:
   GLfloat& operator[](int);
   void dehomogenize();
   void print();
+  double dot(Vector4 B);
+  Vector4 scale(GLfloat);
 };
 
 #endif /* defined(__cse167p6__Vector4__) */

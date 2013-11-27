@@ -34,6 +34,9 @@ Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 //toggle texture
 bool texture = false;
 
+//toggle oblique frustum
+bool obFrustum = false;
+
 //track size and position adjustment constants
 const float trackScale = 10.0;
 const float transRatio = -2.5;
@@ -82,6 +85,47 @@ void idleCallback(void)
   displayCallback();  // call display routine to re-draw cube
 }
 
+inline float sgn(float a)
+{
+    if (a > 0.0F) return (1.0F);
+    if (a < 0.0F) return (-1.0F);
+    return (0.0F);
+}
+
+
+void ModifyProjectionMatrix(Vector4& clipPlane)
+{
+    float       matrix[16];
+    Vector4    q;
+
+    // Grab the current projection matrix from OpenGL
+    glGetFloatv(GL_PROJECTION_MATRIX, matrix);
+    
+    // Calculate the clip-space corner point opposite the clipping plane
+    // as (sgn(clipPlane.x), sgn(clipPlane.y), 1, 1) and
+    // transform it into camera space by multiplying it
+    // by the inverse of the projection matrix
+    
+    q[0] = (sgn(clipPlane[0]) + matrix[8]) / matrix[0];
+    q[1] = (sgn(clipPlane[1]) + matrix[9]) / matrix[5];
+    q[2] = -1.0F;
+    q[3] = (1.0F + matrix[10]) / matrix[14];
+    
+    // Calculate the scaled plane vector
+	Vector4 c = clipPlane.scale(2.0F / (clipPlane.dot(q)));
+    
+    // Replace the third row of the projection matrix
+	matrix[2] = c[0];
+    matrix[6] = c[1];
+    matrix[10] = c[2] + 1.0F;
+    matrix[14] = c[3];
+
+    // Load it back into OpenGL
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(matrix);
+}
+
+
 void reshapeCallback(int w, int h)
 {
   width = w;
@@ -94,8 +138,10 @@ void reshapeCallback(int w, int h)
   glMatrixMode(GL_MODELVIEW);
 }
 
+
 void displayCallback(void)
 {
+  if(obFrustum) ModifyProjectionMatrix(Vector4(0,-1,-2,-1));
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
   glMatrixMode(GL_MODELVIEW);
   glLoadMatrixf(model.getPointer());
@@ -135,6 +181,13 @@ void processKeys (unsigned char key, int x, int y) {
 		glEnable(GL_TEXTURE_2D); 
 		track->texture = true;
     }
+  }
+  if  (key == 'o'){
+	  if(obFrustum){
+		  obFrustum = false;
+			reshapeCallback(width,height);
+	  }
+	  else obFrustum = true;
   }
 }
 
