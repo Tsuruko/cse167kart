@@ -93,10 +93,11 @@ inline float sgn(float a)
 }
 
 
-void ModifyProjectionMatrix(Vector4& clipPlane)
+void ModifyProjectionMatrix(Vector4 * clip)
 {
     float       matrix[16];
     Vector4    q;
+    Vector4 clipPlane = *clip;
 
     // Grab the current projection matrix from OpenGL
     glGetFloatv(GL_PROJECTION_MATRIX, matrix);
@@ -141,7 +142,7 @@ void reshapeCallback(int w, int h)
 
 void displayCallback(void)
 {
-  if(obFrustum) ModifyProjectionMatrix(Vector4(0,-1,-2,-1));
+  if(obFrustum) ModifyProjectionMatrix(new Vector4(0,-1,-2,-1));
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
   glMatrixMode(GL_MODELVIEW);
   glLoadMatrixf(model.getPointer());
