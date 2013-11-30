@@ -239,7 +239,7 @@ void mouseButton(int button, int state, int x, int y) {
 	     -(y/64.0) + 9 < cpy + 0.2 && -(y/64.0) + 9 > cpy - 0.2) {
           selectedCurve = c;
           ctrlpt = true;
-          selected = i;
+          selected = j;
           break;
         }
       }
@@ -254,8 +254,8 @@ void mouseMotion(int x, int y) {
   if (lrb && !editTrack) mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);
 
   if (lrb && ctrlpt && editTrack) {
-    selectedCurve->setCP(selected, 0, ((x - 256) / 64.0));
-    selectedCurve->setCP(selected, 1, -(y/64.0) + 4);
+    selectedCurve->setCP(selected, 0, (x / 128.0));
+    selectedCurve->setCP(selected, 1, -(y/64.0) + 9);
   }
 }
 
