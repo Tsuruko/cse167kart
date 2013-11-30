@@ -24,11 +24,15 @@ using namespace std;
 Matrix4 model;
 Matrix4 trackSize;
 Matrix4 mouse;  //for trackball rotating
-//trackball capability
+//mouse variables
 int clickx, clicky = 0;
 bool lrb = true;
+bool ctrlpt = false;
+BCurve *selectedCurve;
+int selected;
 //toggle between default perspective and simulation perspective
 bool mode = true;
+bool editTrack = false;
 Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
 //toggle texture
@@ -81,7 +85,7 @@ void idleCallback(void)
 {
   model.identity();
   model = model * mouse;
-  if (mode) model = model * trackSize;
+  if (!mode) model = model * trackSize;
   displayCallback();  // call display routine to re-draw cube
 }
 
@@ -147,14 +151,17 @@ void displayCallback(void)
   glMatrixMode(GL_MODELVIEW);
   glLoadMatrixf(model.getPointer());
 
-  gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
+  if (!mode) gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
             cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
             cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
-
-  if (mode) {
+  else gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
+ 
+  if (!mode) {
+    glEnable(GL_LIGHTING);
     track->drawTrack();
     track->drawRoadLines();
   } else {
+    glDisable(GL_LIGHTING);
     track->drawPoints(); 
     track->drawCurves();
   }
@@ -171,6 +178,10 @@ void processKeys (unsigned char key, int x, int y) {
   if (key == 'd') {
     if (mode) mode = false;
     else mode = true;
+  }
+  if (key == 'e') {
+    if (editTrack) editTrack = false;
+    else editTrack = true;
   }
   if (key == 't') {
     if (texture){
@@ -217,12 +228,35 @@ void mouseButton(int button, int state, int x, int y) {
   } else if (button == GLUT_RIGHT_BUTTON) {
     lrb = false;
   }
-  clickx = x;
-  clicky = y;
+  if (editTrack) { 
+    for (int i = 0; i < track->getSize(); i++) {
+      BCurve * c = track->getCurve(i);
+      for (int j = 0; j < 4; j++) { 
+        GLfloat cpx = c->getCPointer(j)[0];
+        GLfloat cpy = c->getCPointer(j)[1];
+        GLfloat cpz = c->getCPointer(j)[2];
+        if ((x / 128.0) < cpx + 0.2 && (x / 128.0) > cpx - 0.2 && 
+	     -(y/64.0) + 9 < cpy + 0.2 && -(y/64.0) + 9 > cpy - 0.2) {
+          selectedCurve = c;
+          ctrlpt = true;
+          selected = i;
+          break;
+        }
+      }
+    }
+  } else {
+    clickx = x;
+    clicky = y;
+  }
 }
 
 void mouseMotion(int x, int y) {
-  mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);
+  if (lrb && !editTrack) mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);
+
+  if (lrb && ctrlpt && editTrack) {
+    selectedCurve->setCP(selected, 0, ((x - 256) / 64.0));
+    selectedCurve->setCP(selected, 1, -(y/64.0) + 4);
+  }
 }
 
 int main(int argc, char *argv[])

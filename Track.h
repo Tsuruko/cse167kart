@@ -24,6 +24,8 @@ public:
   bool texture;
   Track();
   void addCurve(BCurve*);
+  int getSize();
+  BCurve * getCurve(int);
   void drawCurves();
   void drawPoints();
   void drawTrack();

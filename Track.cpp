@@ -21,6 +21,16 @@ void Track::addCurve(BCurve * c) {
   curves.push_back(c);
 }
 
+int Track::getSize() {
+  return curves.size();
+}
+
+BCurve * Track::getCurve(int i) {
+  if (i < 0) return NULL;
+  if (i >= curves.size()) return NULL;
+  return curves[i];
+}
+
 void Track::drawCurves() {
   glColor3f(1,0,0);
   glBegin(GL_LINE_STRIP);
