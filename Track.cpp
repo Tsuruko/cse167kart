@@ -45,12 +45,12 @@ void Track::drawCurves() {
 
 void Track::drawPoints() {
   glPointSize(10);
-  //glColor3f(0, 0, 1);
   glBegin(GL_POINTS);
   for (int i = 0; i < curves.size(); i++) {
-    for (GLfloat j = 0; j < 4; j++) {
-      if (j == 0) glColor3f(0,0,1);
-      else glColor3f(0,1,0);
+    glColor3f(0,0,1);
+    glVertex3fv(curves[i]->getCPointer(0));
+    glColor3f(0,1,0);
+    for (GLfloat j = 1; j < 3; j++) {
       glVertex3fv(curves[i]->getCPointer(j));
     }
   }
