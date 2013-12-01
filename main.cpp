@@ -27,12 +27,9 @@ Matrix4 mouse;  //for trackball rotating
 //mouse variables
 int clickx, clicky = 0;
 bool lrb = true;
-bool ctrlpt = false;
-BCurve *selectedCurve;
-int selected;
 //toggle between default perspective and simulation perspective
 bool mode = true;
-bool editTrack = false;
+bool ctrlpts = true;
 Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
 //toggle texture
@@ -58,25 +55,25 @@ void displayCallback(void);
 //add params later to make more flexible, or different control pts, etc.
 // currently 5 x 13 track, multiply values to get bigger track
 void makeTrack() {
-  Vector3 * start = new Vector3(-2.5f, 2.5f, 0.0f);
+  Vector3 * start = new Vector3(-2.5f, 2.5f, 2.0f);
   Vector3 * middle1 = new Vector3(-2.5f, -2.5f, 0.0f);
   track->addCurve(new BCurve(start, 
-                    new Vector3(-2.5f,  0.83f, -1.0f),
-                    new Vector3(-2.5f,  -0.83f, -1.0f),
+                    new Vector3(-2.5f,  2.5/3.0f, 2.0f),
+                    new Vector3(-2.5f,  -2.5/3.0f, 0.0f),
 		    middle1));
-  Vector3 * middle2 = new Vector3(2.5f, -2.5f, 0.0f);
+  Vector3 * middle2 = new Vector3(2.5f, -2.5f, -2.0f);
   track->addCurve(new BCurve(middle1,
-                    new Vector3(-2.5f, -6.5f, 1.0f),
-                    new Vector3(2.5f, -6.5f, 1.0f),
+                    new Vector3(-2.5f, -6.5f, 0.0f),
+                    new Vector3(2.5f, -6.5f, -2.0f),
 		    middle2));
   Vector3 * end = new Vector3(2.5f, 2.5f, 0.0f);
   track->addCurve(new BCurve(middle2,
-                   new Vector3(2.5f,  -0.83f, -1.0f),
-		   new Vector3(2.5f, 0.83f, -1.0f),
+                   new Vector3(2.5f,  -2.5/3.0f, -2.0f),
+		   new Vector3(2.5f, 2.5/3.0f, 0.0f),
 		    end));
   track->addCurve(new BCurve(end,
-	            new Vector3(2.5f, 6.5f, 1.0f),
-		    new Vector3(-2.5f, 6.5f, 1.0f),
+	            new Vector3(2.5f, 6.5f, 0.0f),
+		    new Vector3(-2.5f, 6.5f, 2.0f),
 		    start));
 }
 
@@ -161,7 +158,7 @@ void displayCallback(void)
     track->drawRoadLines();
   } else {
     glDisable(GL_LIGHTING);
-    track->drawPoints(); 
+    if (ctrlpts) track->drawPoints(); 
     track->drawCurves();
   }
  
@@ -178,9 +175,9 @@ void processKeys (unsigned char key, int x, int y) {
     if (mode) mode = false;
     else mode = true;
   }
-  if (key == 'e') {
-    if (editTrack) editTrack = false;
-    else editTrack = true;
+  if (key == 'c') {
+    if (ctrlpts) ctrlpts = false;
+    else ctrlpts = true;
   }
   if (key == 't') {
     if (texture){
@@ -227,35 +224,12 @@ void mouseButton(int button, int state, int x, int y) {
   } else if (button == GLUT_RIGHT_BUTTON) {
     lrb = false;
   }
-  if (editTrack) { 
-    for (int i = 0; i < track->getSize(); i++) {
-      BCurve * c = track->getCurve(i);
-      for (int j = 0; j < 4; j++) { 
-        GLfloat cpx = c->getCPointer(j)[0];
-        GLfloat cpy = c->getCPointer(j)[1];
-        GLfloat cpz = c->getCPointer(j)[2];
-        if ((x / 128.0) < cpx + 0.2 && (x / 128.0) > cpx - 0.2 && 
-	     -(y/64.0) + 9 < cpy + 0.2 && -(y/64.0) + 9 > cpy - 0.2) {
-          selectedCurve = c;
-          ctrlpt = true;
-          selected = j;
-          break;
-        }
-      }
-    }
-  } else {
-    clickx = x;
-    clicky = y;
-  }
+  clickx = x;
+  clicky = y;
 }
 
 void mouseMotion(int x, int y) {
-  if (lrb && !editTrack) mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);
-
-  if (lrb && ctrlpt && editTrack) {
-    selectedCurve->setCP(selected, 0, (x / 128.0));
-    selectedCurve->setCP(selected, 1, -(y/64.0) + 9);
-  }
+  if (lrb) mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);
 }
 
 int main(int argc, char *argv[])

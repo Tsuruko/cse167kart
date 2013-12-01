@@ -35,7 +35,7 @@ void Track::drawCurves() {
   glColor3f(1,0,0);
   glBegin(GL_LINE_STRIP);
   for (int i = 0; i < curves.size(); i++) {
-    for (GLfloat j = 0; j <= 1+stacks; j += stacks) {
+    for (GLfloat j = 0; j <= 1; j += stacks) {
       glVertex3f(curves[i]->getPoint(j)[0], curves[i]->getPoint(j)[1], 
 			curves[i]->getPoint(j)[2]);
     }
@@ -64,7 +64,7 @@ void Track::drawTrack() {
   int texHeight = 0;
   for (int i = 0; i < curves.size(); i++) {
 	  
-    for (GLfloat j = 0; j <= 1+stacks; j += stacks) {
+    for (GLfloat j = 0; j <= 1; j += stacks) {
 	  texHeight++;
 	  if(texHeight>11) texHeight%=10;
       Vector3 temp4((curves[i]->getTangent(j)));
