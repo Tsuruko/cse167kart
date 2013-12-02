@@ -174,10 +174,8 @@ void displayCallback(void)
               cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
     glEnable(GL_LIGHTING);
-    glEnable(GL_TEXTURE_2D);
     track->drawTrack();
     if (terrain) track->drawTerrain();
-
     glDisable(GL_TEXTURE_2D);
     glLoadMatrixf(car.getPointer());
     glEnableClientState(GL_VERTEX_ARRAY);

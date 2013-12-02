@@ -62,9 +62,7 @@ void Track::drawPoints() {
 void Track::drawTrack() {
   glColor3f(1,1,1);
   glBegin(GL_QUAD_STRIP);
-  if(texture){
-    glEnable(GL_TEXTURE_2D); 
-  }
+  glEnable(GL_TEXTURE_2D); 
   int texHeight = 0;
   for (int i = 0; i < curves.size(); i++) { 
 	int vertCounter = 0;
@@ -83,11 +81,11 @@ void Track::drawTrack() {
 		   -temp4[0]+(curves[i]->getPoint(j))[1],
 		   curves[i]->getPoint(j)[2]);
 
-	  if(texture) glTexCoord2f(0, (texHeight/10.0)); //Texture
+	  glTexCoord2f(0, (texHeight/10.0)); //Texture
       glNormal3f(0, 0, 1);
 	  glVertex3f(v1[0],v1[1],v1[2]);
 
-	  if(texture) glTexCoord2f(laneCount, (texHeight/10.0)); //Texture
+	  glTexCoord2f(laneCount, (texHeight/10.0)); //Texture
       glNormal3f(0, 0, 1);
 	  glVertex3f(v2[0],v2[1],v2[2]);
 
@@ -107,9 +105,7 @@ void Track::drawTrack() {
 	  vertCounter++;
 	  //verticesInner.push_back(genInner(verticesOuter[verticesOuter.size()-1],v1));
     }
-	if(texture){
-		glDisable(GL_TEXTURE_2D); 
-	}
+	glDisable(GL_TEXTURE_2D); 
   }
   glEnd();
 }

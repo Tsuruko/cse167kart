@@ -27,7 +27,6 @@ private:
   Vector3 genInner(Vector3 v1, Vector3 V2);
 
 public:
-  bool texture;
   Track();
   void addCurve(BCurve*);
   int getSize();
