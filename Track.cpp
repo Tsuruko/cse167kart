@@ -5,6 +5,7 @@
 //  Nick Troast, Monica Liu, Andrew Lin
 //
 
+#include <iostream>
 #include "Track.h"
 
 Track::Track()
@@ -103,14 +104,12 @@ Vector3 Track::getNext(GLfloat step, int test)
       if (eyeCurve == curves.size() - 1) {
         eyeCurve = 0;
       }
-      else
-      {
+      else {
         eyeCurve++;
       }
       eye_t = step - (1 - eye_t);
     }
-    else
-    {
+    else {
       eye_t = eye_t + step;
     }
     return curves[eyeCurve]->getPoint(eye_t);

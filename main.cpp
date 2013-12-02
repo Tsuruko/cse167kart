@@ -55,25 +55,26 @@ void displayCallback(void);
 //add params later to make more flexible, or different control pts, etc.
 // currently 5 x 13 track, multiply values to get bigger track
 void makeTrack() {
-  Vector3 * start = new Vector3(-2.5f, 2.5f, 2.0f);
-  Vector3 * middle1 = new Vector3(-2.5f, -2.5f, 0.0f);
+  int mult = 2.0;
+  Vector3 * start = new Vector3(-2.5f, 2.5f*mult, 2.0f*mult);
+  Vector3 * middle1 = new Vector3(-2.5f, -2.5f*mult, 0.0f);
   track->addCurve(new BCurve(start, 
-                    new Vector3(-2.5f,  2.5/3.0f, 2.0f),
-                    new Vector3(-2.5f,  -2.5/3.0f, 0.0f),
+                    new Vector3(-2.5f,  2.5/3.0f*mult, 2.0f*mult),
+                    new Vector3(-2.5f,  -2.5/3.0f*mult, 0.0f),
 		    middle1));
-  Vector3 * middle2 = new Vector3(2.5f, -2.5f, -2.0f);
+  Vector3 * middle2 = new Vector3(2.5f, -2.5f*mult, -2.0f*mult);
   track->addCurve(new BCurve(middle1,
-                    new Vector3(-2.5f, -6.5f, 0.0f),
-                    new Vector3(2.5f, -6.5f, -2.0f),
+                    new Vector3(-2.5f, (-2.5f*mult)-4, 0.0f),
+                    new Vector3(2.5f, (-2.5f*mult)-4, -2.0f*mult),
 		    middle2));
-  Vector3 * end = new Vector3(2.5f, 2.5f, 0.0f);
+  Vector3 * end = new Vector3(2.5f, 2.5f*mult, 0.0f);
   track->addCurve(new BCurve(middle2,
-                   new Vector3(2.5f,  -2.5/3.0f, -2.0f),
-		   new Vector3(2.5f, 2.5/3.0f, 0.0f),
+                   new Vector3(2.5f,  -2.5/3.0f*mult, -2.0f*mult),
+		   new Vector3(2.5f, 2.5/3.0f*mult, 0.0f),
 		    end));
   track->addCurve(new BCurve(end,
-	            new Vector3(2.5f, 6.5f, 0.0f),
-		    new Vector3(-2.5f, 6.5f, 2.0f),
+	            new Vector3(2.5f, (2.5f*mult)+4, 0.0f),
+		    new Vector3(-2.5f, (2.5f*mult)+4, 2.0f*mult),
 		    start));
 }
 
