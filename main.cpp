@@ -89,8 +89,8 @@ void makeTrack() {
 void idleCallback(void)
 {
   model.identity();
-  model = model * mouse;
-  if (!mode) model = model * trackSize;
+  if (mode) model = model * mouse;
+  else  model = model * trackSize;
   carTrans = carTrans.translate(xtrans, -1, -4);
   car = carScale * carTrans;
   displayCallback();  // call display routine to re-draw cube
@@ -161,10 +161,17 @@ void displayCallback(void)
   glLoadIdentity();
   glLoadMatrixf(model.getPointer());
  
-  if (!mode) {
+  if (mode) {
+    gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
+    glDisable(GL_LIGHTING);
+    if (ctrlpts) track->drawPoints();
+    track->drawCurves();
+  } else { 
+    gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
+              cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
+              cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
     glEnable(GL_LIGHTING);
     track->drawTrack();
-    track->drawRoadLines();
     glDisable(GL_TEXTURE_2D);
     glLoadMatrixf(car.getPointer());
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -175,17 +182,8 @@ void displayCallback(void)
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisable(GL_NORMAL_ARRAY);
     glEnable(GL_TEXTURE_2D);
-  } else {
-    glDisable(GL_LIGHTING);
-    if (ctrlpts) track->drawPoints();
-    track->drawCurves();
-  } else { 
-    gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
-              cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
-              cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
-    glEnable(GL_LIGHTING);
-    track->drawTrack();
-  } 
+  }
+ 
   glFlush();
   glutSwapBuffers();
 }
