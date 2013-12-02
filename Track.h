@@ -22,8 +22,10 @@ private:
   int centerCurve;
   int laneCount;
   
-  std::vector<Vector3> verticesInner;
-  std::vector<Vector3> verticesOuter;
+  std::vector<Vector3> l0;
+  std::vector<Vector3> l1;
+  std::vector<Vector3> l2;
+  std::vector<Vector3> l3;
   Vector3 genInner(Vector3 v1, Vector3 V2);
 
 public:
