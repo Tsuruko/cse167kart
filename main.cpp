@@ -36,9 +36,6 @@ Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
 GLfloat xtrans = 0;
 
-//toggle texture
-bool texture = false;
-
 //track size and position adjustment constants
 const float trackScale = 10.0;
 const float transRatio = -2.5;
@@ -165,6 +162,7 @@ void displayCallback(void)
     glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
     gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
     glDisable(GL_LIGHTING);
+    glDisable(GL_TEXTURE_2D);
     if (ctrlpts) track->drawPoints();
     track->drawCurves();
   } else { 
@@ -173,6 +171,7 @@ void displayCallback(void)
               cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
     glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
     track->drawTrack();
     glDisable(GL_TEXTURE_2D);
     glLoadMatrixf(car.getPointer());
@@ -215,17 +214,6 @@ void processKeys (unsigned char key, int x, int y) {
   if (key == 'c') {
     if (ctrlpts) ctrlpts = false;
     else ctrlpts = true;
-  }
-  if (key == 't') {
-    if (texture){
-		texture = false;
-		glDisable(GL_TEXTURE_2D); 
-		track->texture = false;
-    } else {
-		texture = true;
-		glEnable(GL_TEXTURE_2D); 
-		track->texture = true;
-    }
   }
 }
 
@@ -274,8 +262,7 @@ int main(int argc, char *argv[])
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);  // set polygon drawing mode to fill front and back of each polygon
   glDisable(GL_CULL_FACE);     // disable backface culling to render both sides of polygons
   glShadeModel(GL_SMOOTH);             	      // set shading to smooth
-  glDisable(GL_TEXTURE_2D);						// disable texture
-  track->texture = false;
+  glEnable(GL_TEXTURE_2D);		
 
   // Generate material properties:
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
