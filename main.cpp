@@ -148,11 +148,13 @@ void displayCallback(void)
   glLoadMatrixf(model.getPointer());
  
   if (mode) {
+    glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
     gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
     glDisable(GL_LIGHTING);
     if (ctrlpts) track->drawPoints();
     track->drawCurves();
   } else { 
+    glClearColor(0.0, 0.0, 1.0, 0.0);           // set clear color to black
     gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
               cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
