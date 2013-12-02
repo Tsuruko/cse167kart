@@ -64,8 +64,9 @@ void Track::drawTrack() {
   glBegin(GL_QUAD_STRIP);
   glEnable(GL_TEXTURE_2D); 
   int texHeight = 0;
+  int vertCounter = 0;
   for (int i = 0; i < curves.size(); i++) { 
-    int vertCounter = 0;
+    
     
     for (GLfloat j = 0; j <= 1; j += stacks) {
 //code for rendering track
@@ -92,21 +93,33 @@ void Track::drawTrack() {
       glVertex3f(v2[0],v2[1],v2[2]);
 
 //code for rendering terrain
-         
+      if(l0.size()<400){
       Vector3 v3(-temp4[1]+(curves[i]->getPoint(j))[0], 
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
-        	 curves[i]->getPoint(j)[2]);
-      verticesOuter.push_back(v3);
+        	     curves[i]->getPoint(j)[2]);
+      l0.push_back(v3);
 
-      if((vertCounter)%2==0){
-        temp4 = temp4.scale(1.5);
-        Vector3 v4(-temp4[1]+(curves[i]->getPoint(j))[0], 
-        temp4[0]+(curves[i]->getPoint(j))[1], 
-        curves[i]->getPoint(j)[2]);
-        verticesInner.push_back(v4);
-      }
-      vertCounter++;
-  //verticesInner.push_back(genInner(verticesOuter[verticesOuter.size()-1],v1));
+ 
+      temp4 = temp4.scale(1.5);
+      Vector3 v4(-temp4[1]+(curves[i]->getPoint(j))[0], 
+            	 temp4[0]+(curves[i]->getPoint(j))[1], 
+        	     curves[i]->getPoint(j)[2]);
+      l1.push_back(v4);
+
+      temp4 = temp4.scale(1.5);
+      Vector3 v5(-temp4[1]+(curves[i]->getPoint(j))[0], 
+            	 temp4[0]+(curves[i]->getPoint(j))[1], 
+        	     curves[i]->getPoint(j)[2]);
+      l2.push_back(v5);
+
+      temp4 = temp4.scale(1.5);
+      Vector3 v6(-temp4[1]+(curves[i]->getPoint(j))[0], 
+            	 temp4[0]+(curves[i]->getPoint(j))[1], 
+        	     curves[i]->getPoint(j)[2]);
+      l3.push_back(v6);
+
+	  }
+  //l1.push_back(genInner(l0[l0.size()-1],v1));
     }
         glDisable(GL_TEXTURE_2D); 
   }
@@ -114,37 +127,54 @@ void Track::drawTrack() {
 }
 
 void Track::drawTerrain(){
-        /*
+        
   glColor3f(1,0,0);
   glNormal3f(0, 0, 1);
   glBegin(GL_LINE_STRIP);
-  for (int i = 0; i < verticesOuter.size(); i++) {
-      glVertex3f(verticesOuter[i][0],verticesOuter[i][1],verticesOuter[i][2]);
+  for (int i = 0; i < l0.size(); i++) {
+      glVertex3f(l0[i][0],l0[i][1],l0[i][2]);
   }
   glEnd();
 
   glColor3f(1,0,1);
   glNormal3f(0, 0, 1);
   glBegin(GL_LINE_STRIP);
-  for (int i = 0; i < verticesInner.size(); i++) {
-      glVertex3f(verticesInner[i][0],verticesInner[i][1],verticesInner[i][2]);
+  for (int i = 0; i < l1.size(); i++) {
+      glVertex3f(l1[i][0],l1[i][1],l1[i][2]);
   }
-  glEnd();*/
+  glEnd();
 
+    glColor3f(1,0,1);
+  glNormal3f(0, 0, 1);
+  glBegin(GL_LINE_STRIP);
+  for (int i = 0; i < l1.size(); i++) {
+      glVertex3f(l2[i][0],l2[i][1],l2[i][2]);
+  }
+  glEnd();
+
+    glColor3f(1,0,1);
+  glNormal3f(0, 0, 1);
+  glBegin(GL_LINE_STRIP);
+  for (int i = 0; i < l1.size(); i++) {
+      glVertex3f(l3[i][0],l3[i][1],l3[i][2]);
+  }
+  glEnd();
+
+  /*
  glBegin(GL_TRIANGLE_STRIP);
-  glVertex3f(verticesOuter[0][0],verticesOuter[0][1],verticesOuter[0][2]);
-  glVertex3f(verticesInner[0][0],verticesInner[0][1],verticesInner[0][2]);
+  glVertex3f(l0[0][0],l0[0][1],l0[0][2]);
+  glVertex3f(l1[0][0],l1[0][1],l1[0][2]);
 
-  for (int i = 1; i < verticesInner.size()/2; i++) {
+  for (int i = 1; i < l1.size()/2; i++) {
 
-      glVertex3f(verticesOuter[2*i-1][0],verticesOuter[2*i-1][1],verticesOuter[2*i-1][2]);
-          glVertex3f(verticesInner[i][0],verticesInner[i][1],verticesInner[i][2]);
-          glVertex3f(verticesOuter[2*i][0],verticesOuter[2*i][1],verticesOuter[2*i][2]);
+      glVertex3f(l0[2*i-1][0],l0[2*i-1][1],l0[2*i-1][2]);
+          glVertex3f(l1[i][0],l1[i][1],l1[i][2]);
+          glVertex3f(l0[2*i][0],l0[2*i][1],l0[2*i][2]);
 
   }
   glEnd();
-  verticesOuter.clear();
-  verticesInner.clear();
+  l0.clear();
+  l1.clear();*/
 }
 
 Vector3 Track::getNext(GLfloat step, int test)
