@@ -35,9 +35,6 @@ Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 //toggle texture
 bool texture = false;
 
-//toggle oblique frustum
-bool obFrustum = false;
-
 //track size and position adjustment constants
 const float trackScale = 10.0;
 const float transRatio = -2.5;
@@ -81,8 +78,8 @@ void makeTrack() {
 void idleCallback(void)
 {
   model.identity();
-  model = model * mouse;
-  if (!mode) model = model * trackSize;
+  if (mode) model = model * mouse;
+  else  model = model * trackSize;
   displayCallback();  // call display routine to re-draw cube
 }
 
@@ -143,7 +140,7 @@ void reshapeCallback(int w, int h)
 
 void displayCallback(void)
 {
-  if(obFrustum) ModifyProjectionMatrix(new Vector4(0,-1,-2,-1));
+  if(!mode) ModifyProjectionMatrix(new Vector4(0,-1,-2,-1));
   //clear color and depth buffers
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
@@ -161,7 +158,6 @@ void displayCallback(void)
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
     glEnable(GL_LIGHTING);
     track->drawTrack();
-    track->drawRoadLines();
   } 
   glFlush();
   glutSwapBuffers();
@@ -174,11 +170,10 @@ void processKeys (unsigned char key, int x, int y) {
   }
   if (key == 'd') {
     if (mode) {
-      if (! obFrustum) {
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
-      }
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
+
       mode = false;
     } else {
       glMatrixMode(GL_PROJECTION);
@@ -202,13 +197,6 @@ void processKeys (unsigned char key, int x, int y) {
 		glEnable(GL_TEXTURE_2D); 
 		track->texture = true;
     }
-  }
-  if  (key == 'o'){
-	  if(obFrustum){
-		  obFrustum = false;
-			reshapeCallback(width,height);
-	  }
-	  else obFrustum = true;
   }
 }
 
