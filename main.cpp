@@ -66,24 +66,24 @@ void makeTrack() {
   int mult = 2.0;
   Vector3 * start = new Vector3(-2.5f, 2.5f*mult, 2.0f*mult);
   Vector3 * middle1 = new Vector3(-2.5f, -2.5f*mult, 0.0f);
-  track->addCurve(new BCurve(start, 
-                    new Vector3(-2.5f,  2.5/3.0f*mult, 2.0f*mult),
-                    new Vector3(-2.5f,  -2.5/3.0f*mult, 0.0f),
-		    middle1));
+  track->addCurve(new BCurve(start,
+                             new Vector3(-2.5f,  2.5/3.0f*mult, 2.0f*mult),
+                             new Vector3(-2.5f,  -2.5/3.0f*mult, 0.0f),
+                             middle1));
   Vector3 * middle2 = new Vector3(2.5f, -2.5f*mult, -2.0f*mult);
   track->addCurve(new BCurve(middle1,
-                    new Vector3(-2.5f, (-2.5f*mult)-4, 0.0f),
-                    new Vector3(2.5f, (-2.5f*mult)-4, -2.0f*mult),
-		    middle2));
+                             new Vector3(-2.5f, (-2.5f*mult)-4, 0.0f),
+                             new Vector3(2.5f, (-2.5f*mult)-4, -2.0f*mult),
+                             middle2));
   Vector3 * end = new Vector3(2.5f, 2.5f*mult, 0.0f);
   track->addCurve(new BCurve(middle2,
-                   new Vector3(2.5f,  -2.5/3.0f*mult, -2.0f*mult),
-		   new Vector3(2.5f, 2.5/3.0f*mult, 0.0f),
-		    end));
+                             new Vector3(2.5f,  -2.5/3.0f*mult, -2.0f*mult),
+                             new Vector3(2.5f, 2.5/3.0f*mult, 0.0f),
+                             end));
   track->addCurve(new BCurve(end,
-	            new Vector3(2.5f, (2.5f*mult)+4, 0.0f),
-		    new Vector3(-2.5f, (2.5f*mult)+4, 2.0f*mult),
-		    start));
+                             new Vector3(2.5f, (2.5f*mult)+4, 0.0f),
+                             new Vector3(-2.5f, (2.5f*mult)+4, 2.0f*mult),
+                             start));
 }
 
 void idleCallback(void)
@@ -98,43 +98,43 @@ void idleCallback(void)
 
 inline float sgn(float a)
 {
-    if (a > 0.0F) return (1.0F);
-    if (a < 0.0F) return (-1.0F);
-    return (0.0F);
+  if (a > 0.0F) return (1.0F);
+  if (a < 0.0F) return (-1.0F);
+  return (0.0F);
 }
 
 
 void ModifyProjectionMatrix(Vector4 * clip)
 {
-    float       matrix[16];
-    Vector4    q;
-    Vector4 clipPlane = *clip;
-
-    // Grab the current projection matrix from OpenGL
-    glGetFloatv(GL_PROJECTION_MATRIX, matrix);
-    
-    // Calculate the clip-space corner point opposite the clipping plane
-    // as (sgn(clipPlane.x), sgn(clipPlane.y), 1, 1) and
-    // transform it into camera space by multiplying it
-    // by the inverse of the projection matrix
-    
-    q[0] = (sgn(clipPlane[0]) + matrix[8]) / matrix[0];
-    q[1] = (sgn(clipPlane[1]) + matrix[9]) / matrix[5];
-    q[2] = -1.0F;
-    q[3] = (1.0F + matrix[10]) / matrix[14];
-    
-    // Calculate the scaled plane vector
+  float       matrix[16];
+  Vector4    q;
+  Vector4 clipPlane = *clip;
+  
+  // Grab the current projection matrix from OpenGL
+  glGetFloatv(GL_PROJECTION_MATRIX, matrix);
+  
+  // Calculate the clip-space corner point opposite the clipping plane
+  // as (sgn(clipPlane.x), sgn(clipPlane.y), 1, 1) and
+  // transform it into camera space by multiplying it
+  // by the inverse of the projection matrix
+  
+  q[0] = (sgn(clipPlane[0]) + matrix[8]) / matrix[0];
+  q[1] = (sgn(clipPlane[1]) + matrix[9]) / matrix[5];
+  q[2] = -1.0F;
+  q[3] = (1.0F + matrix[10]) / matrix[14];
+  
+  // Calculate the scaled plane vector
 	Vector4 c = clipPlane.scale(2.0F / (clipPlane.dot(q)));
-    
-    // Replace the third row of the projection matrix
+  
+  // Replace the third row of the projection matrix
 	matrix[2] = c[0];
-    matrix[6] = c[1];
-    matrix[10] = c[2] + 1.0F;
-    matrix[14] = c[3];
-
-    // Load it back into OpenGL
-    glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf(matrix);
+  matrix[6] = c[1];
+  matrix[10] = c[2] + 1.0F;
+  matrix[14] = c[3];
+  
+  // Load it back into OpenGL
+  glMatrixMode(GL_PROJECTION);
+  glLoadMatrixf(matrix);
 }
 
 
@@ -155,12 +155,12 @@ void displayCallback(void)
 {
   if(!mode) ModifyProjectionMatrix(new Vector4(0,-1,-2,-1));
   //clear color and depth buffers
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glLoadMatrixf(model.getPointer());
- 
+  
   if (mode) {
     glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
     gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
@@ -168,7 +168,7 @@ void displayCallback(void)
     glDisable(GL_TEXTURE_2D);
     if (ctrlpts) track->drawPoints();
     track->drawCurves();
-  } else { 
+  } else {
     glClearColor(0.0, 0.0, 1.0, 0.0);           // set clear color to black
     gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
               cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
@@ -187,11 +187,11 @@ void displayCallback(void)
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisable(GL_NORMAL_ARRAY);
     glEnable(GL_TEXTURE_2D);
-
+    
     //cam.setEye(track->getNext(0.005, 0));
     //cam.setCenter(track->getNext(0.005, 1));
   }
- 
+  
   glFlush();
   glutSwapBuffers();
 }
@@ -274,8 +274,8 @@ int main(int argc, char *argv[])
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);  // set polygon drawing mode to fill front and back of each polygon
   glDisable(GL_CULL_FACE);     // disable backface culling to render both sides of polygons
   glShadeModel(GL_SMOOTH);             	      // set shading to smooth
-  glEnable(GL_TEXTURE_2D);		
-
+  glEnable(GL_TEXTURE_2D);
+  
   // Generate material properties:
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
   glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
@@ -292,15 +292,15 @@ int main(int argc, char *argv[])
   glutDisplayFunc(displayCallback);
   glutReshapeFunc(reshapeCallback);
   glutIdleFunc(idleCallback);
-
+  
   //process mouse press and motion
   glutMouseFunc(mouseButton);
   glutMotionFunc(mouseMotion);
-
+  
   //process keystrokes
   glutKeyboardFunc(processKeys);
   glutSpecialFunc(processSpecialKeys);
-
+  
   //initialize matrices
   model.identity();
   mouse.identity();
