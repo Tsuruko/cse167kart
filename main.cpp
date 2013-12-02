@@ -184,8 +184,8 @@ void displayCallback(void)
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisable(GL_NORMAL_ARRAY);
     glEnable(GL_TEXTURE_2D);
-    cam.setEye(track->getNext(0.015, 0));
-    cam.setCenter(track->getNext(0.015, 1));
+    cam.setEye(track->getNext(0.005, 0));
+    cam.setCenter(track->getNext(0.005, 1));
   }
  
   glFlush();
@@ -232,10 +232,12 @@ void processKeys (unsigned char key, int x, int y) {
 void processSpecialKeys(int key, int x, int y) {
   switch(key) {
     case GLUT_KEY_LEFT:
-      xtrans = xtrans - 0.1;
+      xtrans = xtrans - 0.2;
+      if (xtrans < -1.8) xtrans = -1.8;
       break;
     case GLUT_KEY_RIGHT:
-      xtrans = xtrans + 0.1;
+      xtrans = xtrans + 0.2;
+      if (xtrans > 1.8) xtrans = 1.8;
       break;
     default:
       break;
