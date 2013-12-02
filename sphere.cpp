@@ -11,10 +11,14 @@ class sphere {
     Matrix4 center;    //adjust the center to the bottom of the sphere
   public:
     sphere (double radius) {
-      r = radius;
+      r = radius/10.0;
+      center = Matrix4::translate(r/10.0, r/10.0, 0.0);
     }
 
-  public draw(Matrix4 C) {
+  void draw(Matrix4 C) {
     glMatrixMode(GL_MODELVIEW);
-    glutSolidSPhere(r, 10.0, 10.0);
+    Matrix4 Cnew = center * C;
+    glLoadMatrixf(Cnew.getPointer());
+    glutSolidSphere(r, 10.0, 10.0);
   }
+};

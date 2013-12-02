@@ -19,6 +19,7 @@
 #include "Texture.h"
 #include "Camera.h"
 #include "objreader.h"
+#include "sphere.cpp"
 
 using namespace std;
 
@@ -44,6 +45,7 @@ const float trackScale = 10.0;
 const float transRatio = -2.5;
 
 Track * track = new Track();
+sphere * s = new sphere(1.0);
 
 int nVerts;
 float *vertices;
@@ -93,7 +95,7 @@ void idleCallback(void)
   else  model = model * trackSize;
   carTrans = carTrans.translate(xtrans, -1, -4);
   car = carScale * carTrans;
-  displayCallback();  // call display routine to re-draw cube
+  displayCallback();  // call display routine to re-draw
 }
 
 inline float sgn(float a)
@@ -174,8 +176,8 @@ void displayCallback(void)
               cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
     glEnable(GL_LIGHTING);
-    glutSolidSphere(1, 10, 10);
     track->drawTrack();
+    s->draw(model);
     if (terrain) track->drawTerrain();
     glDisable(GL_TEXTURE_2D);
     glLoadMatrixf(car.getPointer());
@@ -266,7 +268,7 @@ int main(int argc, char *argv[])
   glutInit(&argc, argv);      	      	      // initialize GLUT
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);   // open an OpenGL context with double buffering, RGB colors, and depth buffering
   glutInitWindowSize(width, height);      // set initial window size
-  glutCreateWindow("OpenGL Cube for CSE167");    	      // open window and set window title
+  glutCreateWindow("OpenGL Kart for CSE167");    	      // open window and set window title
   
   glEnable(GL_DEPTH_TEST);            	      // enable depth buffering
   glClear(GL_DEPTH_BUFFER_BIT);       	      // clear depth buffer
