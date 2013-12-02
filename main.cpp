@@ -18,10 +18,12 @@
 #include "BCurve.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "objreader.h"
 
 using namespace std;
 
 Matrix4 model;
+Matrix4 car, carTrans, carScale;
 Matrix4 trackSize;
 Matrix4 mouse;  //for trackball rotating
 //mouse variables
@@ -31,6 +33,8 @@ bool lrb = true;
 bool mode = true;
 bool ctrlpts = true;
 Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
+
+GLfloat xtrans = 0;
 
 //toggle texture
 bool texture = false;
@@ -43,6 +47,13 @@ const float trackScale = 10.0;
 const float transRatio = -2.5;
 
 Track * track = new Track();
+
+int nVerts;
+float *vertices;
+float *normals;
+float *texcoords;
+int nIndices;
+int *indices;
 
 int width  = 512;   // set window width in pixels here
 int height = 512;   // set window height in pixels here
@@ -82,6 +93,8 @@ void idleCallback(void)
   model.identity();
   model = model * mouse;
   if (!mode) model = model * trackSize;
+  carTrans = carTrans.translate(xtrans, -1, -4);
+  car = carScale * carTrans;
   displayCallback();  // call display routine to re-draw cube
 }
 
@@ -145,6 +158,7 @@ void displayCallback(void)
   if(obFrustum) ModifyProjectionMatrix(new Vector4(0,-1,-2,-1));
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
   glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
   glLoadMatrixf(model.getPointer());
 
   if (!mode) gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
@@ -156,6 +170,16 @@ void displayCallback(void)
     glEnable(GL_LIGHTING);
     track->drawTrack();
     track->drawRoadLines();
+    glDisable(GL_TEXTURE_2D);
+    glLoadMatrixf(car.getPointer());
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glNormalPointer(GL_FLOAT, 0, normals);
+    glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, indices);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisable(GL_NORMAL_ARRAY);
+    glEnable(GL_TEXTURE_2D);
   } else {
     glDisable(GL_LIGHTING);
     if (ctrlpts) track->drawPoints(); 
@@ -208,10 +232,10 @@ void processSpecialKeys(int key, int x, int y) {
     case GLUT_KEY_DOWN:
       break;
     case GLUT_KEY_LEFT:
-      //camera x + 1;
+      xtrans = xtrans - 0.1;
       break;
     case GLUT_KEY_RIGHT:
-      //camera x - 1;
+      xtrans = xtrans + 0.1;
       break;
     default:
       break;
@@ -279,13 +303,18 @@ int main(int argc, char *argv[])
 
   //initialize matrices
   model.identity();
-  mouse.identity(); 
+  mouse.identity();
   trackSize.identity();
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack();
- 
   loadTexture();
-
+  
+  car.identity();
+  carTrans = carTrans.translate(0, -1, -4);
+  carScale = carScale.scale(0.5, 0.5, 0.5);
+  
+  ObjReader::readObj("Porsche_911_GT2.obj", nVerts, &vertices, &normals, &texcoords, nIndices, &indices);
+  
   glutMainLoop();
   return 0;
 }

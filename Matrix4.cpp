@@ -102,10 +102,10 @@ Vector4 Matrix4::operator*(Vector4& other)
 
 Matrix4 Matrix4::translate(GLfloat x, GLfloat y, GLfloat z)
 {
-	return Matrix4(1.0, 0.0, 0.0, x,
-                 0.0, 1.0, 0.0, y,
-                 0.0, 0.0, 1.0, z,
-                 0.0, 0.0, 0.0, 1.0);
+	return Matrix4(1.0, 0.0, 0.0, 0.0,
+                 0.0, 1.0, 0.0, 0.0,
+                 0.0, 0.0, 1.0, 0.0,
+                 x, y, z, 1.0);
 }
 
 Matrix4 Matrix4::scale(GLfloat x, GLfloat y, GLfloat z)
