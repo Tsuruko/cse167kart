@@ -21,7 +21,7 @@ private:
   int eyeCurve; // The curve we are currently on
   int centerCurve;
   int laneCount;
-  
+ 
 public:
   bool texture;
   Track();

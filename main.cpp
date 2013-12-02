@@ -39,9 +39,6 @@ GLfloat xtrans = 0;
 //toggle texture
 bool texture = false;
 
-//toggle oblique frustum
-bool obFrustum = false;
-
 //track size and position adjustment constants
 const float trackScale = 10.0;
 const float transRatio = -2.5;
@@ -66,25 +63,26 @@ void displayCallback(void);
 //add params later to make more flexible, or different control pts, etc.
 // currently 5 x 13 track, multiply values to get bigger track
 void makeTrack() {
-  Vector3 * start = new Vector3(-2.5f, 2.5f, 2.0f);
-  Vector3 * middle1 = new Vector3(-2.5f, -2.5f, 0.0f);
+  int mult = 2.0;
+  Vector3 * start = new Vector3(-2.5f, 2.5f*mult, 2.0f*mult);
+  Vector3 * middle1 = new Vector3(-2.5f, -2.5f*mult, 0.0f);
   track->addCurve(new BCurve(start, 
-                    new Vector3(-2.5f,  2.5/3.0f, 2.0f),
-                    new Vector3(-2.5f,  -2.5/3.0f, 0.0f),
+                    new Vector3(-2.5f,  2.5/3.0f*mult, 2.0f*mult),
+                    new Vector3(-2.5f,  -2.5/3.0f*mult, 0.0f),
 		    middle1));
-  Vector3 * middle2 = new Vector3(2.5f, -2.5f, -2.0f);
+  Vector3 * middle2 = new Vector3(2.5f, -2.5f*mult, -2.0f*mult);
   track->addCurve(new BCurve(middle1,
-                    new Vector3(-2.5f, -6.5f, 0.0f),
-                    new Vector3(2.5f, -6.5f, -2.0f),
+                    new Vector3(-2.5f, (-2.5f*mult)-4, 0.0f),
+                    new Vector3(2.5f, (-2.5f*mult)-4, -2.0f*mult),
 		    middle2));
-  Vector3 * end = new Vector3(2.5f, 2.5f, 0.0f);
+  Vector3 * end = new Vector3(2.5f, 2.5f*mult, 0.0f);
   track->addCurve(new BCurve(middle2,
-                   new Vector3(2.5f,  -2.5/3.0f, -2.0f),
-		   new Vector3(2.5f, 2.5/3.0f, 0.0f),
+                   new Vector3(2.5f,  -2.5/3.0f*mult, -2.0f*mult),
+		   new Vector3(2.5f, 2.5/3.0f*mult, 0.0f),
 		    end));
   track->addCurve(new BCurve(end,
-	            new Vector3(2.5f, 6.5f, 0.0f),
-		    new Vector3(-2.5f, 6.5f, 2.0f),
+	            new Vector3(2.5f, (2.5f*mult)+4, 0.0f),
+		    new Vector3(-2.5f, (2.5f*mult)+4, 2.0f*mult),
 		    start));
 }
 
@@ -148,23 +146,20 @@ void reshapeCallback(int w, int h)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0); // set perspective projection viewing frustum
-  //glTranslatef(0, 0, -20);
+  if (mode) glTranslatef(0, 0, -20);
   glMatrixMode(GL_MODELVIEW);
 }
 
 
 void displayCallback(void)
 {
-  if(obFrustum) ModifyProjectionMatrix(new Vector4(0,-1,-2,-1));
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
+  if(!mode) ModifyProjectionMatrix(new Vector4(0,-1,-2,-1));
+  //clear color and depth buffers
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glLoadMatrixf(model.getPointer());
-
-  if (!mode) gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
-            cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
-            cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
-  else gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
  
   if (!mode) {
     glEnable(GL_LIGHTING);
@@ -182,10 +177,15 @@ void displayCallback(void)
     glEnable(GL_TEXTURE_2D);
   } else {
     glDisable(GL_LIGHTING);
-    if (ctrlpts) track->drawPoints(); 
+    if (ctrlpts) track->drawPoints();
     track->drawCurves();
-  }
- 
+  } else { 
+    gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
+              cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
+              cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
+    glEnable(GL_LIGHTING);
+    track->drawTrack();
+  } 
   glFlush();
   glutSwapBuffers();
 }
@@ -196,8 +196,19 @@ void processKeys (unsigned char key, int x, int y) {
     mouse.identity();
   }
   if (key == 'd') {
-    if (mode) mode = false;
-    else mode = true;
+    if (mode) {
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
+
+      mode = false;
+    } else {
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
+      glTranslatef(0, 0, -20);
+      mode = true;
+    }
   }
   if (key == 'c') {
     if (ctrlpts) ctrlpts = false;
@@ -213,13 +224,6 @@ void processKeys (unsigned char key, int x, int y) {
 		glEnable(GL_TEXTURE_2D); 
 		track->texture = true;
     }
-  }
-  if  (key == 'o'){
-	  if(obFrustum){
-		  obFrustum = false;
-			reshapeCallback(width,height);
-	  }
-	  else obFrustum = true;
   }
 }
 
@@ -272,7 +276,6 @@ int main(int argc, char *argv[])
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);  // set polygon drawing mode to fill front and back of each polygon
   glDisable(GL_CULL_FACE);     // disable backface culling to render both sides of polygons
   glShadeModel(GL_SMOOTH);             	      // set shading to smooth
-  glMatrixMode(GL_PROJECTION);
   glDisable(GL_TEXTURE_2D);						// disable texture
   track->texture = false;
 

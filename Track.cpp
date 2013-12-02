@@ -63,11 +63,10 @@ void Track::drawTrack() {
   glColor3f(1,1,1);
   glBegin(GL_QUAD_STRIP);
   if(texture){
-	  glEnable(GL_TEXTURE_2D); 
+    glEnable(GL_TEXTURE_2D); 
   }
   int texHeight = 0;
   for (int i = 0; i < curves.size(); i++) {
-	  
     for (GLfloat j = 0; j <= 1; j += stacks) {
 	  texHeight++;
 	  if(texHeight>11) texHeight%=10;
@@ -85,51 +84,33 @@ void Track::drawTrack() {
 		   -temp4[0]+(curves[i]->getPoint(j))[1],
 		   curves[i]->getPoint(j)[2]);
     }
-	if(texture){
-		glDisable(GL_TEXTURE_2D); 
-	}
+    if(texture) {
+      glDisable(GL_TEXTURE_2D); 
+    }
   }
   glEnd();
-}
-
-void Track::drawRoadLines() {
-
 }
 
 Vector3 Track::getNext(GLfloat step, int test)
 {
   if (test == 0) {
+  //check if the tstep needs to be reset
     if (eye_t + step > 1) {
-      if (eyeCurve == curves.size() - 1) {
-        eyeCurve = 0;
-      }
-      else
-      {
-        eyeCurve++;
-      }
+    //loop back eyeCurve to first curve on the track
+      if (eyeCurve == curves.size() - 1) eyeCurve = 0;
+      else eyeCurve++;
       eye_t = step - (1 - eye_t);
     }
-    else
-    {
-      eye_t = eye_t + step;
-    }
+    else eye_t = eye_t + step;
     return curves[eyeCurve]->getPoint(eye_t);
   }
   else {
     if (center_t + step > 1) {
-      if (centerCurve == curves.size() - 1) {
-        centerCurve = 0;
-      }
-      else
-      {
-        centerCurve++;
-      }
+      if (centerCurve == curves.size() - 1) centerCurve = 0;
+      else centerCurve++;
       center_t = step - (1 - center_t);
     }
-    else
-    {
-      center_t = center_t + step;
-    }
+    else center_t = center_t + step;
     return curves[centerCurve]->getPoint(center_t);
   }
 }
