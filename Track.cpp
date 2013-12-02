@@ -39,7 +39,7 @@ void Track::drawCurves() {
   for (int i = 0; i < curves.size(); i++) {
     for (GLfloat j = 0; j <= 1; j += stacks) {
       glVertex3f(curves[i]->getPoint(j)[0], curves[i]->getPoint(j)[1], 
-			curves[i]->getPoint(j)[2]);
+        		curves[i]->getPoint(j)[2]);
     }
   }
   glEnd();
@@ -65,53 +65,55 @@ void Track::drawTrack() {
   glEnable(GL_TEXTURE_2D); 
   int texHeight = 0;
   for (int i = 0; i < curves.size(); i++) { 
-	int vertCounter = 0;
+    int vertCounter = 0;
+    
     for (GLfloat j = 0; j <= 1; j += stacks) {
-	  texHeight++;
-	  if(texHeight>11) texHeight%=10;
+//code for rendering track
+      Vector3 v1(-temp4[1]+(curves[i]->getPoint(j))[0], 
+                 temp4[0]+(curves[i]->getPoint(j))[1], 
+        	 curves[i]->getPoint(j)[2]);
+
+      Vector3 v2(temp4[1]+(curves[i]->getPoint(j))[0], 
+                 -temp4[0]+(curves[i]->getPoint(j))[1],
+                 curves[i]->getPoint(j)[2]);
+
+      glTexCoord2f(0, (texHeight/10.0)); //Texture
+      glNormal3f(0, 0, 1);
+      glVertex3f(v1[0],v1[1],v1[2]);
+
+      glTexCoord2f(laneCount, (texHeight/10.0)); //Texture
+      glNormal3f(0, 0, 1);
+      glVertex3f(v2[0],v2[1],v2[2]);
+
+//code for rendering terrain
+      texHeight++;        
+      if(texHeight>11) texHeight%=10;
       Vector3 temp4((curves[i]->getTangent(j)));
-        temp4.normalize();
+      temp4.normalize();
       temp4 = temp4.scale(width);
+         
+      Vector3 v3(-temp4[1]+(curves[i]->getPoint(j))[0], 
+            	 temp4[0]+(curves[i]->getPoint(j))[1], 
+        	 curves[i]->getPoint(j)[2]);
+      verticesOuter.push_back(v3);
 
-	  Vector3 v1(-temp4[1]+(curves[i]->getPoint(j))[0], 
-			temp4[0]+(curves[i]->getPoint(j))[1], 
-			curves[i]->getPoint(j)[2]);
-
-	  Vector3 v2(temp4[1]+(curves[i]->getPoint(j))[0], 
-		   -temp4[0]+(curves[i]->getPoint(j))[1],
-		   curves[i]->getPoint(j)[2]);
-
-	  glTexCoord2f(0, (texHeight/10.0)); //Texture
-      glNormal3f(0, 0, 1);
-	  glVertex3f(v1[0],v1[1],v1[2]);
-
-	  glTexCoord2f(laneCount, (texHeight/10.0)); //Texture
-      glNormal3f(0, 0, 1);
-	  glVertex3f(v2[0],v2[1],v2[2]);
-
-	 
-	  Vector3 v3(-temp4[1]+(curves[i]->getPoint(j))[0], 
-			temp4[0]+(curves[i]->getPoint(j))[1], 
-			curves[i]->getPoint(j)[2]);
-	  verticesOuter.push_back(v3);
-
-	  if((vertCounter)%2==0){
-		temp4 = temp4.scale(1.5);
-		Vector3 v4(-temp4[1]+(curves[i]->getPoint(j))[0], 
-			temp4[0]+(curves[i]->getPoint(j))[1], 
-			curves[i]->getPoint(j)[2]);
-		verticesInner.push_back(v4);
-	  }
-	  vertCounter++;
-	  //verticesInner.push_back(genInner(verticesOuter[verticesOuter.size()-1],v1));
+      if((vertCounter)%2==0){
+        temp4 = temp4.scale(1.5);
+        Vector3 v4(-temp4[1]+(curves[i]->getPoint(j))[0], 
+        temp4[0]+(curves[i]->getPoint(j))[1], 
+        curves[i]->getPoint(j)[2]);
+        verticesInner.push_back(v4);
+      }
+      vertCounter++;
+  //verticesInner.push_back(genInner(verticesOuter[verticesOuter.size()-1],v1));
     }
-	glDisable(GL_TEXTURE_2D); 
+        glDisable(GL_TEXTURE_2D); 
   }
   glEnd();
 }
 
 void Track::drawTerrain(){
-	/*
+        /*
   glColor3f(1,0,0);
   glNormal3f(0, 0, 1);
   glBegin(GL_LINE_STRIP);
@@ -135,8 +137,8 @@ void Track::drawTerrain(){
   for (int i = 1; i < verticesInner.size()/2; i++) {
 
       glVertex3f(verticesOuter[2*i-1][0],verticesOuter[2*i-1][1],verticesOuter[2*i-1][2]);
-	  glVertex3f(verticesInner[i][0],verticesInner[i][1],verticesInner[i][2]);
-	  glVertex3f(verticesOuter[2*i][0],verticesOuter[2*i][1],verticesOuter[2*i][2]);
+          glVertex3f(verticesInner[i][0],verticesInner[i][1],verticesInner[i][2]);
+          glVertex3f(verticesOuter[2*i][0],verticesOuter[2*i][1],verticesOuter[2*i][2]);
 
   }
   glEnd();
@@ -170,7 +172,7 @@ Vector3 Track::getNext(GLfloat step, int test)
 
 
 Vector3 genInner(Vector3 v1, Vector3 v2){
-	Vector3 v3(0,0,0);
-	return v3;
+        Vector3 v3(0,0,0);
+        return v3;
 
 }
