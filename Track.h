@@ -16,8 +16,10 @@ private:
   std::vector<BCurve*> curves;
   GLfloat stacks;
   GLfloat width;
-  GLfloat t; // Where we are on the curve
-  int currentCurve; // The curve we are currently on
+  GLfloat eye_t; // Where we are on the curve
+  GLfloat center_t;
+  int eyeCurve; // The curve we are currently on
+  int centerCurve;
   int laneCount;
   
 public:
@@ -30,7 +32,7 @@ public:
   void drawPoints();
   void drawTrack();
   void drawRoadLines();
-  Vector3 getNext(GLfloat step);
+  Vector3 getNext(GLfloat step, int test);
 };
 
 #endif /* defined(__cse167kart__Track__) */

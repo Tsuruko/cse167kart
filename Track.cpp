@@ -12,8 +12,10 @@ Track::Track()
   curves.clear();
   stacks = 0.01;
   width = 0.5;
-  t = 0;
-  currentCurve = 0;
+  eye_t = 0;
+  center_t = 0.15;
+  eyeCurve = 0;
+  centerCurve = 0;
   laneCount = 2;
 }
 
@@ -94,22 +96,40 @@ void Track::drawRoadLines() {
 
 }
 
-Vector3 Track::getNext(GLfloat step)
+Vector3 Track::getNext(GLfloat step, int test)
 {
-
-  if (t + step > 1) {
-    if (currentCurve == curves.size() - 1) {
-      currentCurve = 0;
+  if (test == 0) {
+    if (eye_t + step > 1) {
+      if (eyeCurve == curves.size() - 1) {
+        eyeCurve = 0;
+      }
+      else
+      {
+        eyeCurve++;
+      }
+      eye_t = step - (1 - eye_t);
     }
     else
     {
-      currentCurve++;
+      eye_t = eye_t + step;
     }
-    t = step - (1 - t);
+    return curves[eyeCurve]->getPoint(eye_t);
   }
-  else
-  {
-    t = t + step;
+  else {
+    if (center_t + step > 1) {
+      if (centerCurve == curves.size() - 1) {
+        centerCurve = 0;
+      }
+      else
+      {
+        centerCurve++;
+      }
+      center_t = step - (1 - center_t);
+    }
+    else
+    {
+      center_t = center_t + step;
+    }
+    return curves[centerCurve]->getPoint(center_t);
   }
-  return curves[currentCurve]->getPoint(t);
 }

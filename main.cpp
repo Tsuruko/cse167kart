@@ -135,7 +135,7 @@ void reshapeCallback(int w, int h)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0); // set perspective projection viewing frustum
-  glTranslatef(0, 0, -20);
+  //glTranslatef(0, 0, -20);
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -202,8 +202,8 @@ void processKeys (unsigned char key, int x, int y) {
 void processSpecialKeys(int key, int x, int y) {
   switch(key) {
     case GLUT_KEY_UP:
-      cam.setEye(track->getNext(0.01));
-      cam.setCenter(track->getNext(0.01));
+      cam.setEye(track->getNext(0.015, 0));
+      cam.setCenter(track->getNext(0.015, 1));
       break;
     case GLUT_KEY_DOWN:
       break;
