@@ -21,7 +21,11 @@ private:
   int eyeCurve; // The curve we are currently on
   int centerCurve;
   int laneCount;
- 
+  
+  std::vector<Vector3> verticesInner;
+  std::vector<Vector3> verticesOuter;
+  Vector3 genInner(Vector3 v1, Vector3 V2);
+
 public:
   bool texture;
   Track();
@@ -32,6 +36,7 @@ public:
   void drawPoints();
   void drawTrack();
   void drawRoadLines();
+  void drawTerrain();
   Vector3 getNext(GLfloat step, int test);
 };
 

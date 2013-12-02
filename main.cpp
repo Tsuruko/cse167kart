@@ -173,7 +173,9 @@ void displayCallback(void)
     glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
     track->drawTrack();
-    glDisable(GL_TEXTURE_2D);
+	track->drawTerrain();
+    
+	glDisable(GL_TEXTURE_2D);
     glLoadMatrixf(car.getPointer());
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
