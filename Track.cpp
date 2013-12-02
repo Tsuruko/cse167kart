@@ -69,7 +69,13 @@ void Track::drawTrack() {
     
     for (GLfloat j = 0; j <= 1; j += stacks) {
 //code for rendering track
-      Vector3 v1(-temp4[1]+(curves[i]->getPoint(j))[0], 
+      Vector3 temp4((curves[i]->getTangent(j)));
+      temp4.normalize();
+      temp4 = temp4.scale(width);
+      texHeight++;
+      if(texHeight>11) texHeight%=10;
+ 
+     Vector3 v1(-temp4[1]+(curves[i]->getPoint(j))[0], 
                  temp4[0]+(curves[i]->getPoint(j))[1], 
         	 curves[i]->getPoint(j)[2]);
 
@@ -86,11 +92,6 @@ void Track::drawTrack() {
       glVertex3f(v2[0],v2[1],v2[2]);
 
 //code for rendering terrain
-      texHeight++;        
-      if(texHeight>11) texHeight%=10;
-      Vector3 temp4((curves[i]->getTangent(j)));
-      temp4.normalize();
-      temp4 = temp4.scale(width);
          
       Vector3 v3(-temp4[1]+(curves[i]->getPoint(j))[0], 
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
