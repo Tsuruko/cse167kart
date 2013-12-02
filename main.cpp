@@ -31,7 +31,10 @@ int clickx, clicky = 0;
 bool lrb = true;
 //toggle between default perspective and simulation perspective
 bool mode = true;
+//toggle control points on/off in edit mode
 bool ctrlpts = true;
+//toggle terrain on/off in car mode
+bool terrain = false;
 Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
 GLfloat xtrans = 0;
@@ -173,9 +176,9 @@ void displayCallback(void)
     glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
     track->drawTrack();
-	track->drawTerrain();
-    
-	glDisable(GL_TEXTURE_2D);
+    if (terrain) track->drawTerrain();
+
+    glDisable(GL_TEXTURE_2D);
     glLoadMatrixf(car.getPointer());
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
@@ -203,7 +206,6 @@ void processKeys (unsigned char key, int x, int y) {
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
       glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
-
       mode = false;
     } else {
       glMatrixMode(GL_PROJECTION);
@@ -216,6 +218,10 @@ void processKeys (unsigned char key, int x, int y) {
   if (key == 'c') {
     if (ctrlpts) ctrlpts = false;
     else ctrlpts = true;
+  }
+  if (key == 't') {
+    if (terrain) terrain = false;
+    else terrain = true;
   }
 }
 

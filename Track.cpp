@@ -114,10 +114,6 @@ void Track::drawTrack() {
   glEnd();
 }
 
-void Track::drawRoadLines() {
-
-}
-
 void Track::drawTerrain(){
 	/*
   glColor3f(1,0,0);
@@ -148,7 +144,10 @@ void Track::drawTerrain(){
 
   }
   glEnd();
+  verticesOuter.clear();
+  verticesInner.clear();
 }
+
 Vector3 Track::getNext(GLfloat step, int test)
 {
   if (test == 0) {
