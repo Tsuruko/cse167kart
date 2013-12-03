@@ -22,6 +22,9 @@
 
 using namespace std;
 
+GLuint trackTex;
+GLuint rockTex;
+
 Matrix4 model;
 Matrix4 car, carTrans, carScale;
 Matrix4 trackSize;
@@ -174,8 +177,12 @@ void displayCallback(void)
               cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
     glEnable(GL_LIGHTING);
+    glBindTexture(GL_TEXTURE_2D, trackTex);
     track->drawTrack();
-    if (terrain) track->drawTerrain();
+    if (terrain){
+      glBindTexture(GL_TEXTURE_2D, rockTex);
+      track->drawTerrain();
+    }
     glDisable(GL_TEXTURE_2D);
     glLoadMatrixf(car.getPointer());
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -306,8 +313,12 @@ int main(int argc, char *argv[])
   trackSize.identity();
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack();
-  loadTexture();
+  char* arr = "road3.ppm";
+  trackTex = loadTexture(arr);
   
+  arr = "rock.ppm";
+  rockTex = loadTexture(arr);
+
   car.identity();
   carTrans = carTrans.translate(0, -1, -4);
   carScale = carScale.scale(0.5, 0.5, 0.5);

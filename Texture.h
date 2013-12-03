@@ -94,15 +94,19 @@ void initGL()
 }
 
 // load image file into texture object
-void loadTexture()
+void doWork(char* tdata){
+
+}
+
+GLuint loadTexture(char* name)
 {
   GLuint texture[1];     // storage for one texture
   int twidth, theight;   // texture width/height [pixels]
   unsigned char* tdata;  // texture pixel data
   
   // Load image file
-  tdata = loadPPM("road3.ppm", twidth, theight);
-  if (tdata==NULL) return;
+  tdata = loadPPM(name, twidth, theight);
+  if (tdata==NULL) return 0;
   
   // Create ID for texture
   glGenTextures(1, &texture[0]);
@@ -119,8 +123,39 @@ void loadTexture()
 
   // Repeat
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+  return texture[0];
 }
 
+
+GLuint loadRockTexture(char* name)
+{
+  GLuint texture[1];     // storage for one texture
+  int twidth, theight;   // texture width/height [pixels]
+  unsigned char* tdata;  // texture pixel data
+  
+  // Load image file
+  tdata = loadPPM(name, twidth, theight);
+  if (tdata==NULL) return 0;
+  
+  // Create ID for texture
+  glGenTextures(1, &texture[0]);
+  
+  // Set this texture to be the one we are working with
+  glBindTexture(GL_TEXTURE_2D, texture[0]);
+  
+  // Generate the texture
+  glTexImage2D(GL_TEXTURE_2D, 0, 3, twidth, theight, 0, GL_RGB, GL_UNSIGNED_BYTE, tdata);
+  
+  // Set bi-linear filtering for both minification and magnification
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  // Repeat
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+  return texture[0];
+}
 /*
 int main(int argc, char** argv)
 {

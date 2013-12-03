@@ -27,6 +27,7 @@ private:
   std::vector<Vector3> l2;
   std::vector<Vector3> l3;
   Vector3 genInner(Vector3 v1, Vector3 V2);
+  Vector3 calcNormal(Vector3 v1);
 
 public:
   Track();
@@ -38,6 +39,7 @@ public:
   void drawTrack();
   void drawRoadLines();
   void drawTerrain();
+
   Vector3 getNext(GLfloat step, int test);
 };
 
