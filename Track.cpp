@@ -6,6 +6,7 @@
 //
 
 #include "Track.h"
+#include <stdlib.h>
 
 Track::Track()
 {
