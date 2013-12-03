@@ -20,11 +20,11 @@
 #include "Camera.h"
 #include "objreader.h"
 #include "sphere.cpp"
+#include "car.h"
 
 using namespace std;
 
 Matrix4 model;
-Matrix4 car, carTrans, carScale;
 Matrix4 trackSize;
 Matrix4 mouse;  //for trackball rotating
 //mouse variables
@@ -46,13 +46,16 @@ const float transRatio = -2.5;
 
 Track * track = new Track();
 sphere * s = new sphere(1.0);
+car * Car = new car();
 
+/*
 int nVerts;
 float *vertices;
 float *normals;
 float *texcoords;
 int nIndices;
 int *indices;
+*/
 
 int width  = 512;   // set window width in pixels here
 int height = 512;   // set window height in pixels here
@@ -93,8 +96,6 @@ void idleCallback(void)
   model.identity();
   if (mode) model = model * mouse;
   else  model = model * trackSize;
-  carTrans = carTrans.translate(xtrans, -1, -4);
-  car = carScale * carTrans;
   displayCallback();  // call display routine to re-draw
 }
 
@@ -180,6 +181,8 @@ void displayCallback(void)
     s->draw(model);
     if (terrain) track->drawTerrain();
     glDisable(GL_TEXTURE_2D);
+    Car->draw(model);
+/*
     glLoadMatrixf(car.getPointer());
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
@@ -189,7 +192,7 @@ void displayCallback(void)
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisable(GL_NORMAL_ARRAY);
     glEnable(GL_TEXTURE_2D);
-
+*/
     //cam.setEye(track->getNext(0.005, 0));
     //cam.setCenter(track->getNext(0.005, 1));
   }
@@ -311,11 +314,8 @@ int main(int argc, char *argv[])
   makeTrack();
   loadTexture();
   
-  car.identity();
-  carTrans = carTrans.translate(0, -1, -4);
-  carScale = carScale.scale(0.5, 0.5, 0.5);
-  
-  ObjReader::readObj("Porsche_911_GT2.obj", nVerts, &vertices, &normals, &texcoords, nIndices, &indices);
+  ObjReader::readObj("Porsche_911_GT2.obj", Car->nVerts, &Car->vertices, 
+		      &Car->normals &Car->texcoords, Car->nIndices, &Car->indices);
   
   glutMainLoop();
   return 0;
