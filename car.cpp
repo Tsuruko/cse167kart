@@ -9,17 +9,18 @@ car::car(float size) {
 }
 
 void car::draw(Matrix4 C) {
-    Matrix4 carpos = C * scale * trans;
-    glLoadMatrixf(carpos.getPointer());
-    glDisable(GL_TEXTURE_2D);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, vertices);
-    glNormalPointer(GL_FLOAT, 0, normals);
-    glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, indices);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisable(GL_NORMAL_ARRAY);
-    glEnable(GL_TEXTURE_2D);
+  Matrix4 carpos = C * scale * trans;
+  glLoadMatrixf(carpos.getPointer());
+  glDisable(GL_TEXTURE_2D);
+  glColor3f(1, 1, 1);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_NORMAL_ARRAY);
+  glVertexPointer(3, GL_FLOAT, 0, vertices);
+  glNormalPointer(GL_FLOAT, 0, normals);
+  glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, indices);
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glDisable(GL_NORMAL_ARRAY);
+  glEnable(GL_TEXTURE_2D);
 }
 
 void car::moveCar(GLfloat xtrans) {
