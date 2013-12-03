@@ -5,10 +5,10 @@
 
 void ObjReader::get_indices(char *word, int *vindex, int *tindex, int *nindex)
 {
-	char *null = " ";
+	const char *null = " ";
 	char *ptr;
-	char *tp;
-	char *np;
+	const char *tp;
+	const char *np;
 
 	/* by default, the texture and normal pointers are set to the null string */
 	tp = null;
@@ -34,7 +34,7 @@ void ObjReader::get_indices(char *word, int *vindex, int *tindex, int *nindex)
 }
 
 
-void ObjReader::readObj(char* fileName, int &nVertices, float **vertices, float **normals, float **texcoords, int &nIndices, int **indices)
+void ObjReader::readObj(const char* fileName, int &nVertices, float **vertices, float **normals, float **texcoords, int &nIndices, int **indices)
 {
 	FILE * fp = fopen(fileName,"r");
 	int nv=0, nn=0, nf=0, nt=0;

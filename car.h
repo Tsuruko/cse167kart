@@ -1,17 +1,16 @@
 #ifndef _CAR_H_
 #define _CAR_H_
 
-#include "objreader.h"
 #include "Matrix4.h"
 
 class car {
 
-  public:
-    float material[3];
-
+  private:
+    GLfloat xpos;
     Matrix4 scale;
     Matrix4 trans;
 
+  public:
     int nVerts; 
     float *vertices; 
     float *normals; 
@@ -19,9 +18,9 @@ class car {
     int nIndices; 
     int *indices; 
 
-    car();
+    car(float);
     void draw(Matrix4);
+    void moveCar(GLfloat);
 };
-
 
 #endif

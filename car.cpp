@@ -1,15 +1,17 @@
 #include "car.h"
 
-car::car() {
-  trans = Matrix4::translate(0, -1, -4);
-  scale = Matrix4::scale(0.5, 0.5, 0.5);
+car::car(float size) {
+  xpos = 0.0;
+  trans.identity();
+  trans = trans.translate(xpos, -1, -4);
+  scale.identity();
+  scale = scale.scale(0.5/size, 0.5/size, 0.5/size);
 }
 
 void car::draw(Matrix4 C) {
-    glMatrixMode(GL_MODELVIEW);
-    Matrix4 Cnew = C * scale;
-    glLoadMatrixf(Cnew.getPointer());
-
+    Matrix4 carpos = C * scale * trans;
+    glLoadMatrixf(carpos.getPointer());
+    glDisable(GL_TEXTURE_2D);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
@@ -20,3 +22,9 @@ void car::draw(Matrix4 C) {
     glEnable(GL_TEXTURE_2D);
 }
 
+void car::moveCar(GLfloat xtrans) {
+  xpos += xtrans;
+  if (xpos < -1.8) xpos = -1.8;
+  if (xpos > 1.8) xpos = 1.8;
+  trans = trans.translate(xpos, -1, -4);
+}

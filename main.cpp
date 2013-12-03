@@ -24,7 +24,6 @@
 
 using namespace std;
 
-Matrix4 model;
 Matrix4 trackSize;
 Matrix4 mouse;  //for trackball rotating
 //mouse variables
@@ -38,24 +37,20 @@ bool ctrlpts = true;
 bool terrain = false;
 Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
-GLfloat xtrans = 0;
-
 //track size and position adjustment constants
 const float trackScale = 10.0;
 const float transRatio = -2.5;
 
 Track * track = new Track();
 sphere * s = new sphere(1.0);
-car * Car = new car();
+car * modelCar = new car(trackScale);
 
-/*
 int nVerts;
 float *vertices;
 float *normals;
 float *texcoords;
 int nIndices;
 int *indices;
-*/
 
 int width  = 512;   // set window width in pixels here
 int height = 512;   // set window height in pixels here
@@ -93,9 +88,6 @@ void makeTrack() {
 
 void idleCallback(void)
 {
-  model.identity();
-  if (mode) model = model * mouse;
-  else  model = model * trackSize;
   displayCallback();  // call display routine to re-draw
 }
 
@@ -162,37 +154,31 @@ void displayCallback(void)
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glLoadMatrixf(model.getPointer());
- 
-  if (mode) {
+  if (mode) { 
+//testing stuff
+    Matrix4 pos = Matrix4::scale(1.5, 1.5, 1.5);
+    pos = mouse * pos;
+    glLoadMatrixf(pos.getPointer());
     glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
     gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
     glDisable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
     if (ctrlpts) track->drawPoints();
     track->drawCurves();
+    s->draw(mouse);
   } else { 
-    glClearColor(0.0, 0.0, 1.0, 0.0);           // set clear color to black
+    glLoadMatrixf(trackSize.getPointer());
+    glClearColor(0.0, 0.0, 1.0, 0.0);           // set clear color to blue
     gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
               cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
     glEnable(GL_LIGHTING);
     track->drawTrack();
-    s->draw(model);
     if (terrain) track->drawTerrain();
     glDisable(GL_TEXTURE_2D);
-    Car->draw(model);
-/*
-    glLoadMatrixf(car.getPointer());
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, vertices);
-    glNormalPointer(GL_FLOAT, 0, normals);
-    glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, indices);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisable(GL_NORMAL_ARRAY);
-    glEnable(GL_TEXTURE_2D);
-*/
+    modelCar->draw(trackSize);
+    s->draw(trackSize);
+
     //cam.setEye(track->getNext(0.005, 0));
     //cam.setCenter(track->getNext(0.005, 1));
   }
@@ -237,12 +223,10 @@ void processSpecialKeys(int key, int x, int y) {
       cam.setCenter(track->getNext(0.015, 1));
       break;
     case GLUT_KEY_LEFT:
-      xtrans = xtrans - 0.2;
-      if (xtrans < -1.8) xtrans = -1.8;
+      modelCar->moveCar(-0.2);
       break;
     case GLUT_KEY_RIGHT:
-      xtrans = xtrans + 0.2;
-      if (xtrans > 1.8) xtrans = 1.8;
+      modelCar->moveCar(0.2);
       break;
     default:
       break;
@@ -307,16 +291,16 @@ int main(int argc, char *argv[])
   glutSpecialFunc(processSpecialKeys);
 
   //initialize matrices
-  model.identity();
   mouse.identity();
   trackSize.identity();
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack();
   loadTexture();
   
-  ObjReader::readObj("Porsche_911_GT2.obj", Car->nVerts, &Car->vertices, 
-		      &Car->normals &Car->texcoords, Car->nIndices, &Car->indices);
-  
+  ObjReader::readObj("Porsche_911_GT2.obj", modelCar->nVerts, &modelCar->vertices, 
+			&modelCar->normals, &modelCar->texcoords, 
+			modelCar->nIndices, &modelCar->indices);
+ 
   glutMainLoop();
   return 0;
 }
