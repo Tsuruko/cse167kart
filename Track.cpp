@@ -100,33 +100,34 @@ void Track::drawTrack() {
       l0.push_back(v3);
 
  
-      temp4 = temp4.scale(1.1);
-     /* Vector3 v4(-temp4[1]+(curves[i]->getPoint(j))[0], 
+      temp4 = temp4.scale(1.2);
+     /* Vector3 v4(-temp4[1]+(curves[i]->getPoint(j))[0],  // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
-        	     curves[i]->getPoint(j)[2]);*/
+        	     curves[i]->getPoint(j)[2]);*/ 
 
-      Vector3 v4(-temp4[1]+v3[0]+rand()%3/5.0, 
-            	 temp4[0]+v3[1]+rand()%3/5.0, 
-        	     v3[2]+rand()%3/2.0);
+      Vector3 v4(-temp4[1]+v3[0],//+rand()%3/4.0,  
+            	 temp4[0]+v3[1],//+rand()%3/4.0, 
+        	     v3[2]+rand()%3/2.0+1/2);
       l1.push_back(v4);
 
-      temp4 = temp4.scale(1.2);
-     /* Vector3 v5(-temp4[1]+(curves[i]->getPoint(j))[0], 
+      temp4 = temp4.scale(1.1);
+     /* Vector3 v5(-temp4[1]+(curves[i]->getPoint(j))[0], // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/
-      Vector3 v5(-temp4[1]+v4[0]+rand()%3/5.0, 
-            	 temp4[0]+v4[1]+rand()%3/5.0, 
-        	     v4[2]+rand()%3/2.0);
+
+      Vector3 v5(-temp4[1]+v4[0],//+rand()%3/4.0, 
+            	 temp4[0]+v4[1],//+rand()%3/5.0, 
+        	     v4[2]);//+rand()%3/2.0+2/2);
       l2.push_back(v5);
 
-      temp4 = temp4.scale(1.2);
+      temp4 = temp4.scale(1.1);
       /*
-      Vector3 v6(-temp4[1]+(curves[i]->getPoint(j))[0], 
+      Vector3 v6(-temp4[1]+(curves[i]->getPoint(j))[0], // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/
-      Vector3 v6(-temp4[1]+v5[0]+rand()%3/5.0, 
-            	 temp4[0]+v5[1]+rand()%3/5.0, 
-        	     v5[2]+rand()%3/2.0);
+      Vector3 v6(-temp4[1]+v5[0],//+rand()%3/4.0, 
+            	 temp4[0]+v5[1],//+rand()%3/5.0, 
+        	     v5[2]);//+rand()%3/2.0+3/2);
       l3.push_back(v6);
 
 	  }
@@ -184,21 +185,27 @@ void Track::drawTerrain(){
   for (int i = 0; i < l0.size(); i++) {
       texHeight++;
       if(texHeight>11) texHeight%=10;
-      glTexCoord2f(l1[i][0]-l0[i][0]+texHeight,l1[i][2]/20.0);
-      glNormal3f(-l1[i][1], l1[i][0], 1);
-      glVertex3f(l1[i][0],l1[i][1],l1[i][2]);
-      lastS1 = l1[i][0];//-l1[i][0]/1;
-      lastT1 = l1[i][2];//-l1[i][2]/1;
+
+
+
       glTexCoord2f(texHeight,0);
       lastS0 = l0[i][0];//-l0[i][0]/1;
       lastT0 = l0[i][2];//-l0[i][2]/1;
       glNormal3f(-l0[i][1], l0[i][0], 1);
       glVertex3f(l0[i][0],l0[i][1],l0[i][2]);
+
+      glTexCoord2f(l1[i][0]-l0[i][0]+texHeight,l1[i][2]/20.0);
+      glNormal3f(-l1[i][1], l1[i][0], 1);
+      glVertex3f(l1[i][0],l1[i][1],l1[i][2]);
+      lastS1 = l1[i][0];//-l1[i][0]/1;
+      lastT1 = l1[i][2];//-l1[i][2]/1;
   }
-    glNormal3f(-l1[0][1], l1[0][0], 1);
-  glVertex3f(l1[0][0],l1[0][1],l1[0][2]);
+  
+
   glNormal3f(-l0[0][1], l0[0][0], 1);
   glVertex3f(l0[0][0],l0[0][1],l0[0][2]);
+  glNormal3f(-l1[0][1], l1[0][0], 1);
+  glVertex3f(l1[0][0],l1[0][1],l1[0][2]);
 
   glEnd();
 
