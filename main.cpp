@@ -314,6 +314,9 @@ int main(int argc, char *argv[])
 			&modelCar->normals, &modelCar->texcoords, 
 			modelCar->nIndices, &modelCar->indices);
  
+  GLint texSize;
+  glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
+  cout<<texSize<<endl;
   glutMainLoop();
   return 0;
 }
