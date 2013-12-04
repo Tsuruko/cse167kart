@@ -157,25 +157,24 @@ void displayCallback(void)
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  if (mode) { 
-//testing stuff
+  if (mode) {
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING);
     Matrix4 pos = Matrix4::scale(1.5, 1.5, 1.5);
     pos = mouse * pos;
     glLoadMatrixf(pos.getPointer());
     glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
     gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
-    glDisable(GL_LIGHTING);
-    glDisable(GL_TEXTURE_2D);
     if (ctrlpts) track->drawPoints();
     track->drawCurves();
     s->draw(mouse);
-  } else { 
+  } else {
     glLoadMatrixf(trackSize.getPointer());
-    glClearColor(0.0, 0.0, 1.0, 0.0);           // set clear color to blue
+    glEnable(GL_LIGHTING);
+    glClearColor(0.0, 0.5, 1.0, 0.0);           // set clear color to blue
     gluLookAt(cam.getEye()[0], cam.getEye()[1], cam.getEye()[2],
               cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
-    glEnable(GL_LIGHTING);
 
     glBindTexture(GL_TEXTURE_2D, trackTex);
     track->drawTrack();
