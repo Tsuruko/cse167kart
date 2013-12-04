@@ -18,6 +18,7 @@ Track::Track()
   eyeCurve = 0;
   centerCurve = 0;
   laneCount = 2;
+  maxLevels = 4;
 }
 
 void Track::addCurve(BCurve * c) {
@@ -113,27 +114,27 @@ void Track::drawTrack() {
       l0.push_back(v3);
 
       Vector3 original = temp4;
-      temp4 = temp4.scale(1.1);//+rand()%10/10.0*-1);
+      temp4 = temp4.scale(1);//1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
      /* Vector3 v4(-temp4[1]+(curves[i]->getPoint(j))[0],  // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/ 
 
       Vector3 v4(-temp4[1]+v3[0],//+rand()%3/4.0,  
             	 temp4[0]+v3[1],//+rand()%3/4.0, 
-        	     v3[2]+.5);//+rand()%3/2.0+1/2);
+        	     v3[2]+rand()%3/5.0);
       l1.push_back(v4);
 
-      temp4 = original.scale(1.1);
+      temp4 = original.scale(1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
      /* Vector3 v5(-temp4[1]+(curves[i]->getPoint(j))[0], // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/
 
       Vector3 v5(-temp4[1]+v4[0],//+rand()%3/4.0, 
             	 temp4[0]+v4[1],//+rand()%3/5.0, 
-        	     v4[2]);//+rand()%3/2.0+2/2);
+        	     v4[2]+rand()%3/5.0);//+rand()%3/2.0+2/2);
       l2.push_back(v5);
 
-      temp4 = original.scale(1.1);
+      temp4 = original.scale(1+std::pow(-1.0,(rand()%2))*(rand()%5)/5.0);
       /*
       Vector3 v6(-temp4[1]+(curves[i]->getPoint(j))[0], // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
@@ -151,6 +152,54 @@ void Track::drawTrack() {
   glEnd();
 }
 
+
+void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2){
+  glColor3f(1,1,1);
+  //glNormal3f(0, 0, 1);
+  glBegin(GL_QUAD_STRIP);
+  glEnable(GL_TEXTURE_2D); 
+
+  int texHeight=1;
+  double repeat = 20.0;
+  for (int i = 0; i < v1.size(); i++) {
+      
+      if(texHeight>repeat) texHeight=1;
+
+      glTexCoord2f(texHeight/repeat,0);
+      glNormal3f(-v1[i][1], v1[i][0], 1);
+      glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
+
+      glTexCoord2f(texHeight/repeat,1);
+      glNormal3f(-v2[i][1], v2[i][0], 1);
+      glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
+
+
+      if (texHeight==repeat){
+          glTexCoord2f(0/repeat,0);
+          glNormal3f(-v1[i][1], v1[i][0], 1);
+          glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
+
+          glTexCoord2f(0/repeat,1);
+          glNormal3f(-v2[i][1], v2[i][0], 1);
+          glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
+
+
+      }
+      texHeight++;
+  }
+  
+  glTexCoord2f(texHeight/repeat,0);
+  glNormal3f(-v1[0][1], v1[0][0], 1);
+  glVertex3f(v1[0][0],v1[0][1],v1[0][2]);
+
+  glTexCoord2f(texHeight/repeat,1);
+  glNormal3f(-v2[0][1], v2[0][0], 1.0/maxLevels);
+  glVertex3f(v2[0][0],v2[0][1],v2[0][2]);
+
+  glEnd();
+
+
+}
 void Track::drawTerrain(){
   /*
   glColor3f(1,0,0);
@@ -185,61 +234,57 @@ void Track::drawTerrain(){
   }
   glEnd();*/
 
-
+  /*
   glColor3f(1,1,1);
   //glNormal3f(0, 0, 1);
   glBegin(GL_QUAD_STRIP);
   glEnable(GL_TEXTURE_2D); 
-  float lastS0 = 0;
-  float lastT0 = 0;
-  float lastS1 = 0;
-  float lastT1 = 0;
+
   int texHeight=1;
+  double repeat = 20.0;
   for (int i = 0; i < l0.size(); i++) {
-      texHeight++;
-      if(texHeight>10) texHeight=1;
+      
+      if(texHeight>repeat) texHeight=1;
 
-
-
-      glTexCoord2f(texHeight/10.0,0);
-      lastS0 = l0[i][0];//-l0[i][0]/1;
-      lastT0 = l0[i][2];//-l0[i][2]/1;
+      glTexCoord2f(texHeight/repeat,0);
       glNormal3f(-l0[i][1], l0[i][0], 1);
       glVertex3f(l0[i][0],l0[i][1],l0[i][2]);
 
-      glTexCoord2f(texHeight/10.0,1);
+      glTexCoord2f(texHeight/repeat,1);
       glNormal3f(-l1[i][1], l1[i][0], 1);
       glVertex3f(l1[i][0],l1[i][1],l1[i][2]);
-      lastS1 = l1[i][0];//-l1[i][0]/1;
-      lastT1 = l1[i][2];//-l1[i][2]/1;
 
-      if (texHeight==10){
-          glTexCoord2f(0/10.0,0);
-          lastS0 = l0[i][0];//-l0[i][0]/1;
-          lastT0 = l0[i][2];//-l0[i][2]/1;
+
+      if (texHeight==repeat){
+          glTexCoord2f(0/repeat,0);
           glNormal3f(-l0[i][1], l0[i][0], 1);
           glVertex3f(l0[i][0],l0[i][1],l0[i][2]);
 
-          glTexCoord2f(0/10.0,1);
+          glTexCoord2f(0/repeat,1);
           glNormal3f(-l1[i][1], l1[i][0], 1);
           glVertex3f(l1[i][0],l1[i][1],l1[i][2]);
-          lastS1 = l1[i][0];//-l1[i][0]/1;
-          lastT1 = l1[i][2];//-l1[i][2]/1;
+
 
       }
+      texHeight++;
 
   }
   
-  glTexCoord2f(texHeight/10.0,0);
+  glTexCoord2f(texHeight/repeat,0);
   glNormal3f(-l0[0][1], l0[0][0], 1);
   glVertex3f(l0[0][0],l0[0][1],l0[0][2]);
-  glTexCoord2f(texHeight/10.0,1);
-  glNormal3f(-l1[0][1], l1[0][0], 1);
+  glTexCoord2f(texHeight/repeat,1);
+  glNormal3f(-l1[0][1], l1[0][0], 1.0/maxLevels);
   glVertex3f(l1[0][0],l1[0][1],l1[0][2]);
 
   glEnd();
 
-  glColor3f(1,1,1);
+  */
+ drawTerrainHelper(l0,l1);
+ drawTerrainHelper(l1,l2);
+ drawTerrainHelper(l2,l3);
+ /*
+ glColor3f(1,1,1);
   glNormal3f(0, 0, 1);
   glBegin(GL_QUAD_STRIP);
   for (int i = 0; i < l0.size(); i++) {
@@ -255,7 +300,7 @@ void Track::drawTerrain(){
   glVertex3f(l1[0][0],l1[0][1],l1[0][2]);
   
   glEnd();
-
+  
   glColor3f(1,1,1);
   glNormal3f(0, 0, 1);
   glBegin(GL_QUAD_STRIP);
@@ -273,7 +318,7 @@ void Track::drawTerrain(){
   glVertex3f(l2[0][0],l2[0][1],l2[0][2]);
   glDisable(GL_TEXTURE_2D); 
   glEnd();
-
+  */
   /*
  glBegin(GL_TRIANGLE_STRIP);
   glVertex3f(l0[0][0],l0[0][1],l0[0][2]);

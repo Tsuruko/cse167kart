@@ -307,13 +307,16 @@ int main(int argc, char *argv[])
    char* arr = "road3.ppm";
   trackTex = loadTexture(arr);
   
-  arr = "rock3l.ppm";
+  arr = "rock.ppm";
   rockTex = loadTexture(arr);
   
   ObjReader::readObj("Porsche_911_GT2.obj", modelCar->nVerts, &modelCar->vertices, 
 			&modelCar->normals, &modelCar->texcoords, 
 			modelCar->nIndices, &modelCar->indices);
  
+  GLint texSize;
+  glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
+  cout<<texSize<<endl;
   glutMainLoop();
   return 0;
 }

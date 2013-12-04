@@ -22,6 +22,7 @@ private:
   int centerCurve;
   int laneCount;
   
+  int maxLevels;
   std::vector<Vector3> l0;
   std::vector<Vector3> l1;
   std::vector<Vector3> l2;
@@ -39,7 +40,7 @@ public:
   void drawTrack();
   void drawRoadLines();
   void drawTerrain();
-
+  void drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2);
   Vector3 getNext(GLfloat step, int test);
 };
 
