@@ -113,6 +113,7 @@ void Track::drawTrack() {
         	     curves[i]->getPoint(j)[2]);
       l0.push_back(v3);
 
+      int reset = 1;
       Vector3 original = temp4;
       temp4 = temp4.scale(1);//1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
      /* Vector3 v4(-temp4[1]+(curves[i]->getPoint(j))[0],  // ORIGINAL
@@ -121,27 +122,27 @@ void Track::drawTrack() {
 
       Vector3 v4(-temp4[1]+v3[0],//+rand()%3/4.0,  
             	 temp4[0]+v3[1],//+rand()%3/4.0, 
-        	     v3[2]+rand()%3/5.0);
+        	     v3[2]+rand()%3/5.0*reset);
       l1.push_back(v4);
 
-      temp4 = original.scale(1+std::pow(-1.0,(rand()%10))*(rand()%5)/10.0);
+      temp4 = original.scale(1+reset*std::pow(-1.0,(rand()%10))*(rand()%5)/10.0);
      /* Vector3 v5(-temp4[1]+(curves[i]->getPoint(j))[0], // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/
 
       Vector3 v5(-temp4[1]+v4[0],//+rand()%3/4.0, 
             	 temp4[0]+v4[1],//+rand()%3/5.0, 
-        	     v4[2]+rand()%3/5.0);//+rand()%3/2.0+2/2);
+        	     v4[2]+reset*rand()%3/5.0);//+rand()%3/2.0+2/2);
       l2.push_back(v5);
 
-      temp4 = original.scale(1+std::pow(-1.0,(rand()%10))*(rand()%5)/5.0);
+      temp4 = original.scale(1+reset*std::pow(-1.0,(rand()%10))*(rand()%5)/5.0);
       /*
       Vector3 v6(-temp4[1]+(curves[i]->getPoint(j))[0], // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/
       Vector3 v6(-temp4[1]+v5[0],//+rand()%3/4.0, 
             	 temp4[0]+v5[1],//+rand()%3/5.0, 
-        	     v5[2]+rand()%3/5.0);
+        	     v5[2]+rand()%3/5.0*reset);
       l3.push_back(v6);
 
 	  }
@@ -160,26 +161,27 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
   glEnable(GL_TEXTURE_2D); 
 
   int texHeight=1;
-  int repeat = 20;
+  int repeatX = 5;
+  int repeatY = 4;
   for (int i = 0; i < v1.size(); i++) {
       
-      if(texHeight>repeat) texHeight=1;
+      if(texHeight>repeatX) texHeight=1;
 
-      glTexCoord2f(texHeight/(repeat*1.0),level/(maxLevels*1.0));
+      glTexCoord2f(texHeight/(repeatX*1.0),level/(maxLevels*1.0/repeatY));
       glNormal3f(-v1[i][1], v1[i][0], 1);
       glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
-      glTexCoord2f(texHeight/(repeat*1.0),1);
-      glNormal3f(-v2[i][1], v2[i][0], (level+1)/(maxLevels*1.0));
+      glTexCoord2f(texHeight/(repeatX*1.0),(level+1)/(maxLevels*1.0/repeatY));
+      glNormal3f(-v2[i][1], v2[i][0], 1);
       glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
 
 
-      if (texHeight==repeat&&((i+1)!=v1.size())){
-          glTexCoord2f(0/repeat*1.0,level/(maxLevels*1.0));
+      if (texHeight==repeatX&&((i+1)!=v1.size())){
+          glTexCoord2f(0/repeatX*1.0,level/(maxLevels*1.0/repeatY));
           glNormal3f(-v1[i][1], v1[i][0], 1);
           glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
-          glTexCoord2f(0/repeat,(level+1)/(maxLevels*1.0));
+          glTexCoord2f(0/(repeatX*1.0),(level+1)/(maxLevels*1.0/repeatY));
           glNormal3f(-v2[i][1], v2[i][0], 1);
           glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
           /*
@@ -206,12 +208,12 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
       glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
       */
       int i = 0;
-      glTexCoord2f(1/(repeat*1.0),level/(maxLevels*1.0));
+      glTexCoord2f(1/(repeatX*1.0),level/(maxLevels*1.0/repeatY));
       glNormal3f(-v1[i][1], v1[i][0], 1);
       glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
-      glTexCoord2f(1/(repeat*1.0),1);
-      glNormal3f(-v2[i][1], v2[i][0], (level+1)/(maxLevels*1.0));
+      glTexCoord2f(1/(repeatX*1.0),(level+1)/(maxLevels*1.0/repeatY));
+      glNormal3f(-v2[i][1], v2[i][0], 1);
       glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
       
   glEnd();
