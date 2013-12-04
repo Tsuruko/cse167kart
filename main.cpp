@@ -304,7 +304,7 @@ int main(int argc, char *argv[])
   trackSize.identity();
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack();
-   char* arr = "road3.ppm";
+  char* arr = "road3.ppm";
   trackTex = loadTexture(arr);
   
   arr = "rock.ppm";
