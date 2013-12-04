@@ -40,7 +40,7 @@ public:
   void drawTrack();
   void drawRoadLines();
   void drawTerrain();
-  void drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2);
+  void drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level);
   Vector3 getNext(GLfloat step, int test);
 };
 

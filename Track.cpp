@@ -124,7 +124,7 @@ void Track::drawTrack() {
         	     v3[2]+rand()%3/5.0);
       l1.push_back(v4);
 
-      temp4 = original.scale(1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+      temp4 = original.scale(1+std::pow(-1.0,(rand()%10))*(rand()%5)/10.0);
      /* Vector3 v5(-temp4[1]+(curves[i]->getPoint(j))[0], // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/
@@ -134,14 +134,14 @@ void Track::drawTrack() {
         	     v4[2]+rand()%3/5.0);//+rand()%3/2.0+2/2);
       l2.push_back(v5);
 
-      temp4 = original.scale(1+std::pow(-1.0,(rand()%2))*(rand()%5)/5.0);
+      temp4 = original.scale(1+std::pow(-1.0,(rand()%10))*(rand()%5)/5.0);
       /*
       Vector3 v6(-temp4[1]+(curves[i]->getPoint(j))[0], // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/
       Vector3 v6(-temp4[1]+v5[0],//+rand()%3/4.0, 
             	 temp4[0]+v5[1],//+rand()%3/5.0, 
-        	     v5[2]);//+rand()%3/2.0+3/2);
+        	     v5[2]+rand()%3/5.0);
       l3.push_back(v6);
 
 	  }
@@ -153,49 +153,67 @@ void Track::drawTrack() {
 }
 
 
-void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2){
+void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level){
   glColor3f(1,1,1);
   //glNormal3f(0, 0, 1);
   glBegin(GL_QUAD_STRIP);
   glEnable(GL_TEXTURE_2D); 
 
   int texHeight=1;
-  double repeat = 20.0;
+  int repeat = 20;
   for (int i = 0; i < v1.size(); i++) {
       
       if(texHeight>repeat) texHeight=1;
 
-      glTexCoord2f(texHeight/repeat,0);
+      glTexCoord2f(texHeight/(repeat*1.0),level/(maxLevels*1.0));
       glNormal3f(-v1[i][1], v1[i][0], 1);
       glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
-      glTexCoord2f(texHeight/repeat,1);
-      glNormal3f(-v2[i][1], v2[i][0], 1);
+      glTexCoord2f(texHeight/(repeat*1.0),1);
+      glNormal3f(-v2[i][1], v2[i][0], (level+1)/(maxLevels*1.0));
       glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
 
 
-      if (texHeight==repeat){
-          glTexCoord2f(0/repeat,0);
+      if (texHeight==repeat&&((i+1)!=v1.size())){
+          glTexCoord2f(0/repeat*1.0,level/(maxLevels*1.0));
           glNormal3f(-v1[i][1], v1[i][0], 1);
           glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
-          glTexCoord2f(0/repeat,1);
+          glTexCoord2f(0/repeat,(level+1)/(maxLevels*1.0));
           glNormal3f(-v2[i][1], v2[i][0], 1);
           glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
+          /*
+          glTexCoord2f(1/repeat,level/maxLevels);
+          glNormal3f(-v1[i+1][1], v1[i+1][0], 1);
+          glVertex3f(v1[i+1][0],v1[i+1][1],v1[i+1][2]);
 
-
+          glTexCoord2f(1/repeat,(level+1)/maxLevels);
+          glNormal3f(-v2[i+1][1], v2[i+1][0], 1);
+          glVertex3f(v2[i+1][0],v2[i+1][1],v2[i+1][2]);
+          */
       }
       texHeight++;
   }
-  
-  glTexCoord2f(texHeight/repeat,0);
-  glNormal3f(-v1[0][1], v1[0][0], 1);
-  glVertex3f(v1[0][0],v1[0][1],v1[0][2]);
+  /*
+      int i = v1.size()-1;
 
-  glTexCoord2f(texHeight/repeat,1);
-  glNormal3f(-v2[0][1], v2[0][0], 1.0/maxLevels);
-  glVertex3f(v2[0][0],v2[0][1],v2[0][2]);
+      glTexCoord2f(0/repeat,level/maxLevels);
+      glNormal3f(-v1[i][1], v1[i][0], 1);
+      glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
+      glTexCoord2f(0/repeat,(level+1)/maxLevels);
+      glNormal3f(-v2[i][1], v2[i][0], 1);
+      glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
+      */
+      int i = 0;
+      glTexCoord2f(1/(repeat*1.0),level/(maxLevels*1.0));
+      glNormal3f(-v1[i][1], v1[i][0], 1);
+      glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
+
+      glTexCoord2f(1/(repeat*1.0),1);
+      glNormal3f(-v2[i][1], v2[i][0], (level+1)/(maxLevels*1.0));
+      glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
+      
   glEnd();
 
 
@@ -280,9 +298,9 @@ void Track::drawTerrain(){
   glEnd();
 
   */
- drawTerrainHelper(l0,l1);
- drawTerrainHelper(l1,l2);
- drawTerrainHelper(l2,l3);
+ drawTerrainHelper(l0,l1,0);
+ drawTerrainHelper(l1,l2,1);
+ drawTerrainHelper(l2,l3,2);
  /*
  glColor3f(1,1,1);
   glNormal3f(0, 0, 1);
