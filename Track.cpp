@@ -120,30 +120,51 @@ void Track::drawTrack() {
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/ 
 
-      Vector3 v4(-temp4[1]+v3[0],//+rand()%3/4.0,  
-            	 temp4[0]+v3[1],//+rand()%3/4.0, 
-        	     v3[2]+rand()%3/5.0*reset);
+      Vector3 v4(-temp4[1]+v3[0], 
+            	 temp4[0]+v3[1],
+        	     v3[2]+(rand()%3/5.0+.25)*reset);
       l1.push_back(v4);
 
-      temp4 = original.scale(1+reset*std::pow(-1.0,(rand()%10))*(rand()%5)/10.0);
+      temp4 = original.scale(1+reset*std::pow(-1.0,(rand()%10))*(rand()%10)/50.0);
      /* Vector3 v5(-temp4[1]+(curves[i]->getPoint(j))[0], // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/
 
-      Vector3 v5(-temp4[1]+v4[0],//+rand()%3/4.0, 
-            	 temp4[0]+v4[1],//+rand()%3/5.0, 
-        	     v4[2]+reset*rand()%3/5.0);//+rand()%3/2.0+2/2);
+      Vector3 v5(-temp4[1]+v4[0],
+            	 temp4[0]+v4[1],
+        	     v4[2]+reset*(rand()%20/30.0+.5));//+rand()%3/2.0+2/2);
       l2.push_back(v5);
+      int x = std::pow(-1.0,(rand()%10));
 
-      temp4 = original.scale(1+reset*std::pow(-1.0,(rand()%10))*(rand()%5)/5.0);
+      temp4 = original.scale(1+reset*std::pow(-1.0,(rand()%10))*(rand()%10)/40.0);
       /*
       Vector3 v6(-temp4[1]+(curves[i]->getPoint(j))[0], // ORIGINAL
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);*/
-      Vector3 v6(-temp4[1]+v5[0],//+rand()%3/4.0, 
-            	 temp4[0]+v5[1],//+rand()%3/5.0, 
-        	     v5[2]+rand()%3/5.0*reset);
+      Vector3 v6(-temp4[1]+v5[0],
+            	 temp4[0]+v5[1],
+        	     v5[2]+(rand()%20/20.0+.5)*reset);
       l3.push_back(v6);
+
+      temp4 = original.scale(1+reset*std::pow(-1.0,(rand()%10))*(rand()%10)/30.0);
+      Vector3 v7(-temp4[1]+v5[0],
+            	 temp4[0]+v5[1],
+        	     v5[2]+(rand()%20/20.0+.50)*reset);
+      l4.push_back(v7);
+
+      temp4 = original.scale(.8+reset*std::pow(-1.0,(rand()%10))*(rand()%10)/10.0);
+      Vector3 v8(-temp4[1]+v5[0],
+            	 temp4[0]+v5[1],
+        	     v5[2]+(rand()%30/10.0+.75)*reset);
+      l5.push_back(v8);
+
+      temp4 = original.scale(.7+reset*std::pow(-1.0,(rand()%10))*(rand()%5)/5.0);
+      Vector3 v9(-temp4[1]+v5[0],
+            	 temp4[0]+v5[1],
+        	     v5[2]+(rand()%30/10+.75)*reset);
+      l6.push_back(v9);
+
+
 
 	  }
   //l1.push_back(genInner(l0[l0.size()-1],v1));
