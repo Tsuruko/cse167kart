@@ -307,7 +307,7 @@ int main(int argc, char *argv[])
    char* arr = "road3.ppm";
   trackTex = loadTexture(arr);
   
-  arr = "rock.ppm";
+  arr = "rock3l.ppm";
   rockTex = loadTexture(arr);
   
   ObjReader::readObj("Porsche_911_GT2.obj", modelCar->nVerts, &modelCar->vertices, 

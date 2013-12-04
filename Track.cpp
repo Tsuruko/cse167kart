@@ -75,7 +75,7 @@ void Track::drawTrack() {
       temp4.normalize();
       temp4 = temp4.scale(width);
       
-      if(texHeight>10) texHeight=0;
+      if(texHeight>10) texHeight=1;
       
      Vector3 v1(-temp4[1]+(curves[i]->getPoint(j))[0], 
                  temp4[0]+(curves[i]->getPoint(j))[1], 
@@ -92,6 +92,17 @@ void Track::drawTrack() {
       glTexCoord2f(laneCount, (texHeight/10.0)); //Texture
       glNormal3f(0, 0, 1);
       glVertex3f(v2[0],v2[1],v2[2]);
+
+      if(texHeight==10){
+      glTexCoord2f(0, (0/10.0)); //Texture
+      glNormal3f(0, 0, 1);
+      glVertex3f(v1[0],v1[1],v1[2]);
+
+      glTexCoord2f(laneCount, (0/10.0)); //Texture
+      glNormal3f(0, 0, 1);
+      glVertex3f(v2[0],v2[1],v2[2]);
+
+      }
 
       texHeight++;
       //code for rendering terrain
@@ -186,26 +197,43 @@ void Track::drawTerrain(){
   int texHeight=1;
   for (int i = 0; i < l0.size(); i++) {
       texHeight++;
-      if(texHeight>10) texHeight=0;
+      if(texHeight>10) texHeight=1;
 
 
 
-      glTexCoord2f(0,texHeight/10.0);
+      glTexCoord2f(texHeight/10.0,0);
       lastS0 = l0[i][0];//-l0[i][0]/1;
       lastT0 = l0[i][2];//-l0[i][2]/1;
       glNormal3f(-l0[i][1], l0[i][0], 1);
       glVertex3f(l0[i][0],l0[i][1],l0[i][2]);
 
-      glTexCoord2f(1,texHeight/10.0);
+      glTexCoord2f(texHeight/10.0,1);
       glNormal3f(-l1[i][1], l1[i][0], 1);
       glVertex3f(l1[i][0],l1[i][1],l1[i][2]);
       lastS1 = l1[i][0];//-l1[i][0]/1;
       lastT1 = l1[i][2];//-l1[i][2]/1;
+
+      if (texHeight==10){
+          glTexCoord2f(0/10.0,0);
+          lastS0 = l0[i][0];//-l0[i][0]/1;
+          lastT0 = l0[i][2];//-l0[i][2]/1;
+          glNormal3f(-l0[i][1], l0[i][0], 1);
+          glVertex3f(l0[i][0],l0[i][1],l0[i][2]);
+
+          glTexCoord2f(0/10.0,1);
+          glNormal3f(-l1[i][1], l1[i][0], 1);
+          glVertex3f(l1[i][0],l1[i][1],l1[i][2]);
+          lastS1 = l1[i][0];//-l1[i][0]/1;
+          lastT1 = l1[i][2];//-l1[i][2]/1;
+
+      }
+
   }
   
-
+  glTexCoord2f(texHeight/10.0,0);
   glNormal3f(-l0[0][1], l0[0][0], 1);
   glVertex3f(l0[0][0],l0[0][1],l0[0][2]);
+  glTexCoord2f(texHeight/10.0,1);
   glNormal3f(-l1[0][1], l1[0][0], 1);
   glVertex3f(l1[0][0],l1[0][1],l1[0][2]);
 
