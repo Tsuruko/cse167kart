@@ -7,6 +7,7 @@
 
 #include "Track.h"
 #include <stdlib.h>
+#include <cmath>
 
 Track::Track()
 {
