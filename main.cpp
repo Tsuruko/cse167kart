@@ -160,9 +160,7 @@ void displayCallback(void)
   if (mode) {
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
-    Matrix4 pos = Matrix4::scale(1.5, 1.5, 1.5);
-    pos = mouse * pos;
-    glLoadMatrixf(pos.getPointer());
+    glLoadMatrixf(mouse.getPointer());
     glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
     gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
     if (ctrlpts) track->drawPoints();
