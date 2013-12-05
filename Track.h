@@ -30,6 +30,7 @@ private:
   std::vector<Vector3> l4;
   std::vector<Vector3> l5;
   std::vector<Vector3> l6;
+  std::vector<Vector3> l7;
   Vector3 genInner(Vector3 v1, Vector3 V2);
   Vector3 calcNormal(Vector3 v1);
 
