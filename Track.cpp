@@ -378,28 +378,17 @@ void Track::drawTerrain(){
   l1.clear();*/
 }
 
-Vector3 Track::getNext(GLfloat step, int test)
+Vector3 Track::getPoint(GLfloat &t, GLfloat step, int &curve)
 {
-  if (test == 0) {
   //check if the tstep needs to be reset
-    if (eye_t + step > 1) {
+  if (t + step > 1) {
     //loop back eyeCurve to first curve on the track
-      if (eyeCurve == curves.size() - 1) eyeCurve = 0;
-      else eyeCurve++;
-      eye_t = step - (1 - eye_t);
-    }
-    else eye_t = eye_t + step;
-    return curves[eyeCurve]->getPoint(eye_t);
+    if (curve == curves.size() - 1) curve = 0;
+    else curve++;
+    t = step - (1 - t);
   }
-  else {
-    if (center_t + step > 1) {
-      if (centerCurve == curves.size() - 1) centerCurve = 0;
-      else centerCurve++;
-      center_t = step - (1 - center_t);
-    }
-    else center_t = center_t + step;
-    return curves[centerCurve]->getPoint(center_t);
-  }
+  else t = t + step;
+  return curves[curve]->getPoint(t);
 }
 
 

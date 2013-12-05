@@ -225,14 +225,15 @@ void processKeys (unsigned char key, int x, int y) {
 void processSpecialKeys(int key, int x, int y) {
   switch(key) {
     case GLUT_KEY_UP:
-      cam.setEye(track->getNext(0.015, 0));
-      cam.setCenter(track->getNext(0.015, 1));
+      cam.setEye(track->getPoint(cam.eye_t, 0.01, cam.eyeCurve));
+      cam.setCenter(track->getPoint(cam.center_t, 0.01, cam.centerCurve));
+      modelCar->moveForward(track->getPoint(modelCar->t, 0.01, modelCar->curve));
       break;
     case GLUT_KEY_LEFT:
-      modelCar->moveCar(-0.2);
+      modelCar->moveSide(-0.2);
       break;
     case GLUT_KEY_RIGHT:
-      modelCar->moveCar(0.2);
+      modelCar->moveSide(0.2);
       break;
     default:
       break;

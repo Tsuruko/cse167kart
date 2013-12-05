@@ -12,6 +12,9 @@ Camera::Camera(Vector3 e, Vector3 d, Vector3 up)
   this->e = e;
   this->d = d;
   this->up = up;
+  eye_t = 0;
+  center_t = 0.2;
+  eyeCurve = centerCurve = 0;
 }
 
 Vector3& Camera::getCenter()

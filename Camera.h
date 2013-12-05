@@ -17,6 +17,8 @@ private:
   Vector3 up;
   
 public:
+  GLfloat eye_t, center_t;
+  int eyeCurve, centerCurve;
   Camera();
   Camera(Vector3, Vector3, Vector3);
   Vector3& getEye();

@@ -1,19 +1,17 @@
 #include "car.h"
 
 car::car(float size) {
+  t = 0.2;
+  curve = 0;
   xpos = 0.0;
-  trans.identity();
-  trans = trans.translate(xpos, -1, -4);
-  firetrans1 = trans.translate(xpos + 0.2, -1, -2.5);
-  firetrans2 = trans.translate(xpos - 0.2, -1, -2.5);
+  forwardTrans.identity();
+  sideTrans.identity();
   scale.identity();
   scale = scale.scale(0.5/size, 0.5/size, 0.5/size);
-  fire1 = new FireCone();
-  fire2 = new FireCone();
 }
 
 void car::draw(Matrix4 C) {
-  Matrix4 carpos = C * scale * trans;
+  Matrix4 carpos = C * forwardTrans * scale * sideTrans;
   glLoadMatrixf(carpos.getPointer());
   glDisable(GL_TEXTURE_2D);
   glColor3f(1, 1, 1);
@@ -24,22 +22,16 @@ void car::draw(Matrix4 C) {
   glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, indices);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_NORMAL_ARRAY);
-  
-  Matrix4 firepos = C * fire1->scale * firetrans1;
-  glLoadMatrixf(firepos.getPointer());
-  fire1->draw();
-  firepos = C * fire2->scale * firetrans2;
-  glLoadMatrixf(firepos.getPointer());
-  fire2->draw();
-  
   glEnable(GL_TEXTURE_2D);
 }
 
-void car::moveCar(GLfloat xtrans) {
+void car::moveSide(GLfloat xtrans) {
   xpos += xtrans;
   if (xpos < -1.8) xpos = -1.8;
   if (xpos > 1.8) xpos = 1.8;
-  trans = trans.translate(xpos, -1, -4);
-  firetrans1 = trans.translate(xpos/1.1 + 0.2, -1, -2.5);
-  firetrans2 = trans.translate(xpos/1.2 - 0.2, -1, -2.5);
+  sideTrans = Matrix4::translate(xpos, -1, -4);
+}
+
+void car::moveForward(Vector3 v) {
+  forwardTrans = Matrix4::translate(v[0], v[1], v[2]);
 }
