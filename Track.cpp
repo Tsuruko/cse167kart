@@ -109,7 +109,7 @@ void Track::drawTrack() {
       texHeight++;
 
       //code for rendering terrain - Version 1
-      if(l0.size()<400){
+      if(l0.size()<(4*1.0/(stacks*1.0))){
       Vector3 v3(-temp4[1]+(curves[i]->getPoint(j))[0], 
             	 temp4[0]+(curves[i]->getPoint(j))[1], 
         	     curves[i]->getPoint(j)[2]);
@@ -219,18 +219,18 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
       }
       texHeight++;
   }
-  /*
+  
       int i = v1.size()-1;
 
-      glTexCoord2f(0/repeat,level/maxLevels);
+      glTexCoord2f(0/repeatX*1.0,level/maxLevels);
       glNormal3f(-v1[i][1], v1[i][0], 1);
       glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
-      glTexCoord2f(0/repeat,(level+1)/maxLevels);
+      glTexCoord2f(0/repeatX*1.0,(level+1)/maxLevels);
       glNormal3f(-v2[i][1], v2[i][0], 1);
       glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
-      */
-      int i = 0;
+      
+      i = 0;
       glTexCoord2f(1/(repeatX*1.0),level/(maxLevels*1.0/repeatY));
       glNormal3f(-v1[i][1], v1[i][0], 1);
       glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
