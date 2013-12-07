@@ -24,34 +24,35 @@ Vector3::Vector3(GLfloat x, GLfloat y, GLfloat z)
   v[2] = z;
 }
 
-float& Vector3::operator[](int i)
-{
-	return v[i];
+void Vector3::set(GLfloat x, GLfloat y, GLfloat z) {
+  v[0] = x;
+  v[1] = y;
+  v[2] = z;
 }
 
-Vector3 Vector3::operator+(Vector3& rhs)
-{
+float& Vector3::operator[](int i) {
+  return v[i];
+}
+
+Vector3 Vector3::operator+(Vector3& rhs) {
   return Vector3(v[0] + rhs[0],
                  v[1] + rhs[1],
                  v[2] + rhs[2]);
 }
 
-Vector3 Vector3::operator-(Vector3& rhs)
-{
+Vector3 Vector3::operator-(Vector3& rhs) {
   return Vector3(v[0] - rhs[0],
                  v[1] - rhs[1],
                  v[2] - rhs[2]);
 }
 
-Vector3 Vector3::scale(GLfloat s)
-{
+Vector3 Vector3::scale(GLfloat s) {
   return Vector3(v[0] * s,
                  v[1] * s,
                  v[2] * s);
 }
 
-Vector3 Vector3::cross(Vector3& A, Vector3& B)
-{
+Vector3 Vector3::cross(Vector3& A, Vector3& B) {
   return Vector3(A[2] * B[3] - A[3] * B[2],
                  A[2] * B[3] - A[3] * B[2],
                  A[2] * B[3] - A[3] * B[2]);
@@ -67,16 +68,13 @@ Vector3 Vector3::cross(Vector3 c) {
   return *this;
 }
 
-GLfloat Vector3::magnitude()
-{
+GLfloat Vector3::magnitude() {
   return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
 
-void Vector3::normalize()
-{
+void Vector3::normalize() {
   GLfloat d = this->magnitude();
-  if (d != 0.0)
-  {
+  if (d != 0.0) {
     v[0] /= d;
     v[1] /= d;
     v[2] /= d;

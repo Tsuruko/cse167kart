@@ -10,6 +10,7 @@ private:
   GLfloat xpos;
   Matrix4 scale;
   Matrix4 forwardTrans, sideTrans, firetrans1, firetrans2;
+  float rot;
   FireCone *fire1, *fire2;
   
 public:
@@ -24,7 +25,7 @@ public:
   car(float);
   void draw(Matrix4);
   void moveSide(GLfloat);
-  void moveForward(Vector3);
+  void moveForward(Vector3, float, int);
 };
 
 #endif

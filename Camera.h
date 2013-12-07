@@ -9,6 +9,7 @@
 #define __cse167p6__Camera__
 
 #include "Vector3.h"
+#include "Matrix4.h"
 
 class Camera{
 private:
@@ -30,6 +31,7 @@ public:
   void setEye(Vector3);
   void setCenter(Vector3);
   void setUp(Vector3);
+  Matrix4 generateMatrix();
 };
 
 #endif /* defined(__cse167p6__Camera__) */

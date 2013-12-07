@@ -40,6 +40,7 @@ public:
           GLfloat, GLfloat, GLfloat, GLfloat,
           GLfloat, GLfloat, GLfloat, GLfloat,
           GLfloat, GLfloat, GLfloat, GLfloat);
+  void set(Vector3, Vector3, Vector3, Vector3);
   Matrix4Row operator[](int x) { return Matrix4Row(*this, x);}
   GLfloat* getPointer();
   void identity();

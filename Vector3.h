@@ -21,6 +21,7 @@ private:
 public:
   Vector3();
   Vector3(GLfloat, GLfloat, GLfloat);
+  void set(GLfloat, GLfloat, GLfloat);
   GLfloat* getPointer() {return &v[0];};
   GLfloat& operator[](int);
   Vector3 operator-(Vector3&);

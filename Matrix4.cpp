@@ -45,6 +45,10 @@ Matrix4::Matrix4(GLfloat m00, GLfloat m01, GLfloat m02, GLfloat m03,
   m[3][3] = m33;
 }
 
+void Matrix4::set(Vector3 x, Vector3 y, Vector3 z, Vector3 e) {
+
+}
+
 GLfloat* Matrix4::getPointer()
 {
   return &m[0][0];

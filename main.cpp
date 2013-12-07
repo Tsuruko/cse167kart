@@ -46,6 +46,7 @@ const float trackScale = 10.0;
 const float transRatio = -2.5;
 
 car * modelCar = new car(trackScale);
+//car * modelCar = new car(1);
 
 Track * track = new Track();
 
@@ -171,6 +172,7 @@ void displayCallback(void)
     if (ctrlpts) track->drawPoints();
     track->drawCurves();
     track->drawObjects();
+    modelCar->draw(mouse);
   } else {
     glLoadMatrixf(trackSize.getPointer());
     glEnable(GL_LIGHTING);
@@ -190,8 +192,10 @@ void displayCallback(void)
     track->drawObjects();
     modelCar->draw(trackSize);
 
-    //cam.setEye(track->getNext(0.005, 0));
-    //cam.setCenter(track->getNext(0.005, 1));
+    //cam.setEye(track->getPoint(cam.eye_t, 0.005, cam.eyeCurve));
+    //cam.setCenter(track->getPoint(cam.center_t, 0.005, cam.centerCurve));
+    //modelCar->moveForward(track->getPoint(modelCar->t, 0.005, modelCar->curve));
+
   }
  
   glFlush();
@@ -232,7 +236,8 @@ void processSpecialKeys(int key, int x, int y) {
     case GLUT_KEY_UP:
       cam.setEye(track->getPoint(cam.eye_t, 0.01, cam.eyeCurve));
       cam.setCenter(track->getPoint(cam.center_t, 0.01, cam.centerCurve));
-      modelCar->moveForward(track->getPoint(modelCar->t, 0.01, modelCar->curve));
+      modelCar->moveForward(track->getPoint(modelCar->t, 0.01, modelCar->curve), 
+				0.01, track->getSize());
       break;
     case GLUT_KEY_LEFT:
       modelCar->moveSide(-0.2);
