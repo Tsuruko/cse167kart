@@ -7,13 +7,16 @@
 
 #ifndef __cse167kart__Track__
 #define __cse167kart__Track__
+
 #include <vector>
 #include "BCurve.h"
+#include "geode.h"
 
-class Track
-{
+class Track {
+
 private:
   std::vector<BCurve*> curves;
+  std::vector<geode*> roadObjects;
   GLfloat stacks;
   GLfloat width;
   GLfloat eye_t; // Where we are on the curve
@@ -44,11 +47,13 @@ private:
 public:
   Track();
   void addCurve(BCurve*);
+  void addGeode(geode*);
   int getSize();
   BCurve * getCurve(int);
   void drawCurves();
   void drawPoints();
   void drawTrack();
+  void drawObjects(Matrix4);
   void drawRoadLines();
   void drawTerrain();
   void drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level);

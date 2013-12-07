@@ -10,12 +10,10 @@
 #include <math.h>
 #include "Vector4.h"
 
-Vector4::Vector4()
-{
-	for (int i=0; i<4; ++i)
-	{
-		v[i] = 0;
-	}
+Vector4::Vector4() {
+  for (int i=0; i<4; ++i) {
+    v[i] = 0;
+  }
 }
 
 Vector4::Vector4(float x, float y, float z, float w)

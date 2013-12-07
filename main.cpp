@@ -44,9 +44,9 @@ Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 const float trackScale = 10.0;
 const float transRatio = -2.5;
 
-Track * track = new Track();
-sphere * s = new sphere(1.0);
 car * modelCar = new car(trackScale);
+
+Track * track = new Track();
 
 int nVerts;
 float *vertices;
@@ -64,7 +64,6 @@ void displayCallback(void);
 
 //just the DEFAULT track shape, no objects
 //add params later to make more flexible, or different control pts, etc.
-// currently 5 x 13 track, multiply values to get bigger track
 void makeTrack() {
   int mult = 2.0;
   Vector3 * start = new Vector3(-2.5f, 2.5f*mult, 2.0f*mult);
@@ -87,6 +86,8 @@ void makeTrack() {
 	            new Vector3(2.5f, (2.5f*mult)+4, 0.0f),
 		    new Vector3(-2.5f, (2.5f*mult)+4, 2.0f*mult),
 		    start));
+  Vector3 * obj = new Vector3(-2.5f,  2.5/3.0f*mult, 2.0f*mult);
+  track->addGeode(new sphere(1.0, *middle1));
 }
 
 void idleCallback(void)
@@ -160,12 +161,14 @@ void displayCallback(void)
   if (mode) {
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
-    glLoadMatrixf(mouse.getPointer());
+    Matrix4 pos = Matrix4::scale(10, 10, 10);
+    pos = mouse; //* pos;
+    glLoadMatrixf(pos.getPointer());
     glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
     gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
     if (ctrlpts) track->drawPoints();
     track->drawCurves();
-    s->draw(mouse);
+    track->drawObjects(mouse);
   } else {
     glLoadMatrixf(trackSize.getPointer());
     glEnable(GL_LIGHTING);
@@ -174,8 +177,17 @@ void displayCallback(void)
               cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
 
+    //glDisable(GL_LIGHTING);
+    //track->drawCurves();
+    //track->drawPoints();
+    //Matrix4 * temp = new Matrix4();
+    //temp->identity();
+    //track->drawObjects(*temp); 
     glBindTexture(GL_TEXTURE_2D, trackTex);
     track->drawTrack();
+    //Matrix4 * temp = new Matrix4();
+    //temp->identity();
+    //track->drawObjects(*temp);
     if (terrain){
       glBindTexture(GL_TEXTURE_2D, rockTex);
       track->drawTerrain();
@@ -183,7 +195,6 @@ void displayCallback(void)
 
     glDisable(GL_TEXTURE_2D);
     modelCar->draw(trackSize);
-    s->draw(trackSize);
 
     //cam.setEye(track->getNext(0.005, 0));
     //cam.setCenter(track->getNext(0.005, 1));
@@ -302,11 +313,8 @@ int main(int argc, char *argv[])
   trackSize.identity();
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack();
-  char* arr = "road3.ppm";
-  trackTex = loadTexture(arr);
-  
-  arr = "rock.ppm";
-  rockTex = loadTexture(arr);
+  trackTex = loadTexture("road3.ppm");
+  rockTex = loadTexture("rock.ppm");
   
   ObjReader::readObj("Porsche_911_GT2.obj", modelCar->nVerts, &modelCar->vertices, 
 			&modelCar->normals, &modelCar->texcoords, 

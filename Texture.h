@@ -98,7 +98,7 @@ void doWork(char* tdata){
 
 }
 
-GLuint loadTexture(char* name)
+GLuint loadTexture(const char* name)
 {
   GLuint texture[1];     // storage for one texture
   int twidth, theight;   // texture width/height [pixels]

@@ -1,25 +1,18 @@
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
-#include "Matrix4.h"
+#include "geode.h"
 
-class sphere {
-  private:
-    double r;
-    Matrix4 center;    //adjust the center to the bottom of the sphere
-  public:
-    sphere (double radius) {
-      r = radius; ///10.0;
-      center = Matrix4::translate(-2.5, 5.0, 4.0);
-   }
+class sphere : public geode {
 
-  void draw(Matrix4 C) {
-    glMatrixMode(GL_MODELVIEW);
-    Matrix4 pos = center * C;
-    glLoadMatrixf(pos.getPointer());
-    glutSolidSphere(r, 10.0, 10.0);
+  public:sphere(double radius, Vector3 pos) {
+    trans = Matrix4::translate(pos[0]*1.0, pos[1]*1.0, (pos[2]*1.0)+radius);
+    r = radius;
   }
 
+  public:void draw(Matrix4 C) {
+      glMatrixMode(GL_MODELVIEW);
+      Matrix4 Cnew = trans * C;
+      glLoadMatrixf(Cnew.getPointer());
+   
+      glutSolidSphere(r, 10.0, 10.0);
+      //glLoadMatrixf(C.getPointer());
+  }
 };

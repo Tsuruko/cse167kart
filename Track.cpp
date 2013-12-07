@@ -9,9 +9,9 @@
 #include <stdlib.h>
 #include <cmath>
 
-Track::Track()
-{
+Track::Track() {
   curves.clear();
+  roadObjects.clear();
   stacks = 0.01;
   width = 0.5;
   eye_t = 0;
@@ -22,24 +22,24 @@ Track::Track()
   maxInnerLevels = 9;
   maxOuterLevels = 9;
   
-  
   innerLevels.push_back(&l0);
   for(int i=0;i<maxInnerLevels-1;i++){
      std::vector<Vector3>* temp =  new std::vector<Vector3>;
      innerLevels.push_back(temp);
   }
-
   outerLevels.push_back(&r0);
   for(int i=0;i<maxOuterLevels-1;i++){
      std::vector<Vector3>* temp =  new std::vector<Vector3>;
      outerLevels.push_back(temp);
   }
-
-
 }
 
 void Track::addCurve(BCurve * c) {
   curves.push_back(c);
+}
+
+void Track::addGeode(geode * g) {
+  roadObjects.push_back(g);
 }
 
 int Track::getSize() {
@@ -210,6 +210,11 @@ void Track::drawTrack() {
   glEnd();
 }
 
+void Track::drawObjects(Matrix4 C) {
+  for (int i = 0; i < roadObjects.size(); i++) {
+    roadObjects[i]->draw(C);
+  }
+}
 
 void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level){
   glColor3f(1,1,1);
@@ -488,9 +493,6 @@ Vector3 calcNormal(Vector3 v1){
 
 
       */ return vec;
-
-
-
 
 
 }
