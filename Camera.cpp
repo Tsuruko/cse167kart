@@ -106,6 +106,7 @@ Matrix4 Camera::generateMatrix()
                       0, 0, 1, -e[2],
                       0, 0, 0, 1);
   
-  cInv = r ;//* t;
+  cInv = r * t;
+  
   return cInv;
 }

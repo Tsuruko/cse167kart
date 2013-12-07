@@ -46,7 +46,6 @@ const float trackScale = 10.0;
 const float transRatio = -2.5;
 
 car * modelCar = new car(trackScale);
-//car * modelCar = new car(1);
 
 Track * track = new Track();
 
@@ -67,28 +66,29 @@ void displayCallback(void);
 //just the DEFAULT track shape, no objects
 //add params later to make more flexible, or different control pts, etc.
 void makeTrack() {
-  int mult = 2.0;
-  Vector3 * start = new Vector3(-2.5f, 2.5f*mult, 2.0f*mult);
-  Vector3 * middle1 = new Vector3(-2.5f, -2.5f*mult, 0.0f);
+  int multz = 2.0;
+  int multy = 2.0;
+  Vector3 * start = new Vector3(-2.5f, 2.5f*multy, 2.0f*multz);
+  Vector3 * middle1 = new Vector3(-2.5f, -2.5f*multy, 0.0f);
   track->addCurve(new BCurve(start, 
-                    new Vector3(-2.5f,  2.5/3.0f*mult, 2.0f*mult),
-                    new Vector3(-2.5f,  -2.5/3.0f*mult, 0.0f),
+                    new Vector3(-2.5f,  2.5/3.0f*multy, 2.0f*multz),
+                    new Vector3(-2.5f,  -2.5/3.0f*multy, 0.0f),
 		    middle1));
-  Vector3 * middle2 = new Vector3(2.5f, -2.5f*mult, -2.0f*mult);
+  Vector3 * middle2 = new Vector3(2.5f, -2.5f*multy, -2.0f*multz);
   track->addCurve(new BCurve(middle1,
-                    new Vector3(-2.5f, (-2.5f*mult)-4, 0.0f),
-                    new Vector3(2.5f, (-2.5f*mult)-4, -2.0f*mult),
+                    new Vector3(-2.5f, (-2.5f*multy)-4, 0.0f),
+                    new Vector3(2.5f, (-2.5f*multy)-4, -2.0f*multz),
 		    middle2));
-  Vector3 * end = new Vector3(2.5f, 2.5f*mult, 0.0f);
+  Vector3 * end = new Vector3(2.5f, 2.5f*multy, 0.0f);
   track->addCurve(new BCurve(middle2,
-                   new Vector3(2.5f,  -2.5/3.0f*mult, -2.0f*mult),
-		   new Vector3(2.5f, 2.5/3.0f*mult, 0.0f),
+                   new Vector3(2.5f,  -2.5/3.0f*multy, -2.0f*multz),
+		   new Vector3(2.5f, 2.5/3.0f*multy, 0.0f),
 		    end));
   track->addCurve(new BCurve(end,
-	            new Vector3(2.5f, (2.5f*mult)+4, 0.0f),
-		    new Vector3(-2.5f, (2.5f*mult)+4, 2.0f*mult),
+	            new Vector3(2.5f, (2.5f*multy)+4, 0.0f),
+		    new Vector3(-2.5f, (2.5f*multy)+4, 2.0f*multz),
 		    start));
-  Vector3 * obj = new Vector3(-2.5f,  2.5/3.0f*mult, 2.0f*mult);
+  Vector3 * obj = new Vector3(-2.5f,  2.5/3.0f*multy, 2.0f*multz);
   track->addGeode(new sphere(0.1, *middle1));
   track->addGeode(new cube(0.1, *start));
   track->addGeode(new sphere(0.1, *end));
@@ -172,7 +172,9 @@ void displayCallback(void)
     if (ctrlpts) track->drawPoints();
     track->drawCurves();
     track->drawObjects();
-    modelCar->draw(mouse);
+    Vector3 temp;
+    temp.set(0.0, 0.0, 0.0);
+    modelCar->draw(mouse, temp);
   } else {
     glLoadMatrixf(trackSize.getPointer());
     glEnable(GL_LIGHTING);
@@ -190,7 +192,7 @@ void displayCallback(void)
 
     glDisable(GL_TEXTURE_2D);
     track->drawObjects();
-    modelCar->draw(trackSize);
+    modelCar->draw(trackSize, cam.getEye());
 
     //cam.setEye(track->getPoint(cam.eye_t, 0.005, cam.eyeCurve));
     //cam.setCenter(track->getPoint(cam.center_t, 0.005, cam.centerCurve));
@@ -236,8 +238,7 @@ void processSpecialKeys(int key, int x, int y) {
     case GLUT_KEY_UP:
       cam.setEye(track->getPoint(cam.eye_t, 0.01, cam.eyeCurve));
       cam.setCenter(track->getPoint(cam.center_t, 0.01, cam.centerCurve));
-      modelCar->moveForward(track->getPoint(modelCar->t, 0.01, modelCar->curve), 
-				0.01, track->getSize());
+      modelCar->moveForward(track->getPoint(modelCar->t, 0.01, modelCar->curve));
       break;
     case GLUT_KEY_LEFT:
       modelCar->moveSide(-0.2);
@@ -318,7 +319,8 @@ int main(int argc, char *argv[])
   ObjReader::readObj("Porsche_911_GT2.obj", modelCar->nVerts, &modelCar->vertices, 
 			&modelCar->normals, &modelCar->texcoords, 
 			modelCar->nIndices, &modelCar->indices);
- 
+  modelCar->findMinMax(); 
+
   GLint texSize;
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
   cout<<texSize<<endl;
