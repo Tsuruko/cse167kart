@@ -172,9 +172,6 @@ void displayCallback(void)
     if (ctrlpts) track->drawPoints();
     track->drawCurves();
     track->drawObjects();
-    Vector3 temp;
-    temp.set(0.0, 0.0, 0.0);
-    modelCar->draw(mouse, temp);
   } else {
     glLoadMatrixf(trackSize.getPointer());
     glEnable(GL_LIGHTING);
@@ -192,7 +189,7 @@ void displayCallback(void)
 
     glDisable(GL_TEXTURE_2D);
     track->drawObjects();
-    modelCar->draw(trackSize, cam.getEye());
+    modelCar->draw(trackSize, cam.generateMatrix());
 
     //cam.setEye(track->getPoint(cam.eye_t, 0.005, cam.eyeCurve));
     //cam.setCenter(track->getPoint(cam.center_t, 0.005, cam.centerCurve));
