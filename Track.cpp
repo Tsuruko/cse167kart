@@ -210,9 +210,9 @@ void Track::drawTrack() {
   glEnd();
 }
 
-void Track::drawObjects(Matrix4 C) {
+void Track::drawObjects() {
   for (int i = 0; i < roadObjects.size(); i++) {
-    roadObjects[i]->draw(C);
+    roadObjects[i]->draw();
   }
 }
 

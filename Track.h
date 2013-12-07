@@ -53,7 +53,7 @@ public:
   void drawCurves();
   void drawPoints();
   void drawTrack();
-  void drawObjects(Matrix4);
+  void drawObjects();
   void drawRoadLines();
   void drawTerrain();
   void drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level);

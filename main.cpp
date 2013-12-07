@@ -161,14 +161,12 @@ void displayCallback(void)
   if (mode) {
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
-    Matrix4 pos = Matrix4::scale(10, 10, 10);
-    pos = mouse; //* pos;
-    glLoadMatrixf(pos.getPointer());
+    glLoadMatrixf(mouse.getPointer());
     glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
     gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
     if (ctrlpts) track->drawPoints();
     track->drawCurves();
-    track->drawObjects(mouse);
+    track->drawObjects();
   } else {
     glLoadMatrixf(trackSize.getPointer());
     glEnable(GL_LIGHTING);
@@ -177,17 +175,9 @@ void displayCallback(void)
               cam.getCenter()[0], cam.getCenter()[1], cam.getCenter()[2],
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
 
-    //glDisable(GL_LIGHTING);
-    //track->drawCurves();
-    //track->drawPoints();
-    //Matrix4 * temp = new Matrix4();
-    //temp->identity();
-    //track->drawObjects(*temp); 
     glBindTexture(GL_TEXTURE_2D, trackTex);
     track->drawTrack();
-    //Matrix4 * temp = new Matrix4();
-    //temp->identity();
-    //track->drawObjects(*temp);
+    track->drawObjects();
     if (terrain){
       glBindTexture(GL_TEXTURE_2D, rockTex);
       track->drawTerrain();

@@ -10,9 +10,9 @@ class geode {
 //    virtual void boundingBox() = 0;
 
   public: 
-    Matrix4 trans;
+    Vector3 trans;
     double r;
-    virtual void draw(Matrix4) = 0;
+    virtual void draw() = 0;
 };
 
 #endif
