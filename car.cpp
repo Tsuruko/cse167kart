@@ -1,11 +1,11 @@
 #include "car.h"
 
 car::car(float size) {
-  t = 0.1;
+  t = 0.06;
   curve = 0;
   xpos = 0.0;
   zpos = 0.0;
-  scale.set(1/size, 1/size, 1/size);
+  scale.set(.8/size, .8/size, .8/size);
 }
 
 void car::draw(Matrix4 model, Matrix4 cam) {
@@ -43,8 +43,8 @@ void car::draw(Matrix4 model, Matrix4 cam) {
 
 void car::moveSide(GLfloat xtrans) {
   xpos += xtrans;
-  if (xpos < -1.8) xpos = -1.8;
-  if (xpos > 1.8) xpos = 1.8;
+  if (xpos < -3.7) xpos = -3.7;
+  if (xpos > 3.7) xpos = 3.7;
 }
 
 void car::moveForward(Vector3 v) {

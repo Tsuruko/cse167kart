@@ -46,7 +46,6 @@ const float trackScale = 10.0;
 const float transRatio = -2.5;
 
 car * modelCar = new car(trackScale);
-
 Track * track = new Track();
 
 int nVerts;
