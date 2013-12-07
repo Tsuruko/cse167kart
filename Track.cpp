@@ -22,15 +22,30 @@ Track::Track() {
   maxInnerLevels = 9;
   maxOuterLevels = 9;
   
+  //double arr[] = {.2,.3,.4,.4,.3,.4,.3,.2};
+  //double arr2[] = {.5,.5,.25,.05,-.5,-.5,.3,.4};
+  double arr[] = {.5,.5,.5,.5,.5,.5,.5,.5};
+  double arr2[] = {.25,0,0,0,0,0,0,0};
   innerLevels.push_back(&l0);
+  upIBase.push_back(0);
+  outIBase.push_back(0);
   for(int i=0;i<maxInnerLevels-1;i++){
      std::vector<Vector3>* temp =  new std::vector<Vector3>;
      innerLevels.push_back(temp);
+
+     upIBase.push_back(arr[i]);
+     outIBase.push_back(arr2[i]);
   }
+
+  upOBase.push_back(0);
+  outOBase.push_back(0);
   outerLevels.push_back(&r0);
   for(int i=0;i<maxOuterLevels-1;i++){
      std::vector<Vector3>* temp =  new std::vector<Vector3>;
      outerLevels.push_back(temp);
+
+     upOBase.push_back(arr[i]);
+     outOBase.push_back(arr2[i]);
   }
 }
 
@@ -142,10 +157,11 @@ void Track::drawTrack() {
       
 
       for(int k=1;k<innerLevels.size();k++){
-        temp4 = temp4.scale(1);//1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+        temp4 = original;
+        temp4 = temp4.scale(outIBase[k]);//1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
         v3[0] = -temp4[1]+v3[0];
         v3[1] =	 temp4[0]+v3[1],
-        v3[2] =  v3[2]+.1;
+        v3[2] =  v3[2]+upIBase[k];
         innerLevels[k]->push_back(v3);
       }
 
@@ -153,10 +169,11 @@ void Track::drawTrack() {
 
 
       for(int k=1;k<outerLevels.size();k++){
-        temp4 = temp4.scale(1);//1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+        temp4 = original;
+        temp4 = temp4.scale(outOBase[k]);//1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
         v4[0] = temp4[1]+v4[0];
         v4[1] =	-temp4[0]+v4[1],
-        v4[2] =  v4[2]+.1;
+        v4[2] =  v4[2]+upOBase[k];
         outerLevels[k]->push_back(v4);
       }
       /*
@@ -223,8 +240,8 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
   glEnable(GL_TEXTURE_2D); 
 
   int texHeight=1;
-  int repeatX = 5;
-  int repeatY = 4;
+  int repeatX = 5; //5
+  int repeatY = 4; //4
   for (int i = 0; i < v1.size(); i++) {
       
       if(texHeight>repeatX) texHeight=1;

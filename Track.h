@@ -15,6 +15,7 @@
 class Track {
 
 private:
+
   std::vector<BCurve*> curves;
   std::vector<geode*> roadObjects;
   GLfloat stacks;
@@ -29,8 +30,15 @@ private:
   int maxOuterLevels;
   std::vector<std::vector<Vector3>* > innerLevels;
   std::vector<std::vector<Vector3>* > outerLevels;
-  std::vector<float> upRand;
-  std::vector<float> outRand;
+  std::vector<float> upIRand;
+  std::vector<float> outIRand;
+  std::vector<float> upORand;
+  std::vector<float> outORand;
+  std::vector<float> upIBase;
+  std::vector<float> outIBase;
+  std::vector<float> upOBase;
+  std::vector<float> outOBase;
+
   std::vector<Vector3> l0;
   std::vector<Vector3> r0;
   /*std::vector<Vector3> l1;
