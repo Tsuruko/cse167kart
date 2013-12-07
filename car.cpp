@@ -5,16 +5,17 @@ car::car(float size) {
   curve = 0;
   xpos = 0.0;
   zpos = 0.0;
-  scale.set(.8/size, .8/size, .8/size);
+  scale = 0.8/size;
+  fire = new FireCone();
 }
 
-void car::draw(Matrix4 model, Matrix4 cam) {
+void car::draw() {
   glMatrixMode(GL_MODELVIEW);
 
 //move the car
   glTranslatef(forwardTrans[0], forwardTrans[1], forwardTrans[2]);  
-  glScalef(scale[0], scale[1], scale[2]);
   glTranslatef(0.0, 0.0, zpos);
+  glScalef(scale, scale, scale);
 
 //orient the car to face the right direction
   glRotatef(90, 1.0, 0.0, 0.0);
@@ -23,11 +24,12 @@ void car::draw(Matrix4 model, Matrix4 cam) {
 //hacky adjustments of rotation
   if (curve%2 == 1) glRotatef(180*t, 0.0, 1.0, 0.0);
   if (curve > 1) glRotatef(180, 0.0, 1.0, 0.0);
-  //glRotatef(prevT.angle(forwardTrans)*2, 1.0, 0.0, 0.0);
   float check = prevT[2] - forwardTrans[2];
   glRotatef(-check*600, 1.0, 0.0, 0.0);
 
   glTranslatef(xpos, 0.0, 0.0);
+//draw car
+
 
   glDisable(GL_TEXTURE_2D);
   glColor3f(1, 1, 1);
@@ -39,6 +41,14 @@ void car::draw(Matrix4 model, Matrix4 cam) {
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_NORMAL_ARRAY);
   glEnable(GL_TEXTURE_2D);
+
+  glPushMatrix();
+  glTranslatef(0.5*xmax, ymin*scale, -zmin);
+  fire->draw();
+  glPopMatrix();
+
+  glTranslatef(0.5*xmin, ymin*scale, -zmin);
+  fire->draw();
 }
 
 void car::moveSide(GLfloat xtrans) {
@@ -72,5 +82,5 @@ void car::findMinMax() {
       zmin = vertices[j+2];
     } 
   }
-  zpos = 0.3 + scale[2]*(zmax-zmin);
+  zpos = -zmin*scale*.5;
 }

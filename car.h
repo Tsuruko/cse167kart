@@ -8,13 +8,11 @@ class car {
   
 private:
   GLfloat xpos, zpos;
-  Matrix4 firetrans1, firetrans2;
-  Vector3 scale;
   Vector3 forwardTrans, sideTrans;
   Vector3 prevT;
-  float angle;
+  float scale;
   float xmin, xmax, ymin, ymax, zmin, zmax;
-  FireCone *fire1, *fire2;
+  FireCone *fire;
   
 public:
   GLfloat t;
@@ -26,7 +24,7 @@ public:
   int nIndices;
   int *indices;
   car(float);
-  void draw(Matrix4, Matrix4);
+  void draw();
   void moveSide(GLfloat);
   void moveForward(Vector3);
   void findMinMax();

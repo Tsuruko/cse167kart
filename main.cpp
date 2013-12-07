@@ -188,7 +188,7 @@ void displayCallback(void)
 
     glDisable(GL_TEXTURE_2D);
     track->drawObjects();
-    modelCar->draw(trackSize, cam.generateMatrix());
+    modelCar->draw();
 
     //cam.setEye(track->getPoint(cam.eye_t, 0.005, cam.eyeCurve));
     //cam.setCenter(track->getPoint(cam.center_t, 0.005, cam.centerCurve));
