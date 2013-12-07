@@ -1,3 +1,13 @@
+//
+//  car.h
+//  cse167kart
+//
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 12/2/13
+//
+//  Modified: 12/7/13
+//
+
 #ifndef _CAR_H_
 #define _CAR_H_
 

@@ -1,3 +1,13 @@
+//
+//  cube.cpp
+//  cse167kart
+//
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 12/6/13
+//
+//  Modified: 12/7/13
+//
+
 #include "geode.h"
 
 class cube : public geode {

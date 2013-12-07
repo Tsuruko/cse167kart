@@ -1,3 +1,14 @@
+//
+//  car.cpp
+//  cse167kart
+//
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 12/2/13
+//
+//  Modified: 12/7/13
+//
+
+#include <iostream>
 #include "car.h"
 
 car::car(float size) {
@@ -84,4 +95,10 @@ void car::findMinMax() {
     } 
   }
   zpos = -zmin*scale*.5;
+
+//print min/maxes
+  std::cout << "X: " << xmin << ", " << xmax <<std::endl;
+  std::cout << "Y: " << ymin << ", " << ymax <<std::endl;
+  std::cout << "Z: " << zmin << ", " << zmax <<std::endl;
+
 }

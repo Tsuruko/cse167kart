@@ -1,3 +1,13 @@
+//
+//  geode.h
+//  cse167kart
+//
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 12/6/13
+//
+//  Modified: 12/7/13
+//
+
 #ifndef _GEODE_H_
 #define _GEODE_H_
 

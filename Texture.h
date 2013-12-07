@@ -1,3 +1,15 @@
+//
+//  Texture.h
+//  cse167kart
+//
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 11/25/13
+//
+//  Modified: 12/7/13
+//
+//  Original Author: Dr. Jurgen Schulze
+//
+
 #include <stdlib.h>
 #include <stdio.h>
 #ifdef __APPLE__
