@@ -190,9 +190,9 @@ void displayCallback(void)
     track->drawObjects();
     modelCar->draw();
 
-    cam.setEye(track->getPoint(cam.eye_t, 0.005, cam.eyeCurve));
-    cam.setCenter(track->getPoint(cam.center_t, 0.005, cam.centerCurve));
-    modelCar->moveForward(track->getPoint(modelCar->t, 0.005, modelCar->curve));
+    //cam.setEye(track->getPoint(cam.eye_t, 0.005, cam.eyeCurve));
+    //cam.setCenter(track->getPoint(cam.center_t, 0.005, cam.centerCurve));
+    //modelCar->moveForward(track->getPoint(modelCar->t, 0.005, modelCar->curve));
 
   }
  

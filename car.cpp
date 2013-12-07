@@ -40,7 +40,6 @@ void car::draw() {
   glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, indices);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_NORMAL_ARRAY);
-  glEnable(GL_TEXTURE_2D);
 
   glPushMatrix();
   glTranslatef(0.5*xmax, ymin*scale, -zmin);
@@ -49,6 +48,8 @@ void car::draw() {
 
   glTranslatef(0.5*xmin, ymin*scale, -zmin);
   fire->draw();
+
+  glEnable(GL_TEXTURE_2D);
 }
 
 void car::moveSide(GLfloat xtrans) {
