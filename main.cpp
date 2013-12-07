@@ -20,6 +20,7 @@
 #include "Camera.h"
 #include "objreader.h"
 #include "sphere.cpp"
+#include "cube.cpp"
 #include "car.h"
 
 using namespace std;
@@ -87,7 +88,10 @@ void makeTrack() {
 		    new Vector3(-2.5f, (2.5f*mult)+4, 2.0f*mult),
 		    start));
   Vector3 * obj = new Vector3(-2.5f,  2.5/3.0f*mult, 2.0f*mult);
-  track->addGeode(new sphere(1.0, *middle1));
+  track->addGeode(new sphere(0.1, *middle1));
+  track->addGeode(new cube(0.1, *start));
+  track->addGeode(new sphere(0.1, *end));
+  track->addGeode(new cube(0.1, *middle2));
 }
 
 void idleCallback(void)
@@ -177,13 +181,13 @@ void displayCallback(void)
 
     glBindTexture(GL_TEXTURE_2D, trackTex);
     track->drawTrack();
-    track->drawObjects();
     if (terrain){
       glBindTexture(GL_TEXTURE_2D, rockTex);
       track->drawTerrain();
     }
 
     glDisable(GL_TEXTURE_2D);
+    track->drawObjects();
     modelCar->draw(trackSize);
 
     //cam.setEye(track->getNext(0.005, 0));
