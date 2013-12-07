@@ -154,14 +154,26 @@ void Track::drawTrack() {
 
       int reset = 0;
       Vector3 original = temp4;
-      
+
+      upIRand.clear();
+      upORand.clear();
+      outIRand.clear();
+      outORand.clear();
+
+
+      for(int k=0;k<innerLevels.size();k++){
+        upIRand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+        upORand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+        outIRand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+        outORand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+      }
 
       for(int k=1;k<innerLevels.size();k++){
         temp4 = original;
-        temp4 = temp4.scale(outIBase[k]);//1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+        temp4 = temp4.scale(outIBase[k]+outIRand[k]);//1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
         v3[0] = -temp4[1]+v3[0];
         v3[1] =	 temp4[0]+v3[1],
-        v3[2] =  v3[2]+upIBase[k];
+        v3[2] =  v3[2]+upIBase[k]+upIRand[k];
         innerLevels[k]->push_back(v3);
       }
 
@@ -170,10 +182,10 @@ void Track::drawTrack() {
 
       for(int k=1;k<outerLevels.size();k++){
         temp4 = original;
-        temp4 = temp4.scale(outOBase[k]);//1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+        temp4 = temp4.scale(outOBase[k]+outIRand[k]);//1+std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
         v4[0] = temp4[1]+v4[0];
         v4[1] =	-temp4[0]+v4[1],
-        v4[2] =  v4[2]+upOBase[k];
+        v4[2] =  v4[2]+upOBase[k]+upORand[k];
         outerLevels[k]->push_back(v4);
       }
       /*
