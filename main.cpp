@@ -177,7 +177,6 @@ void displayCallback(void)
 
     glBindTexture(GL_TEXTURE_2D, trackTex);
     track->drawTrack();
-    track->drawObjects();
     if (terrain){
       glBindTexture(GL_TEXTURE_2D, rockTex);
       track->drawTerrain();
@@ -185,6 +184,8 @@ void displayCallback(void)
 
     glDisable(GL_TEXTURE_2D);
     modelCar->draw(trackSize);
+
+    track->drawObjects();
 
     //cam.setEye(track->getNext(0.005, 0));
     //cam.setCenter(track->getNext(0.005, 1));
