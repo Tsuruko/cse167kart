@@ -12,7 +12,7 @@
 Track::Track() {
   curves.clear();
   roadObjects.clear();
-  stacks = 0.01;
+  stacks = 0.005;
   width = 0.5;
   eye_t = 0;
   center_t = 0.15;
@@ -24,8 +24,8 @@ Track::Track() {
   
   //double arr[] = {.2,.3,.4,.4,.3,.4,.3,.2};
   //double arr2[] = {.5,.5,.25,.05,-.5,-.5,.3,.4};
-  double arr[] = {.5,.5,.5,.5,.5,.5,.5,.5};
-  double arr2[] = {.25,0,0,0,0,0,0,0};
+  double arr[] = {.2,.3,.5,.5,.5,.5,.5,.5};
+  double arr2[] = {.55,.35,0,0,0,0,0,0};
   innerLevels.push_back(&l0);
   upIBase.push_back(0);
   outIBase.push_back(0);
@@ -162,10 +162,20 @@ void Track::drawTrack() {
 
 
       for(int k=0;k<innerLevels.size();k++){
+
+        
+       if(k!=0){
         upIRand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
         upORand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
         outIRand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
         outORand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+       }
+       else{
+        upIRand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+        upORand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+        outIRand.push_back((rand()%5)/10.0);
+        outORand.push_back((rand()%5)/10.0);
+       }
       }
 
       for(int k=1;k<innerLevels.size();k++){
@@ -254,6 +264,10 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
   int texHeight=1;
   int repeatX = 5; //5
   int repeatY = 4; //4
+  if(level >6) {
+    repeatX = 10;
+    repeatY = 8;
+  }
   for (int i = 0; i < v1.size(); i++) {
       
       if(texHeight>repeatX) texHeight=1;
