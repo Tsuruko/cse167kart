@@ -23,7 +23,7 @@
 class geode {
   public: 
     Vector3 trans;
-    double r;
+    float r;
     virtual void draw() = 0;
 };
 

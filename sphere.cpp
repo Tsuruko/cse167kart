@@ -12,7 +12,7 @@
 
 class sphere : public geode {
 
-  public: sphere(double radius, Vector3 pos) {
+  public: sphere(float radius, Vector3 pos) {
     trans = pos;
     r = radius;
   }

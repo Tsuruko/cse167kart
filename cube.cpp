@@ -12,9 +12,9 @@
 #include "geode.h"
 
 class cube : public geode {
-  private: double s;
+  private: float s;
 
-  public:cube(double side, Vector3 pos) {
+  public:cube(float side, Vector3 pos) {
     trans = pos;
     s = side;
     r = std::sqrt(2*std::pow(s, 2))/2;
