@@ -219,7 +219,7 @@ void Track::drawObjects() {
 void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level){
   glColor3f(1,1,1);
   glBegin(GL_QUAD_STRIP);
-  
+  Vector3 n;
   int texHeight=1;
   int repeatX = 5; //5
   int repeatY = 4; //4
@@ -228,51 +228,58 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
     repeatY = 8;
   }
   for (int i = 0; i < v1.size(); i++) {
+    //calculate normal
+    n = Vector3::cross(v1[i], v2[i]);
     
     if(texHeight>repeatX) texHeight=1;
     
     glTexCoord2f(texHeight/(repeatX*1.0),level/(maxInnerLevels*1.0/repeatY));
-    glNormal3f(-v1[i][1], v1[i][0], 1);
+    glNormal3fv(n.getPointer());
     glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
     
     glTexCoord2f(texHeight/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-    glNormal3f(-v2[i][1], v2[i][0], 1);
+    glNormal3fv(n.getPointer());
     glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
     
-    
+    /* What is this part for?
     if (texHeight==repeatX&&((i+1)!=v1.size())){
       glTexCoord2f(0/repeatX*1.0,level/(maxInnerLevels*1.0/repeatY));
-      glNormal3f(-v1[i][1], v1[i][0], 1);
+      glNormal3fv(n.getPointer());
       glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
       glTexCoord2f(0/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-      glNormal3f(-v2[i][1], v2[i][0], 1);
+      glNormal3fv(n.getPointer());
       glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
     }
+    */
+    
     texHeight++;
   }
   glEnd();
-  int i;
   
-
+  int i;
   glBegin(GL_QUAD_STRIP);
 
-  i = v1.size()-1;
+  i = v1.size() - 1;
+  n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(0/repeatX*1.0,level/(maxInnerLevels*1.0/repeatY));
-  glNormal3f(-v1[i][1], v1[i][0], 1);
+  glNormal3fv(n.getPointer());
   glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
-  i = v1.size()-1;
+  i = v1.size() - 1;
+  n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(0/repeatX*1.0,(level+1)/(maxInnerLevels*1.0/repeatY));
-  glNormal3f(-v2[i][1], v2[i][0], 1);
+  glNormal3fv(n.getPointer());
   glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
   i = 0;
+  n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(1/(repeatX*1.0),level/(maxInnerLevels*1.0/repeatY));
-  glNormal3f(-v1[i][1], v1[i][0], 1);
+  glNormal3fv(n.getPointer());
   glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
   
   i = 0;
+  n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(1/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-  glNormal3f(-v2[i][1], v2[i][0], 1);
+  glNormal3fv(n.getPointer());
   glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
   glEnd();
 }
