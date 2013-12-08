@@ -9,7 +9,6 @@
 //
 
 #include "car.h"
-#include <iostream>
 
 car::car(float size) {
   t = 0.06;
@@ -121,7 +120,6 @@ void car::findMinMax() {
   float ydiff = ymax - ymin;
   float zdiff = zmax - zmin;
 
-  std::cout << xdiff << std::endl;
   xr = xdiff/2;
   yr = ydiff/2;
   zr = zdiff/2; 
