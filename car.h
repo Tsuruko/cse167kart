@@ -26,6 +26,8 @@ private:
   float xmin, xmax, ymin, ymax, zmin, zmax;   //find size of the car
   float r;   //bounding box radius
   FireCone *fire;
+
+  float getRadius();
   
 public:
 //traversing the track
@@ -45,7 +47,7 @@ public:
   void moveSide(GLfloat);
   void moveForward(Vector3);
   void findMinMax();
-  float getRadius();
+  Vector4 getBoundingSphere();
 };
 
 #endif

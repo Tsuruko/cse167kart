@@ -156,6 +156,28 @@ void reshapeCallback(int w, int h)
   glMatrixMode(GL_MODELVIEW);
 }
 
+void checkCollision() {
+  Vector4 carCenter = modelCar->getBoundingSphere();
+
+//testing  
+  std::cout << "center: " << carCenter[0] << ", " << carCenter[1] << ", " <<
+	carCenter[2] << "; radius: " << carCenter[3] << std::endl;
+
+  geode * currObj;
+  float objRadius;
+  Vector4 objCenter;
+  for (int i = 0; i < track->getNumObj(); i++) {
+    currObj = track->getObj(i);
+    objCenter = currObj->getBoundingSphere();
+  
+
+//checks centers only for now
+    if (carCenter[0] == objCenter[0] && carCenter[1] == objCenter[1] &&
+	carCenter[2] == objCenter[2]) {
+      std::cout << "crash!" << std::endl;
+    }
+  }
+}
 
 void displayCallback(void)
 {
@@ -192,6 +214,8 @@ void displayCallback(void)
     glDisable(GL_TEXTURE_2D);
     track->drawObjects();
     modelCar->draw();
+
+    checkCollision();
 
     //cam.setEye(track->getPoint(cam.eye_t, 0.005, cam.eyeCurve));
     //cam.setCenter(track->getPoint(cam.center_t, 0.005, cam.centerCurve));

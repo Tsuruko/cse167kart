@@ -17,7 +17,7 @@
 #include <cstdlib>
 #include <GL/glut.h>
 #endif
-#include <cstring>
+
 #include "Matrix4.h"
 
 class geode {
@@ -25,6 +25,7 @@ class geode {
     Vector3 trans;
     float r;
     virtual void draw() = 0;
+    virtual Vector4 getBoundingSphere() = 0;
 };
 
 #endif

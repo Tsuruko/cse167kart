@@ -59,7 +59,8 @@ public:
   Track();
   void addCurve(BCurve*);
   void addGeode(geode*);
-  int getSize();
+  int getNumObj();
+  geode * getObj(int);
   BCurve * getCurve(int);
   void drawCurves();
   void drawPoints();

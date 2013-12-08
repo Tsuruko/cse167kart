@@ -8,7 +8,6 @@
 //  Modified: 12/7/13
 //
 
-#include <iostream>
 #include "car.h"
 
 car::car(float size) {
@@ -96,9 +95,42 @@ void car::findMinMax() {
   }
   zpos = -zmin*scale*.5;
 
-//print min/maxes
-  std::cout << "X: " << xmin << ", " << xmax <<std::endl;
-  std::cout << "Y: " << ymin << ", " << ymax <<std::endl;
-  std::cout << "Z: " << zmin << ", " << zmax <<std::endl;
+}
 
+//helper function for organization
+float car::getRadius() {
+  float xdiff = xmax - xmin;
+  float ydiff = ymax - ymin;
+  float zdiff = zmax - zmin;
+  float longest;
+ 
+  if (xdiff > ydiff) {
+    if (xdiff > zdiff) longest = xdiff/2;
+    else longest = zdiff/2;
+  }
+
+  if (ydiff > zdiff) longest = ydiff/2;
+  else longest = zdiff/2;
+
+  return longest * scale;
+}
+
+Vector4 car::getBoundingSphere() {
+  GLdouble winX, winY, winZ;
+  GLint viewport[4];
+  GLdouble modelview[16];
+  GLdouble projection[16];
+
+  glGetDoublev( GL_PROJECTION_MATRIX, projection );
+  glGetIntegerv( GL_VIEWPORT, viewport );
+  glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
+
+  gluProject(0.0, 0.0, 0.0, modelview, projection, viewport, &winX, &winY, &winZ);
+
+//r1 and r2 discarded
+  GLdouble radius, r1, r2;
+  float r = getRadius();
+  gluProject(r, 0.0, 0.0, modelview, projection, viewport, &radius, &r1, &r2);
+
+  return Vector4(winX, winY, winZ, radius-winX);
 }
