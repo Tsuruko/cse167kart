@@ -14,20 +14,7 @@
 class cube : public geode {
   private: float s;
 
-  public:cube(float side, Vector3 pos) {
-    trans = pos;
-    s = side;
-    r = std::sqrt(2*std::pow(s, 2))/2;
-  }
-
-  public:void draw() {
-      glTranslatef(trans[0], trans[1], trans[2]+r);   
-      glColor3f(1.0, 0.0, 0.0);
-      glutSolidCube(s);
-      glTranslatef(-trans[0], -trans[1], -(trans[2]+r));
-  }
-
-  public: Vector4 getBoundingSphere() {
+  private:void calculateBoundingSphere() {
     GLdouble winX, winY, winZ;
     GLint viewport[4];
     GLdouble modelview[16];
@@ -41,6 +28,24 @@ class cube : public geode {
     gluProject(0.0, 0.0, 0.0, modelview, projection, viewport, &winX, &winY, &winZ);
     gluProject(0.0, 0.0, 0.0, modelview, projection, viewport, &rad, &r1, &r2);
 
-    return Vector4(winX, winY, winZ, rad-winX);
+    bounding = Vector4(winX, winY, winZ, rad-winX);
+  }
+
+  public:cube(float side, Vector3 pos) {
+    trans = pos;
+    s = side;
+    r = std::sqrt(2*std::pow(s, 2))/2;
+  }
+
+  public:void draw() {
+    glTranslatef(trans[0], trans[1], trans[2]+r);   
+    glColor3f(1.0, 0.0, 0.0);
+    glutSolidCube(s);
+    calculateBoundingSphere();
+    glTranslatef(-trans[0], -trans[1], -(trans[2]+r));
+  }
+
+  public: Vector4 getBoundingSphere() {
+    return bounding;
   }
 };

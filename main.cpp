@@ -159,10 +159,6 @@ void reshapeCallback(int w, int h)
 void checkCollision() {
   Vector4 carCenter = modelCar->getBoundingSphere();
 
-//testing  
-  std::cout << "center: " << carCenter[0] << ", " << carCenter[1] << ", " <<
-	carCenter[2] << "; radius: " << carCenter[3] << std::endl;
-
   geode * currObj;
   float objRadius;
   Vector4 objCenter;

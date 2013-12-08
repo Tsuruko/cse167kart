@@ -21,8 +21,12 @@
 #include "Matrix4.h"
 
 class geode {
+  private:
+    virtual void calculateBoundingSphere() = 0;
+
   public: 
     Vector3 trans;
+    Vector4 bounding;
     float r;
     virtual void draw() = 0;
     virtual Vector4 getBoundingSphere() = 0;
