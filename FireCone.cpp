@@ -13,7 +13,7 @@ GLfloat g,b;
 
 FireCone::FireCone() {
   scale = Matrix4().scale(0.1, 0.1, 0.1);
-  for (int i = 0; i < 1000; i++) {
+  for (int i = 0; i < 300; i++) {
     particles.push_back(Particle());
   }
 }
@@ -21,7 +21,7 @@ FireCone::FireCone() {
 void FireCone::draw()
 {
   glDisable(GL_LIGHTING);
-  glPointSize(3);
+  glPointSize(2);
   glBegin(GL_POINTS);
   for (std::vector<Particle>::iterator it = particles.begin() ; it != particles.end(); ++it)
   {
