@@ -60,8 +60,12 @@ void Track::addGeode(geode * g) {
   roadObjects.push_back(g);
 }
 
-int Track::getSize() {
-  return curves.size();
+int Track::getNumObj() {
+  return roadObjects.size();
+}
+
+geode * Track::getObj(int i) {
+  return roadObjects[i];
 }
 
 BCurve * Track::getCurve(int i) {

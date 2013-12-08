@@ -8,7 +8,6 @@
 //  Modified: 12/7/13
 //
 
-#include <iostream>
 #include "car.h"
 
 car::car(float size) {
@@ -18,6 +17,25 @@ car::car(float size) {
   zpos = 0.0;
   scale = 0.8/size;
   fire = new FireCone();
+}
+
+void car::calculateBoundingSphere() {
+  GLdouble winX, winY, winZ;
+  GLint viewport[4];
+  GLdouble modelview[16];
+  GLdouble projection[16];
+
+  glGetDoublev( GL_PROJECTION_MATRIX, projection );
+  glGetIntegerv( GL_VIEWPORT, viewport );
+  glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
+
+  gluProject(0.0, 0.0, 0.0, modelview, projection, viewport, &winX, &winY, &winZ);
+
+//r2 and r3 discarded
+  GLdouble radius, r1, r2, r3;
+  gluProject(xr, 0.0, 0.0, modelview, projection, viewport, &r1, &r2, &r3);
+
+  bounding = Vector4(winX, winY, winZ, r1-winX);
 }
 
 void car::draw() {
@@ -51,6 +69,8 @@ void car::draw() {
   glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_INT, indices);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_NORMAL_ARRAY);
+
+  calculateBoundingSphere();
 
   glPushMatrix();
   glTranslatef(0.5*xmax, ymin*scale, -zmin);
@@ -96,9 +116,15 @@ void car::findMinMax() {
   }
   zpos = -zmin*scale*.5;
 
-//print min/maxes
-  std::cout << "X: " << xmin << ", " << xmax <<std::endl;
-  std::cout << "Y: " << ymin << ", " << ymax <<std::endl;
-  std::cout << "Z: " << zmin << ", " << zmax <<std::endl;
+  float xdiff = xmax - xmin;
+  float ydiff = ymax - ymin;
+  float zdiff = zmax - zmin;
 
+  xr = xdiff/2;
+  yr = ydiff/2;
+  zr = zdiff/2; 
+}
+
+Vector4 car::getBoundingSphere() {
+  return bounding;
 }

@@ -92,9 +92,9 @@ void makeTrack() {
 		    start));
   Vector3 * obj = new Vector3(-2.5f,  2.5/3.0f*multy, 2.0f*multz);
   track->addGeode(new sphere(0.1, *middle1));
-  track->addGeode(new cube(0.1, *start));
+  track->addGeode(new cube(0.2, *start));
   track->addGeode(new sphere(0.1, *end));
-  track->addGeode(new cube(0.1, *middle2));
+  track->addGeode(new cube(0.2, *middle2));
 }
 
 void idleCallback(void)
@@ -156,6 +156,31 @@ void reshapeCallback(int w, int h)
   glMatrixMode(GL_MODELVIEW);
 }
 
+void printTest(Vector4 t, const char* n) {
+  std::cout << n << t[0] << ", " << t[1] << ", " << t[2] << ", " <<t[3] << std::endl;
+}
+void checkCollision() {
+  Vector4 carCenter = modelCar->getBoundingSphere();
+
+  geode * currObj;
+  float objRadius;
+  Vector4 objCenter;
+  for (int i = 0; i < track->getNumObj(); i++) {
+    currObj = track->getObj(i);
+    objCenter = currObj->getBoundingSphere();
+
+     // printTest(carCenter, "car ");
+
+//check x and y direction
+    if (carCenter[0]+carCenter[3] > objCenter[0]-objCenter[3] &&
+		carCenter[0]-carCenter[3] < objCenter[0]+objCenter[3]) {
+      if (carCenter[1]+carCenter[3] > objCenter[1]-objCenter[3] &&
+ 		carCenter[1]-carCenter[3] < objCenter[1]+objCenter[3]) { 
+        std::cout << "crash!" << std::endl;
+      }
+    }
+  }
+}
 
 void displayCallback(void)
 {
@@ -192,6 +217,8 @@ void displayCallback(void)
     glDisable(GL_TEXTURE_2D);
     track->drawObjects();
     modelCar->draw();
+
+    checkCollision();
 
     //cam.setEye(track->getPoint(cam.eye_t, 0.005, cam.eyeCurve));
     //cam.setCenter(track->getPoint(cam.center_t, 0.005, cam.centerCurve));
@@ -258,6 +285,7 @@ void mouseButton(int button, int state, int x, int y) {
   }
   clickx = x;
   clicky = y;
+  std::cout << x <<endl;
 }
 
 void mouseMotion(int x, int y) {
@@ -322,7 +350,7 @@ int main(int argc, char *argv[])
 
   GLint texSize;
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
-  cout<<texSize<<endl;
+  //cout<<texSize<<endl;
   glutMainLoop();
   return 0;
 }

@@ -17,17 +17,20 @@
 #include <cstdlib>
 #include <GL/glut.h>
 #endif
-#include <cstring>
+
+#include <cmath>
 #include "Matrix4.h"
 
 class geode {
   private:
-//    virtual void boundingBox() = 0;
+    virtual void calculateBoundingSphere() = 0;
 
   public: 
     Vector3 trans;
-    double r;
+    Vector4 bounding;
+    float r;
     virtual void draw() = 0;
+    virtual Vector4 getBoundingSphere() = 0;
 };
 
 #endif
