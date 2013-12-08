@@ -58,9 +58,6 @@ void car::draw() {
 
   glTranslatef(xpos, 0.0, 0.0);
 //draw car
-
-
-  glDisable(GL_TEXTURE_2D);
   glColor3f(1, 1, 1);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
@@ -79,8 +76,6 @@ void car::draw() {
 
   glTranslatef(0.5*xmin, ymin*scale, -zmin);
   fire->draw();
-
-  glEnable(GL_TEXTURE_2D);
 }
 
 void car::moveSide(GLfloat xtrans) {

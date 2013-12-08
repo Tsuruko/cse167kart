@@ -44,14 +44,6 @@ private:
 
   std::vector<Vector3> l0;
   std::vector<Vector3> r0;
-  /*std::vector<Vector3> l1;
-  std::vector<Vector3> l2;
-  std::vector<Vector3> l3;
-  std::vector<Vector3> l4;
-  std::vector<Vector3> l5;
-  std::vector<Vector3> l6;
-  std::vector<Vector3> l7;
-  std::vector<Vector3> l8;*/
   Vector3 genInner(Vector3 v1, Vector3 V2);
   Vector3 calcNormal(Vector3 v1);
 

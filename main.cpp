@@ -42,6 +42,9 @@ bool mode = true;
 bool ctrlpts = true;
 //toggle terrain on/off in car mode
 bool terrain = false;
+//toggle texture on/off
+bool textureOn = false;
+
 Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
 //track size and position adjustment constants
@@ -191,7 +194,6 @@ void displayCallback(void)
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   if (mode) {
-    glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
     glLoadMatrixf(mouse.getPointer());
     glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
@@ -208,22 +210,18 @@ void displayCallback(void)
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
 
     glBindTexture(GL_TEXTURE_2D, trackTex);
+    if (textureOn) glEnable(GL_TEXTURE_2D);
     track->drawTrack();
     if (terrain){
       glBindTexture(GL_TEXTURE_2D, rockTex);
       track->drawTerrain();
     }
+    if (textureOn) glDisable(GL_TEXTURE_2D);
 
-    glDisable(GL_TEXTURE_2D);
     track->drawObjects();
     modelCar->draw();
 
     checkCollision();
-
-    //cam.setEye(track->getPoint(cam.eye_t, 0.005, cam.eyeCurve));
-    //cam.setCenter(track->getPoint(cam.center_t, 0.005, cam.centerCurve));
-    //modelCar->moveForward(track->getPoint(modelCar->t, 0.005, modelCar->curve));
-
   }
  
   glFlush();
@@ -256,6 +254,9 @@ void processKeys (unsigned char key, int x, int y) {
   if (key == 't') {
     if (terrain) terrain = false;
     else terrain = true;
+  }
+  if (key == 'x') {
+    textureOn = !textureOn;
   }
 }
 
@@ -308,7 +309,6 @@ int main(int argc, char *argv[])
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);  // set polygon drawing mode to fill front and back of each polygon
   glDisable(GL_CULL_FACE);     // disable backface culling to render both sides of polygons
   glShadeModel(GL_SMOOTH);             	      // set shading to smooth
-  glEnable(GL_TEXTURE_2D);		
 
   // Generate material properties:
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
