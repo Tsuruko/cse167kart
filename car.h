@@ -24,11 +24,12 @@ private:
   float scale;
 
   float xmin, xmax, ymin, ymax, zmin, zmax;   //find size of the car
-  float r;   //bounding box radius
+  float xr, yr, zr;   //bounding params
   FireCone *fire;
 
-  float getRadius();
-  
+  Vector4 bounding;
+  void calculateBoundingSphere();
+
 public:
 //traversing the track
   GLfloat t;

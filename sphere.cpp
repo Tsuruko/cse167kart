@@ -23,9 +23,9 @@ class sphere : public geode {
 
     GLdouble r1, r2, rad;
     gluProject(0.0, 0.0, 0.0, modelview, projection, viewport, &winX, &winY, &winZ);
-    gluProject(0.0, 0.0, 0.0, modelview, projection, viewport, &rad, &r1, &r2);
+    gluProject(r, 0.0, 0.0, modelview, projection, viewport, &rad, &r1, &r2);
 
-    bounding = Vector4(winX, winY, winZ, rad-winX);
+    bounding = Vector4(winX, winY, winZ, std::abs(rad-winX));
   }
 
   public: sphere(float radius, Vector3 pos) {
@@ -37,6 +37,7 @@ class sphere : public geode {
     glTranslatef(trans[0], trans[1], trans[2]+r);   
     glColor3f(1.0, 0.0, 0.0);
     glutSolidSphere(r, 10.0, 10.0);
+    calculateBoundingSphere();
     glTranslatef(-trans[0], -trans[1], -(trans[2]+r));
   }
 

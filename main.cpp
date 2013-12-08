@@ -156,6 +156,9 @@ void reshapeCallback(int w, int h)
   glMatrixMode(GL_MODELVIEW);
 }
 
+void printTest(Vector4 t, const char* n) {
+  std::cout << n << t[0] << ", " << t[1] << ", " << t[2] << ", " <<t[3] << std::endl;
+}
 void checkCollision() {
   Vector4 carCenter = modelCar->getBoundingSphere();
 
@@ -165,11 +168,13 @@ void checkCollision() {
   for (int i = 0; i < track->getNumObj(); i++) {
     currObj = track->getObj(i);
     objCenter = currObj->getBoundingSphere();
-  
 
-//checks centers only for now
-    if (carCenter[0] == objCenter[0] && carCenter[1] == objCenter[1] &&
-	carCenter[2] == objCenter[2]) {
+     // printTest(carCenter, "car ");
+
+//checks x-direction only  
+    if (carCenter[0]+carCenter[3] > objCenter[0]-objCenter[3] &&
+	carCenter[0]-carCenter[3] < objCenter[0]+objCenter[3])
+    {
       std::cout << "crash!" << std::endl;
     }
   }
@@ -278,6 +283,7 @@ void mouseButton(int button, int state, int x, int y) {
   }
   clickx = x;
   clicky = y;
+  std::cout << x <<endl;
 }
 
 void mouseMotion(int x, int y) {

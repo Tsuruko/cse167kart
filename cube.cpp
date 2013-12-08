@@ -26,7 +26,7 @@ class cube : public geode {
 
     GLdouble r1, r2, rad;
     gluProject(0.0, 0.0, 0.0, modelview, projection, viewport, &winX, &winY, &winZ);
-    gluProject(0.0, 0.0, 0.0, modelview, projection, viewport, &rad, &r1, &r2);
+    gluProject(r, 0.0, 0.0, modelview, projection, viewport, &rad, &r1, &r2);
 
     bounding = Vector4(winX, winY, winZ, rad-winX);
   }

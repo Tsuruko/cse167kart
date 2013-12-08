@@ -18,6 +18,7 @@
 #include <GL/glut.h>
 #endif
 
+#include <cmath>
 #include "Matrix4.h"
 
 class geode {
