@@ -171,11 +171,13 @@ void checkCollision() {
 
      // printTest(carCenter, "car ");
 
-//checks x-direction only  
+//check x and y direction
     if (carCenter[0]+carCenter[3] > objCenter[0]-objCenter[3] &&
-	carCenter[0]-carCenter[3] < objCenter[0]+objCenter[3])
-    {
-      std::cout << "crash!" << std::endl;
+		carCenter[0]-carCenter[3] < objCenter[0]+objCenter[3]) {
+      if (carCenter[1]+carCenter[3] > objCenter[1]-objCenter[3] &&
+ 		carCenter[1]-carCenter[3] < objCenter[1]+objCenter[3]) { 
+        std::cout << "crash!" << std::endl;
+      }
     }
   }
 }
