@@ -1,3 +1,15 @@
+//
+//  Texture.h
+//  cse167kart
+//
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 11/25/13
+//
+//  Modified: 12/7/13
+//
+//  Original Author: Dr. Jurgen Schulze
+//
+
 #include <stdlib.h>
 #include <stdio.h>
 #ifdef __APPLE__
@@ -81,23 +93,6 @@ unsigned char* loadPPM(const char* filename, int& width, int& height)
 	return rawData;
 }
 
-// initialize OpenGL state
-void initGL()
-{
-  glEnable(GL_TEXTURE_2D);   // enable texture mapping
-  glShadeModel(GL_SMOOTH);   // enable smooth shading
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // black background
-  glClearDepth(1.0f);        // depth buffer setup
-  glEnable(GL_DEPTH_TEST);   // enables depth testing
-  glDepthFunc(GL_LEQUAL);    // configure depth testing
-  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);          // really nice perspective calculations
-}
-
-// load image file into texture object
-void doWork(char* tdata){
-
-}
-
 GLuint loadTexture(const char* name)
 {
   GLuint texture[1];     // storage for one texture
@@ -156,94 +151,3 @@ GLuint loadRockTexture(char* name)
 
   return texture[0];
 }
-/*
-int main(int argc, char** argv)
-{
-  glutInit(&argc, argv);
-  
-  glutInitWindowSize(512, 512);
-  
-  glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-  
-
-  glutCreateWindow("Texturing Example");
-
-  glutDisplayFunc(display);
-
-  glutReshapeFunc(reshape);
-  
-  glutIdleFunc(idle);
-  
-  loadTexture();
-  
-  initGL();
-  
-  glutMainLoop();
-  
-  return 0;
-}*/
-
-/*! glut display callback function.  Every time the window needs to be drawn,
- glut will call this function.  This includes when the window size
- changes, or when another window covering part of this window is
- moved so this window is uncovered.
- */
-void display()
-{
-  cerr << "display callback" << endl;
-  
-  /* clear the color buffer (resets everything to black) */
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  
-  /* draw quad, takes 4 vertices */
-  glBegin(GL_QUADS);
-  
-  // set the current drawing color to white to use original texture colors
-  glColor3f(1, 1, 1);
-  
-  // specify texture coordinates for each vertex
-  // note that textures are stored "upside down"
-  glTexCoord2f(0, 1); glVertex3f(-2, -1, 0);
-  glTexCoord2f(1, 1); glVertex3f(2, -1, 0);
-  glTexCoord2f(1, 0); glVertex3f(2, 1, 0);
-  glTexCoord2f(0, 0); glVertex3f(-2, 1, 0);
-  
-  /* tell OpenGL we're done drawing quads */
-  glEnd();
-  
-  /* swap the back and front buffers so we can see what we just drew */
-  glutSwapBuffers();
-}
-
-/*! glut reshape callback function.  GLUT calls this function whenever
- the window is resized, including the first time it is created.
- You can use variables to keep track the current window size.
- */
-void reshape(int width, int height)
-{
-  cerr << "reshape callback" << endl;
-  
-  /* tell OpenGL we want to display in a recangle that is the
-   same size as the window
-   */
-  glViewport(0,0,width,height);
-  
-  /* switch to the projection matrix */
-  glMatrixMode(GL_PROJECTION);
-  
-  /* clear the projection matrix */
-  glLoadIdentity();
-  
-  /* set the camera view, orthographic projection with 4x4 unit square canvas*/
-  glOrtho(-2,2,-2,2,2,-2);
-  
-  /* switch back to the model view matrix */
-  glMatrixMode(GL_MODELVIEW);
-}
-
-/* Gets called whenever computer doesn't have anything else to do */
-void idle()
-{
-  cerr << "idle callback" << endl;
-  display();     // call display callback, useful for animation
-} 

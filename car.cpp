@@ -1,3 +1,13 @@
+//
+//  car.cpp
+//  cse167kart
+//
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 12/2/13
+//
+//  Modified: 12/7/13
+//
+
 #include "car.h"
 
 car::car(float size) {
@@ -7,6 +17,25 @@ car::car(float size) {
   zpos = 0.0;
   scale = 0.8/size;
   fire = new FireCone();
+}
+
+void car::calculateBoundingSphere() {
+  GLdouble winX, winY, winZ;
+  GLint viewport[4];
+  GLdouble modelview[16];
+  GLdouble projection[16];
+
+  glGetDoublev( GL_PROJECTION_MATRIX, projection );
+  glGetIntegerv( GL_VIEWPORT, viewport );
+  glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
+
+  gluProject(0.0, 0.0, 0.0, modelview, projection, viewport, &winX, &winY, &winZ);
+
+//r2 and r3 discarded
+  GLdouble radius, r1, r2, r3;
+  gluProject(xr, 0.0, 0.0, modelview, projection, viewport, &r1, &r2, &r3);
+
+  bounding = Vector4(winX, winY, winZ, r1-winX);
 }
 
 void car::draw() {
@@ -29,9 +58,6 @@ void car::draw() {
 
   glTranslatef(xpos, 0.0, 0.0);
 //draw car
-
-
-  glDisable(GL_TEXTURE_2D);
   glColor3f(1, 1, 1);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
@@ -41,6 +67,8 @@ void car::draw() {
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_NORMAL_ARRAY);
 
+  calculateBoundingSphere();
+
   glPushMatrix();
   glTranslatef(0.5*xmax, ymin*scale, -zmin);
   fire->draw();
@@ -48,8 +76,6 @@ void car::draw() {
 
   glTranslatef(0.5*xmin, ymin*scale, -zmin);
   fire->draw();
-
-  glEnable(GL_TEXTURE_2D);
 }
 
 void car::moveSide(GLfloat xtrans) {
@@ -84,4 +110,16 @@ void car::findMinMax() {
     } 
   }
   zpos = -zmin*scale*.5;
+
+  float xdiff = xmax - xmin;
+  float ydiff = ymax - ymin;
+  float zdiff = zmax - zmin;
+
+  xr = xdiff/2;
+  yr = ydiff/2;
+  zr = zdiff/2; 
+}
+
+Vector4 car::getBoundingSphere() {
+  return bounding;
 }

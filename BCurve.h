@@ -1,8 +1,11 @@
 //
 //  BCurve.h
-//  cse167p6
+//  cse167kart
 //
-//  Nick Troast, Monica Liu, Andrew Lin
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 11/17/13
+//
+//  Modified: 12/7/13
 //
 
 #ifndef __cse167p6__BCurve__

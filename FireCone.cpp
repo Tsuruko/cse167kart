@@ -1,9 +1,11 @@
 //
 //  FireCone.cpp
-//  FireCone
+//  cse167kart
 //
-//  Created by Nick Troast on 12/2/13.
-//  Copyright (c) 2013 Nick Troast. All rights reserved.
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 12/4/13
+//
+//  Modified: 12/7/13
 //
 
 #include "FireCone.h"
@@ -11,7 +13,7 @@ GLfloat g,b;
 
 FireCone::FireCone() {
   scale = Matrix4().scale(0.1, 0.1, 0.1);
-  for (int i = 0; i < 1000; i++) {
+  for (int i = 0; i < 300; i++) {
     particles.push_back(Particle());
   }
 }
@@ -19,7 +21,7 @@ FireCone::FireCone() {
 void FireCone::draw()
 {
   glDisable(GL_LIGHTING);
-  glPointSize(3);
+  glPointSize(2);
   glBegin(GL_POINTS);
   for (std::vector<Particle>::iterator it = particles.begin() ; it != particles.end(); ++it)
   {

@@ -1,9 +1,11 @@
 //
 //  FireCone.h
-//  FireCone
+//  cse167kart
 //
-//  Created by Nick Troast on 12/2/13.
-//  Copyright (c) 2013 Nick Troast. All rights reserved.
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 12/4/13
+//
+//  Modified: 12/7/13
 //
 
 #ifndef __FireCone__FireCone__

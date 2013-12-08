@@ -2,7 +2,10 @@
 //  main.cpp
 //  cse167kart
 //
-//  Nick Troast, Monica Liu, Andrew Lin
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 11/17/13
+//
+//  Modified: 12/7/13
 //
 
 #include <stdio.h>
@@ -39,6 +42,9 @@ bool mode = true;
 bool ctrlpts = true;
 //toggle terrain on/off in car mode
 bool terrain = false;
+//toggle texture on/off
+bool textureOn = false;
+
 Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
 //track size and position adjustment constants
@@ -89,9 +95,9 @@ void makeTrack() {
 		    start));
   Vector3 * obj = new Vector3(-2.5f,  2.5/3.0f*multy, 2.0f*multz);
   track->addGeode(new sphere(0.1, *middle1));
-  track->addGeode(new cube(0.1, *start));
+  track->addGeode(new cube(0.2, *start));
   track->addGeode(new sphere(0.1, *end));
-  track->addGeode(new cube(0.1, *middle2));
+  track->addGeode(new cube(0.2, *middle2));
 }
 
 void idleCallback(void)
@@ -153,6 +159,31 @@ void reshapeCallback(int w, int h)
   glMatrixMode(GL_MODELVIEW);
 }
 
+void printTest(Vector4 t, const char* n) {
+  std::cout << n << t[0] << ", " << t[1] << ", " << t[2] << ", " <<t[3] << std::endl;
+}
+void checkCollision() {
+  Vector4 carCenter = modelCar->getBoundingSphere();
+
+  geode * currObj;
+  float objRadius;
+  Vector4 objCenter;
+  for (int i = 0; i < track->getNumObj(); i++) {
+    currObj = track->getObj(i);
+    objCenter = currObj->getBoundingSphere();
+
+     // printTest(carCenter, "car ");
+
+//check x and y direction
+    if (carCenter[0]+carCenter[3] > objCenter[0]-objCenter[3] &&
+		carCenter[0]-carCenter[3] < objCenter[0]+objCenter[3]) {
+      if (carCenter[1]+carCenter[3] > objCenter[1]-objCenter[3] &&
+ 		carCenter[1]-carCenter[3] < objCenter[1]+objCenter[3]) { 
+        std::cout << "crash!" << std::endl;
+      }
+    }
+  }
+}
 
 void displayCallback(void)
 {
@@ -163,7 +194,6 @@ void displayCallback(void)
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   if (mode) {
-    glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
     glLoadMatrixf(mouse.getPointer());
     glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
@@ -180,20 +210,18 @@ void displayCallback(void)
               cam.getUp()[0], cam.getUp()[1], cam.getUp()[2]);
 
     glBindTexture(GL_TEXTURE_2D, trackTex);
+    if (textureOn) glEnable(GL_TEXTURE_2D);
     track->drawTrack();
     if (terrain){
       glBindTexture(GL_TEXTURE_2D, rockTex);
       track->drawTerrain();
     }
+    if (textureOn) glDisable(GL_TEXTURE_2D);
 
-    glDisable(GL_TEXTURE_2D);
     track->drawObjects();
     modelCar->draw();
 
-    //cam.setEye(track->getPoint(cam.eye_t, 0.005, cam.eyeCurve));
-    //cam.setCenter(track->getPoint(cam.center_t, 0.005, cam.centerCurve));
-    //modelCar->moveForward(track->getPoint(modelCar->t, 0.005, modelCar->curve));
-
+    checkCollision();
   }
  
   glFlush();
@@ -227,6 +255,9 @@ void processKeys (unsigned char key, int x, int y) {
     if (terrain) terrain = false;
     else terrain = true;
   }
+  if (key == 'x') {
+    textureOn = !textureOn;
+  }
 }
 
 void processSpecialKeys(int key, int x, int y) {
@@ -255,6 +286,7 @@ void mouseButton(int button, int state, int x, int y) {
   }
   clickx = x;
   clicky = y;
+  std::cout << x <<endl;
 }
 
 void mouseMotion(int x, int y) {
@@ -277,7 +309,6 @@ int main(int argc, char *argv[])
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);  // set polygon drawing mode to fill front and back of each polygon
   glDisable(GL_CULL_FACE);     // disable backface culling to render both sides of polygons
   glShadeModel(GL_SMOOTH);             	      // set shading to smooth
-  glEnable(GL_TEXTURE_2D);		
 
   // Generate material properties:
   glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
@@ -319,7 +350,7 @@ int main(int argc, char *argv[])
 
   GLint texSize;
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
-  cout<<texSize<<endl;
+  //cout<<texSize<<endl;
   glutMainLoop();
   return 0;
 }

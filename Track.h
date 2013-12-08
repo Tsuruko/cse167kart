@@ -2,7 +2,10 @@
 //  Track.h
 //  cse167kart
 //
-//  Nick Troast, Monica Liu, Andrew Lin
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 11/17/13
+//
+//  Modified: 12/7/13
 //
 
 #ifndef __cse167kart__Track__
@@ -41,14 +44,6 @@ private:
 
   std::vector<Vector3> l0;
   std::vector<Vector3> r0;
-  /*std::vector<Vector3> l1;
-  std::vector<Vector3> l2;
-  std::vector<Vector3> l3;
-  std::vector<Vector3> l4;
-  std::vector<Vector3> l5;
-  std::vector<Vector3> l6;
-  std::vector<Vector3> l7;
-  std::vector<Vector3> l8;*/
   Vector3 genInner(Vector3 v1, Vector3 V2);
   Vector3 calcNormal(Vector3 v1);
 
@@ -56,7 +51,8 @@ public:
   Track();
   void addCurve(BCurve*);
   void addGeode(geode*);
-  int getSize();
+  int getNumObj();
+  geode * getObj(int);
   BCurve * getCurve(int);
   void drawCurves();
   void drawPoints();

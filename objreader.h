@@ -1,3 +1,15 @@
+//
+//  objreader.h
+//  cse167kart
+//
+//  Authors: Nick Troast, Monica Liu, Andrew Lin
+//  Created: 12/2/13
+//
+//  Modified: 12/7/13
+//
+// Original Author: Dr. Jurgen Schulze
+//
+
 #ifndef __ObjReader_h__
 #define __ObjReader_h__
 
