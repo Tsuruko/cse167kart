@@ -21,9 +21,6 @@
 #include "Matrix4.h"
 
 class geode {
-  private:
-//    virtual void boundingBox() = 0;
-
   public: 
     Vector3 trans;
     double r;

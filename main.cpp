@@ -92,9 +92,9 @@ void makeTrack() {
 		    start));
   Vector3 * obj = new Vector3(-2.5f,  2.5/3.0f*multy, 2.0f*multz);
   track->addGeode(new sphere(0.1, *middle1));
-  track->addGeode(new cube(0.1, *start));
+  track->addGeode(new cube(0.2, *start));
   track->addGeode(new sphere(0.1, *end));
-  track->addGeode(new cube(0.1, *middle2));
+  track->addGeode(new cube(0.2, *middle2));
 }
 
 void idleCallback(void)
@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
 
   GLint texSize;
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
-  cout<<texSize<<endl;
+  //cout<<texSize<<endl;
   glutMainLoop();
   return 0;
 }

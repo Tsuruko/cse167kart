@@ -8,18 +8,22 @@
 //  Modified: 12/7/13
 //
 
+#include <cmath>
 #include "geode.h"
 
 class cube : public geode {
-  public:cube(double radius, Vector3 pos) {
+  private: double s;
+
+  public:cube(double side, Vector3 pos) {
     trans = pos;
-    r = radius;
+    s = side;
+    r = std::sqrt(2*std::pow(s, 2))/2;
   }
 
   public:void draw() {
       glTranslatef(trans[0], trans[1], trans[2]+r);   
       glColor3f(1.0, 0.0, 0.0);
-      glutSolidCube(r*2);
+      glutSolidCube(s);
       glTranslatef(-trans[0], -trans[1], -(trans[2]+r));
   }
 };
