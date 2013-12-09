@@ -309,7 +309,7 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
 
 void Track::drawTerrain(){
   
-  if((innerLevelsN[0]->size())<800){//(4.0/(stacks*1.0))){
+  if((innerLevelsN[0]->size())<801){//(4.0/(stacks*1.0))){
     for(int i=0;i<maxInnerLevels;i++){
       for(int j=0;j<innerLevels[i]->size();j++){
       
@@ -324,40 +324,40 @@ void Track::drawTerrain(){
         
       
         if(i==0){
-            innerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i+1])[(j)], (*innerLevels[i])[(j2)], (*innerLevels[i])[(j)]-Vector3(0,0,1)));
+            innerLevelsN[i]->push_back(calcNormal(innerLevels[i]->at(j),innerLevels[i]->at((j+1)%(innerLevels[i]->size()-1)),innerLevels[i]->at(j), innerLevels[i]->at(j2), innerLevels[i]->at(j)));
         }
         else if(i==(maxInnerLevels-1)){
-            innerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i])[(j)]+Vector3(0,0,1), (*innerLevels[i])[(j2)], (*innerLevels[i-1])[(j)]));
+            innerLevelsN[i]->push_back(calcNormal(innerLevels[i]->at(j),innerLevels[i]->at((j+1)%(innerLevels[i]->size()-1)),innerLevels[i]->at(j), innerLevels[i]->at(j2), innerLevels[i-1]->at(j)));
         }
         else{
-            innerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i+1])[(j)], (*innerLevels[i])[(j2)], (*innerLevels[i-1])[(j)]));
+            innerLevelsN[i]->push_back(calcNormal(innerLevels[i]->at(j),innerLevels[i]->at((j+1)%(innerLevels[i]->size()-1)),innerLevels[i]->at(j), innerLevels[i]->at(j2), innerLevels[i-1]->at(j)));
         }
       }
     }
   }
   
-    if(outerLevelsN[0]->size()<(4.0/stacks)){
-    for(int i=0;i<maxInnerLevels;i++){
-      for(int j=0;j<innerLevels[i]->size();j++){
+   if(outerLevelsN[0]->size()<(4.0/stacks)){
+    for(int i=0;i<maxOuterLevels;i++){
+      for(int j=0;j<outerLevels[i]->size();j++){
       
         int j1;
         int j2;
       
-        if((j)==(innerLevels[i]->size()-1)){ j1 = 0;}
+        if((j)==(outerLevels[i]->size()-1)){ j1 = 0;}
         else{j1 = j+1;};
 
-        if((j==0)){ j2 = (innerLevels[i]->size()-1);}
+        if((j==0)){ j2 = (outerLevels[i]->size()-1);}
         else{j2 = j-1;}
 
       
         if(i==0){
-          outerLevelsN[i]->push_back(calcNormal(innerLevels[i]->at(j),innerLevels[i]->at((j+1)%(innerLevels[i]->size()-1)),innerLevels[i]->at(j), innerLevels[i]->at(j2), innerLevels[i]->at(j)));
+          outerLevelsN[i]->push_back(calcNormal(outerLevels[i]->at(j),outerLevels[i]->at((j+1)%(outerLevels[i]->size()-1)),outerLevels[i]->at(j), outerLevels[i]->at(j2), outerLevels[i]->at(j)));
         }
         else if(i==maxInnerLevels-1){
-          outerLevelsN[i]->push_back(calcNormal(innerLevels[i]->at(j),innerLevels[i]->at((j+1)%(innerLevels[i]->size()-1)),innerLevels[i]->at(j), innerLevels[i]->at(j2), innerLevels[i-1]->at(j)));
+          outerLevelsN[i]->push_back(calcNormal(outerLevels[i]->at(j),outerLevels[i]->at((j+1)%(outerLevels[i]->size()-1)),outerLevels[i]->at(j), outerLevels[i]->at(j2), outerLevels[i-1]->at(j)));
         }
         else{
-          outerLevelsN[i]->push_back(calcNormal(innerLevels[i]->at(j),innerLevels[i]->at((j+1)%(innerLevels[i]->size()-1)),innerLevels[i]->at(j), innerLevels[i]->at(j2), innerLevels[i-1]->at(j)));
+          outerLevelsN[i]->push_back(calcNormal(outerLevels[i]->at(j),outerLevels[i]->at((j+1)%(outerLevels[i]->size()-1)),outerLevels[i]->at(j), outerLevels[i]->at(j2), outerLevels[i-1]->at(j)));
         }
       }
     }
