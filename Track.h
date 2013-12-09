@@ -33,6 +33,9 @@ private:
   int maxOuterLevels;
   std::vector<std::vector<Vector3>* > innerLevels;
   std::vector<std::vector<Vector3>* > outerLevels;
+  std::vector<std::vector<Vector3>* > innerLevelsN;
+  std::vector<std::vector<Vector3>* > outerLevelsN;
+
   std::vector<float> upIRand;
   std::vector<float> outIRand;
   std::vector<float> upORand;
@@ -45,7 +48,7 @@ private:
   std::vector<Vector3> l0;
   std::vector<Vector3> r0;
   Vector3 genInner(Vector3 v1, Vector3 V2);
-  Vector3 calcNormal(Vector3 v1);
+  Vector3 calcNormal(Vector3 v1, Vector3 v2, Vector3 v3,Vector3 v4, Vector3 v5);
 
 public:
   Track();

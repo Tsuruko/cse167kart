@@ -32,10 +32,15 @@ Track::Track() {
   innerLevels.push_back(&l0);
   upIBase.push_back(0);
   outIBase.push_back(0);
+  innerLevelsN.push_back(new std::vector<Vector3>);
+
   for(int i=0;i<maxInnerLevels-1;i++){
     std::vector<Vector3>* temp =  new std::vector<Vector3>;
     innerLevels.push_back(temp);
     
+    std::vector<Vector3>* temp2 =  new std::vector<Vector3>;
+    innerLevelsN.push_back(temp2);
+
     upIBase.push_back(arr[i]);
     outIBase.push_back(arr2[i]);
   }
@@ -43,10 +48,15 @@ Track::Track() {
   upOBase.push_back(0);
   outOBase.push_back(0);
   outerLevels.push_back(&r0);
+  outerLevelsN.push_back(new std::vector<Vector3>);
+
   for(int i=0;i<maxOuterLevels-1;i++){
     std::vector<Vector3>* temp =  new std::vector<Vector3>;
     outerLevels.push_back(temp);
     
+    std::vector<Vector3>* temp2 =  new std::vector<Vector3>;
+    outerLevelsN.push_back(temp2);
+
     upOBase.push_back(arr[i]);
     outOBase.push_back(arr2[i]);
   }
@@ -232,21 +242,25 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
     if(texHeight>repeatX) texHeight=1;
     
     glTexCoord2f(texHeight/(repeatX*1.0),level/(maxInnerLevels*1.0/repeatY));
-    glNormal3f(-v1[i][1], v1[i][0], 1);
+    //glNormal3f(-v1[i][1], v1[i][0], 1);
+    glNormal3f(innerLevelsN[level]->at(i)[0],innerLevelsN[level]->at(i)[1],innerLevelsN[level]->at(i)[2]);
     glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
     
     glTexCoord2f(texHeight/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-    glNormal3f(-v2[i][1], v2[i][0], 1);
+    //glNormal3f(-v2[i][1], v2[i][0], 1);
+    glNormal3f(innerLevelsN[level+1]->at(i)[0],innerLevelsN[level+1]->at(i)[1],innerLevelsN[level+1]->at(i)[2]);
     glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
     
     
     if (texHeight==repeatX&&((i+1)!=v1.size())){
       glTexCoord2f(0/repeatX*1.0,level/(maxInnerLevels*1.0/repeatY));
-      glNormal3f(-v1[i][1], v1[i][0], 1);
+      //glNormal3f(-v1[i][1], v1[i][0], 1);
+      glNormal3f(innerLevelsN[level]->at(i)[0],innerLevelsN[level]->at(i)[1],innerLevelsN[level]->at(i)[2]);
       glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
       glTexCoord2f(0/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-      glNormal3f(-v2[i][1], v2[i][0], 1);
+      //glNormal3f(-v2[i][1], v2[i][0], 1);
+      glNormal3f(innerLevelsN[level+1]->at(i)[0],innerLevelsN[level+1]->at(i)[1],innerLevelsN[level+1]->at(i)[2]);
       glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
     }
     texHeight++;
@@ -260,30 +274,91 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
   i = v1.size()-1;
   glTexCoord2f(0/repeatX*1.0,level/(maxInnerLevels*1.0/repeatY));
   glNormal3f(-v1[i][1], v1[i][0], 1);
+  //glNormal3f(innerLevelsN[level]->at(i)[0],innerLevelsN[level]->at(i)[1],innerLevelsN[level]->at(i)[2]);
   glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
   i = v1.size()-1;
   glTexCoord2f(0/repeatX*1.0,(level+1)/(maxInnerLevels*1.0/repeatY));
   glNormal3f(-v2[i][1], v2[i][0], 1);
+  //glNormal3f(innerLevelsN[level+1]->at(i)[0],innerLevelsN[level+1]->at(i)[1],innerLevelsN[level+1]->at(i)[2]);
   glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
   i = 0;
   glTexCoord2f(1/(repeatX*1.0),level/(maxInnerLevels*1.0/repeatY));
   glNormal3f(-v1[i][1], v1[i][0], 1);
+  //glNormal3f(innerLevelsN[level]->at(i)[0],innerLevelsN[level]->at(i)[1],innerLevelsN[level]->at(i)[2]);
   glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
   
   i = 0;
   glTexCoord2f(1/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
   glNormal3f(-v2[i][1], v2[i][0], 1);
+  //glNormal3f(innerLevelsN[level+1]->at(i)[0],innerLevelsN[level+1]->at(i)[1],innerLevelsN[level+1]->at(i)[2]);
   glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
   glEnd();
 }
 
+
 void Track::drawTerrain(){
+  
+  if((innerLevelsN[0]->size())<800){//(4.0/(stacks*1.0))){
+    for(int i=0;i<maxInnerLevels;i++){
+      for(int j=0;j<innerLevels[i]->size();j++){
+      
+        int j1;
+        int j2;
+      
+        if((j)==(innerLevels[i]->size()-1)){ j1 = 0;}
+        else{j1 = j+1;};
+
+        if((j==0)){ j2 = (innerLevels[i]->size()-1);}
+        else{j2 = j-1;}
+        
+      
+        if(i==0){
+            innerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i+1])[(j)], (*innerLevels[i])[(j2)], (*innerLevels[i])[(j)]-Vector3(0,0,1)));
+        }
+        else if(i==(maxInnerLevels-1)){
+            innerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i])[(j)]+Vector3(0,0,1), (*innerLevels[i])[(j2)], (*innerLevels[i-1])[(j)]));
+        }
+        else{
+            innerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i+1])[(j)], (*innerLevels[i])[(j2)], (*innerLevels[i-1])[(j)]));
+        }
+      }
+    }
+  }
+  
+    if(outerLevelsN[0]->size()<(4.0/stacks)){
+    for(int i=0;i<maxInnerLevels;i++){
+      for(int j=0;j<innerLevels[i]->size();j++){
+      
+        int j1;
+        int j2;
+      
+        if((j)==(innerLevels[i]->size()-1)){ j1 = 0;}
+        else{j1 = j+1;};
+
+        if((j==0)){ j2 = (innerLevels[i]->size()-1);}
+        else{j2 = j-1;}
+
+      
+        if(i==0){
+          outerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i+1])[(j)], (*innerLevels[i])[(j2)], (*innerLevels[i])[(j)]-Vector3(0,0,1)));
+        }
+        else if(i==maxInnerLevels-1){
+          outerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i])[(j)]+Vector3(0,0,1), (*innerLevels[i])[(j2)], (*innerLevels[i-1])[(j)]));
+        }
+        else{
+            outerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i+1])[(j)], (*innerLevels[i])[(j2)], (*innerLevels[i-1])[(j)]));
+        }
+       // outerLevelsN[i]->push_back(Vector3(0,0,0));
+      }
+    }
+  }
+  
   for(int i=0;i<maxInnerLevels-1;i++){
-    drawTerrainHelper(*innerLevels[i],*innerLevels[i+1],0);
+    drawTerrainHelper(*innerLevels[i],*innerLevels[i+1],i);
   }
   
   for(int i=0;i<maxOuterLevels-1;i++){
-    drawTerrainHelper(*outerLevels[i],*outerLevels[i+1],0);
+    drawTerrainHelper(*outerLevels[i],*outerLevels[i+1],i);
   }
 }
 
@@ -307,39 +382,28 @@ Vector3 genInner(Vector3 v1, Vector3 v2){
   
 }
 
-Vector3 calcNormal(Vector3 v1){
-  Vector3 vec, norm;
-  /**
-   Vector4 test1, test2, test3, test4;
-   
-   Matrix4 r;
-   
-   
-   
-   
-   
-   vec = v1;
-   norm = Vector3(-v1[1], v1[0], 0);
-   
-   
-   
-   
-   norm.normalize();
-   
-   
-   
-   test1 = Vector4(v1[0], v1[1], v1[2], 1);
-   test3 = Vector4(norm[0], norm[1], norm[2], 1);
-   
-   test1 = r * test1;
-   
-   test3 = r * test3;
-   
-   
-   norm = Vector3(test3[0], test3[1], test3[2]);
-   
-   
-   */ return vec;
+
+Vector3 Track::calcNormal(Vector3 v0, Vector3 v1,Vector3 v2, Vector3 v3, Vector3 v4){
+  Vector3 res(0,0,0);
+  Vector3 norm;
+  Vector3 vec[5] = {v0,v1,v2,v3,v4};
+  Vector3 temp;
+
+  for(int i = 0;i<4;i++){
+    int j = i+1;
+    if(j==5) j=1;
+  temp = Vector3::cross(vec[i], vec[j]);
+  temp.normalize();
+  res = res+temp;
+  }
+  /*
+  Vector3::cross(v1-v0, v2-v0);
+  Vector3::cross(v2-v0, v3-v0);
+  Vector3::cross(v3-v0, v4-v0);
+  Vector3::cross(v4-v0, v1-v0);
+  */
+
+  return res;
   
   
 }
