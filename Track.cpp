@@ -226,7 +226,7 @@ void Track::drawObjects() {
   }
 }
 
-void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level){
+void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level, std::vector<Vector3> n1, std::vector<Vector3> n2){
   glColor3f(1,1,1);
   glBegin(GL_QUAD_STRIP);
   Vector3 n;
@@ -244,29 +244,25 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
     if(texHeight>repeatX) texHeight=1;
     
     glTexCoord2f(texHeight/(repeatX*1.0),level/(maxInnerLevels*1.0/repeatY));
-    //glNormal3f(-v1[i][1], v1[i][0], 1);
-    glNormal3f(innerLevelsN[level]->at(i)[0],innerLevelsN[level]->at(i)[1],innerLevelsN[level]->at(i)[2]);
+    glNormal3f(n1[i][0],n1[i][1],n1[i][2]);
     //glNormal3fv(n.getPointer());
     glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
     
     glTexCoord2f(texHeight/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-    //glNormal3f(-v2[i][1], v2[i][0], 1);
-    glNormal3f(innerLevelsN[level+1]->at(i)[0],innerLevelsN[level+1]->at(i)[1],innerLevelsN[level+1]->at(i)[2]);
+    glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
     //glNormal3fv(n.getPointer());
     glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
     
     // What is this part for? //The texture wraparound bug 
     if (texHeight==repeatX&&((i+1)!=v1.size())){
       glTexCoord2f(0/repeatX*1.0,level/(maxInnerLevels*1.0/repeatY));
-      //glNormal3f(-v1[i][1], v1[i][0], 1);
-      glNormal3f(innerLevelsN[level]->at(i)[0],innerLevelsN[level]->at(i)[1],innerLevelsN[level]->at(i)[2]);
-      glNormal3fv(n.getPointer());
+      glNormal3f(n1[i][0],n1[i][1],n1[i][2]);
+      //glNormal3fv(n.getPointer());
       glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
       glTexCoord2f(0/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-      //glNormal3f(-v2[i][1], v2[i][0], 1);
-      glNormal3f(innerLevelsN[level+1]->at(i)[0],innerLevelsN[level+1]->at(i)[1],innerLevelsN[level+1]->at(i)[2]);
-      glNormal3fv(n.getPointer());
+      glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
+      //glNormal3fv(n.getPointer());
       glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
     }
     
@@ -282,26 +278,27 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
   n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(0/repeatX*1.0,level/(maxInnerLevels*1.0/repeatY));
   //glNormal3fv(n.getPointer());
-  glNormal3f(innerLevelsN[level]->at(i)[0],innerLevelsN[level]->at(i)[1],innerLevelsN[level]->at(i)[2]);
-  //glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
+  glNormal3f(n1[i][0],n1[i][1],n2[i][2]);
+  glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
+
   i = v1.size() - 1;
   n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(0/repeatX*1.0,(level+1)/(maxInnerLevels*1.0/repeatY));
   ///glNormal3fv(n.getPointer());
-  glNormal3f(innerLevelsN[level+1]->at(i)[0],innerLevelsN[level+1]->at(i)[1],innerLevelsN[level+1]->at(i)[2]);
+  glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
   glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
   i = 0;
   n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(1/(repeatX*1.0),level/(maxInnerLevels*1.0/repeatY));
   //glNormal3fv(n.getPointer());
-  glNormal3f(innerLevelsN[level]->at(i)[0],innerLevelsN[level]->at(i)[1],innerLevelsN[level]->at(i)[2]);
+  glNormal3f(n1[i][0],n1[i][1],n1[i][2]);
   glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
   
   i = 0;
   n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(1/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-  glNormal3fv(n.getPointer());
-  //glNormal3f(innerLevelsN[level+1]->at(i)[0],innerLevelsN[level+1]->at(i)[1],innerLevelsN[level+1]->at(i)[2]);
+  //glNormal3fv(n.getPointer());
+  glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
   glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
   glEnd();
 }
@@ -364,11 +361,11 @@ void Track::drawTerrain(){
   }
   
   for(int i=0;i<maxInnerLevels-1;i++){
-    drawTerrainHelper(*innerLevels[i],*innerLevels[i+1],i);
+    drawTerrainHelper(*innerLevels[i],*innerLevels[i+1],i, *innerLevelsN[i],*innerLevelsN[i+1]);
   }
   
   for(int i=0;i<maxOuterLevels-1;i++){
-    drawTerrainHelper(*outerLevels[i],*outerLevels[i+1],i);
+    drawTerrainHelper(*outerLevels[i],*outerLevels[i+1],i,*outerLevelsN[i],*outerLevelsN[i+1]);
   }
 }
 

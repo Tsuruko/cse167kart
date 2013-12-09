@@ -63,7 +63,7 @@ public:
   void drawObjects();
   void drawRoadLines();
   void drawTerrain();
-  void drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level);
+  void drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level, std::vector<Vector3> n1, std::vector<Vector3> n2);
   Vector3 getPoint(GLfloat &t, GLfloat step, int &curve);
 };
 
