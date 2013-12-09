@@ -351,10 +351,10 @@ void Track::drawTerrain(){
 
       
         if(i==0){
-          outerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i+1])[(j)], (*innerLevels[i])[(j2)], (*innerLevels[i])[(j)]-Vector3(0,0,1)));
+          outerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i+1])[(j)], (*innerLevels[i])[(j2)], (*innerLevels[i])[(j)]));
         }
         else if(i==maxInnerLevels-1){
-          outerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i])[(j)]+Vector3(0,0,1), (*innerLevels[i])[(j2)], (*innerLevels[i-1])[(j)]));
+          outerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i])[(j)], (*innerLevels[i])[(j2)], (*innerLevels[i-1])[(j)]));
         }
         else{
             outerLevelsN[i]->push_back(calcNormal((*innerLevels[i])[j],(*innerLevels[i])[((j+1)%(innerLevels[i]->size()-1))],(*innerLevels[i+1])[(j)], (*innerLevels[i])[(j2)], (*innerLevels[i-1])[(j)]));
