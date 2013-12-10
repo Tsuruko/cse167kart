@@ -402,7 +402,9 @@ Vector3 Track::calcNormal(Vector3 v0, Vector3 v1,Vector3 v2, Vector3 v3, Vector3
   temp = Vector3::cross(vec[i], vec[j]);
   temp.normalize();
   res = res+temp;
+
   }
+  res.normalize();
   /*
   Vector3::cross(v1-v0, v2-v0);
   Vector3::cross(v2-v0, v3-v0);
