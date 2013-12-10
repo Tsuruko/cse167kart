@@ -44,6 +44,8 @@ bool ctrlpts = true;
 bool terrain = false;
 //toggle texture on/off
 bool textureOn = false;
+//toggle per vertex normals
+bool vertNormal = true;
 
 Camera cam = Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
@@ -258,6 +260,11 @@ void processKeys (unsigned char key, int x, int y) {
   if (key == 'x') {
     textureOn = !textureOn;
   }
+  if (key=='n'){
+    if(vertNormal) vertNormal = false;
+    else vertNormal = true;
+    track->setVertN(vertNormal);
+  }
 }
 
 void processSpecialKeys(int key, int x, int y) {
@@ -348,9 +355,11 @@ int main(int argc, char *argv[])
 			modelCar->nIndices, &modelCar->indices);
   modelCar->findMinMax(); 
 
+  /* To Calculate Max Texture Size
   GLint texSize;
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
-  //cout<<texSize<<endl;
+  cout<<texSize<<endl;*/
+  
   glutMainLoop();
   return 0;
 }

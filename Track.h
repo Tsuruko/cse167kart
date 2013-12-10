@@ -31,6 +31,8 @@ private:
   
   int maxInnerLevels;
   int maxOuterLevels;
+
+  bool vertNormals;
   std::vector<std::vector<Vector3>* > innerLevels;
   std::vector<std::vector<Vector3>* > outerLevels;
   std::vector<std::vector<Vector3>* > innerLevelsN;
@@ -65,6 +67,7 @@ public:
   void drawTerrain();
   void drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level, std::vector<Vector3> n1, std::vector<Vector3> n2);
   Vector3 getPoint(GLfloat &t, GLfloat step, int &curve);
+  void setVertN(bool flag);
 };
 
 #endif /* defined(__cse167kart__Track__) */

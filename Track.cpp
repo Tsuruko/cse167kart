@@ -24,7 +24,7 @@ Track::Track() {
   laneCount = 2;
   maxInnerLevels = 9;
   maxOuterLevels = 9;
-  
+  vertNormals = true;
   //double arr[] = {.2,.3,.4,.4,.3,.4,.3,.2};
   //double arr2[] = {.5,.5,.25,.05,-.5,-.5,.3,.4};
   double arr[] = {.2,.3,.5,.5,.5,.5,.5,.5};
@@ -244,25 +244,25 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
     if(texHeight>repeatX) texHeight=1;
     
     glTexCoord2f(texHeight/(repeatX*1.0),level/(maxInnerLevels*1.0/repeatY));
-    glNormal3f(n1[i][0],n1[i][1],n1[i][2]);
-    //glNormal3fv(n.getPointer());
+    if(vertNormals) glNormal3f(n1[i][0],n1[i][1],n1[i][2]);
+    else glNormal3fv(n.getPointer());
     glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
     
     glTexCoord2f(texHeight/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-    glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
-    //glNormal3fv(n.getPointer());
+    if(vertNormals) glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
+    else glNormal3fv(n.getPointer());
     glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
     
     // What is this part for? //The texture wraparound bug 
     if (texHeight==repeatX&&((i+1)!=v1.size())){
       glTexCoord2f(0/repeatX*1.0,level/(maxInnerLevels*1.0/repeatY));
-      glNormal3f(n1[i][0],n1[i][1],n1[i][2]);
-      //glNormal3fv(n.getPointer());
+      if(vertNormals) glNormal3f(n1[i][0],n1[i][1],n1[i][2]);
+      else glNormal3fv(n.getPointer());
       glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
       glTexCoord2f(0/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-      glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
-      //glNormal3fv(n.getPointer());
+      if(vertNormals) glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
+      else glNormal3fv(n.getPointer());
       glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
     }
     
@@ -277,28 +277,28 @@ void Track::drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, 
   i = v1.size() - 1;
   n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(0/repeatX*1.0,level/(maxInnerLevels*1.0/repeatY));
-  //glNormal3fv(n.getPointer());
-  glNormal3f(n1[i][0],n1[i][1],n2[i][2]);
+  if(vertNormals) glNormal3f(n1[i][0],n1[i][1],n2[i][2]);
+  else glNormal3fv(n.getPointer());
   glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
 
   i = v1.size() - 1;
   n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(0/repeatX*1.0,(level+1)/(maxInnerLevels*1.0/repeatY));
-  ///glNormal3fv(n.getPointer());
-  glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
+  if(vertNormals) glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
+  else glNormal3fv(n.getPointer());
   glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
   i = 0;
   n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(1/(repeatX*1.0),level/(maxInnerLevels*1.0/repeatY));
-  //glNormal3fv(n.getPointer());
-  glNormal3f(n1[i][0],n1[i][1],n1[i][2]);
+  if(vertNormals) glNormal3f(n1[i][0],n1[i][1],n1[i][2]);
+  else glNormal3fv(n.getPointer());
   glVertex3f(v1[i][0],v1[i][1],v1[i][2]);
   
   i = 0;
   n = Vector3::cross(v1[i], v2[i]);
   glTexCoord2f(1/(repeatX*1.0),(level+1)/(maxInnerLevels*1.0/repeatY));
-  //glNormal3fv(n.getPointer());
-  glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
+  if(vertNormals) glNormal3f(n2[i][0],n2[i][1],n2[i][2]);
+  else glNormal3fv(n.getPointer());
   glVertex3f(v2[i][0],v2[i][1],v2[i][2]);
   glEnd();
 }
@@ -413,4 +413,8 @@ Vector3 Track::calcNormal(Vector3 v0, Vector3 v1,Vector3 v2, Vector3 v3, Vector3
   return res;
   
   
+}
+
+void Track::setVertN(bool flag){
+  vertNormals = flag;
 }
