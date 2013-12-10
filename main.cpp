@@ -61,7 +61,7 @@ float *texcoords;
 int nIndices;
 int *indices;
 
-int width  = 512;   // set window width in pixels here
+int width  = 665;   // set window width in pixels here
 int height = 512;   // set window height in pixels here
 
 void idleCallback(void);
@@ -154,7 +154,7 @@ void reshapeCallback(int w, int h)
   glViewport(0, 0, w, h);  // set new viewport size
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0); // set perspective projection viewing frustum
+  glFrustum(-10.0, 10.0, -7.0, 7.0, 10, 1000.0); // set perspective projection viewing frustum
   if (mode) glTranslatef(0, 0, -20);
   glMatrixMode(GL_MODELVIEW);
 }
