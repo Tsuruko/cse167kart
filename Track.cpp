@@ -179,18 +179,18 @@ void Track::drawTrack() {
 
       for(int k=0;k<innerLevels.size();k++){
 
-        
+        //srand(k);
        if(k!=0){
-        upIRand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
-        upORand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
+        upIRand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/40.0);
+        upORand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/40.0);
         outIRand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
         outORand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
        }
        else{
-        upIRand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
-        upORand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/10.0);
-        outIRand.push_back((rand()%5)/10.0);
-        outORand.push_back((rand()%5)/10.0);
+        upIRand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/40.0);
+        upORand.push_back(std::pow(-1.0,(rand()%2))*(rand()%5)/40.0);
+        outIRand.push_back((rand()%5)/40.0);
+        outORand.push_back((rand()%5)/40.0);
        }
       }
 

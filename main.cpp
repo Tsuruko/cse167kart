@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack();
   trackTex = loadTexture("road3.ppm");
-  rockTex = loadTexture("rock.ppm");
+  rockTex = loadTexture("rock2.ppm");
   
   ObjReader::readObj("Porsche_911_GT2.obj", modelCar->nVerts, &modelCar->vertices, 
 			&modelCar->normals, &modelCar->texcoords, 
