@@ -123,3 +123,9 @@ void car::findMinMax() {
 Vector4 car::getBoundingSphere() {
   return bounding;
 }
+
+void car::reset() {
+  t = 0.06;
+  curve = 0;
+  xpos = 0;
+}

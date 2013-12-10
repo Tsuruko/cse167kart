@@ -113,3 +113,10 @@ Matrix4 Camera::generateMatrix()
   
   return cInv;
 }
+
+void Camera::reset() {
+  eye_t = 0;
+  center_t = 0.2;
+  eyeCurve = 0;
+  centerCurve = 0;
+}

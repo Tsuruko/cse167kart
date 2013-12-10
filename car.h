@@ -49,6 +49,7 @@ public:
   void moveForward(Vector3);
   void findMinMax();
   Vector4 getBoundingSphere();
+  void reset();
 };
 
 #endif

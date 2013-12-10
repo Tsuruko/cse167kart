@@ -35,6 +35,7 @@ public:
   void setCenter(Vector3);
   void setUp(Vector3);
   Matrix4 generateMatrix();
+  void reset();
 };
 
 #endif /* defined(__cse167p6__Camera__) */
