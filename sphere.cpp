@@ -12,20 +12,10 @@
 
 class sphere : public geode {
   private:void calculateBoundingSphere() {
-    GLdouble winX, winY, winZ;
-    GLint viewport[4];
     GLdouble modelview[16];
-    GLdouble projection[16];
-
-    glGetDoublev( GL_PROJECTION_MATRIX, projection );
-    glGetIntegerv( GL_VIEWPORT, viewport );
     glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
 
-    GLdouble r1, r2, rad;
-    gluProject(0.0, 0.0, 0.0, modelview, projection, viewport, &winX, &winY, &winZ);
-    gluProject(r, 0.0, 0.0, modelview, projection, viewport, &rad, &r1, &r2);
-
-    bounding = Vector4(winX, winY, winZ, std::abs(rad-winX));
+    bounding = Vector4(modelview[12], modelview[13], modelview[14], 1);
   }
 
   public: sphere(float radius, Vector3 pos) {

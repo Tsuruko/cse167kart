@@ -203,24 +203,20 @@ void printWindow(string s) {
 
 void checkCollision() {
   Vector4 carCenter = modelCar->getBoundingSphere();
-  
   geode * currObj;
-  float objRadius;
   Vector4 objCenter;
   for (int i = 0; i < track->getNumObj(); i++) {
     currObj = track->getObj(i);
     objCenter = currObj->getBoundingSphere();
+    GLfloat dx = carCenter[0] - objCenter[0];
+    GLfloat dy = carCenter[1] - objCenter[1];
+    GLfloat dz = carCenter[2] - objCenter[2];
     
-    // printTest(carCenter, "car ");
+    GLfloat distance = sqrt(dx*dx + dy*dy + dz*dz);
     
-    //check x and y direction
-    if (carCenter[0]+carCenter[3] > objCenter[0]-objCenter[3] &&
-        carCenter[0]-carCenter[3] < objCenter[0]+objCenter[3]) {
-      if (carCenter[1]+carCenter[3] > objCenter[1]-objCenter[3] &&
-          carCenter[1]-carCenter[3] < objCenter[1]+objCenter[3]) {
-        printWindow("CRASH");
-        pause = true;
-      }
+    if (distance <= (carCenter[3] + objCenter[3])) {
+      printWindow("CRASH");
+      pause = true;
     }
   }
 }
