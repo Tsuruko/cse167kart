@@ -37,7 +37,7 @@ Matrix4 mouse;  //for trackball rotating
 int clickx, clicky = 0;
 bool lrb = true;
 //toggle between default perspective and simulation perspective
-bool mode = true;
+bool mode = false;
 //toggle control points on/off in edit mode
 bool ctrlpts = true;
 //toggle terrain on/off in car mode
@@ -50,7 +50,7 @@ bool vertNormal = true;
 GLboolean leftPressed = false;
 GLboolean rightPressed = false;
 
-bool pause = false;
+bool pauseGame = false;
 
 Camera *cam = new Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
@@ -144,7 +144,7 @@ void idleCallback(void)
   if(frameCounter>1000){
     frameCounter = 0;
   }
-  if (!pause) {
+  if (!pauseGame) {
     if (!mode) {
       cam->setEye(track->getPoint(cam->eye_t, 0.006, cam->eyeCurve));
       cam->setCenter(track->getPoint(cam->center_t, 0.006, cam->centerCurve));
@@ -258,7 +258,7 @@ void checkCollision() {
     
     if (distance <= (carCenter[3] + objCenter[3])) {
       printWindow("CRASH");
-      pause = true;
+      pauseGame = true;
     }
   }
 }
@@ -320,7 +320,7 @@ void processKeys (unsigned char key, int x, int y) {
     track->getRoadObjs()->at(4)->trans=track->getPoint(geode_t[4], 0.0, geodeCurve[4]);
     track->getRoadObjs()->at(0)->trans=track->getPoint(geode_t[0], 0.0, geodeCurve[0]);
     frameCounter = 0;
-    pause = false;
+    pauseGame = false;
   }
   if (key == 'd') {
     if (mode) {
@@ -390,7 +390,6 @@ void mouseButton(int button, int state, int x, int y) {
   }
   clickx = x;
   clicky = y;
-  std::cout << x <<endl;
 }
 
 void mouseMotion(int x, int y) {
