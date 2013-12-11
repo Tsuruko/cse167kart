@@ -34,4 +34,8 @@ class sphere : public geode {
   public: Vector4 getBoundingSphere() {
     return bounding;
   }
+
+  public:void updateLoc(Vector3 temp){
+    trans = temp;
+  }
 };

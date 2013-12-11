@@ -420,3 +420,7 @@ Vector3 Track::calcNormal(Vector3 v0, Vector3 v1,Vector3 v2, Vector3 v3, Vector3
 void Track::setVertN(bool flag){
   vertNormals = flag;
 }
+
+std::vector<geode*>* Track::getRoadObjs(){
+  return &roadObjects;
+}

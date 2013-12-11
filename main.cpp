@@ -65,8 +65,13 @@ float *texcoords;
 int nIndices;
 int *indices;
 
+int frameCounter;
 int width  = 512;   // set window width in pixels here
 int height = 512;   // set window height in pixels here
+
+ int geodeCurve[5] = {1,2,2,3,3};
+ Vector3 geodeCenter[5];
+ GLfloat geode_t[5] = {0,0,0.5,0,0.5};
 
 void idleCallback(void);
 void reshapeCallback(int, int);
@@ -97,9 +102,7 @@ void makeTrack() {
                              new Vector3(2.5f, (2.5f*multy)+4, 0.0f),
                              new Vector3(-2.5f, (2.5f*multy)+4, 2.0f*multz),
                              start));
-  GLfloat geode_t[5] = {0,0,0.5,0,0.5};
-  int geodeCurve[5] = {1,2,2,3,3};
-  Vector3 geodeCenter[5];
+
   geodeCenter[0] = track->getPoint(geode_t[0], 0.0, geodeCurve[0]);
   geodeCenter[1] = track->getPoint(geode_t[1], 0.0, geodeCurve[1]);
   geodeCenter[1][0] -= 0.2;
@@ -112,10 +115,32 @@ void makeTrack() {
   track->addGeode(new sphere(0.1, geodeCenter[2]));
   track->addGeode(new cube(0.2, geodeCenter[3]));
   track->addGeode(new sphere(0.1, geodeCenter[4]));
+  frameCounter = 500;
 }
 
 void idleCallback(void)
 {
+  frameCounter++;
+
+  if(frameCounter%100&&frameCounter<500){
+    track->getRoadObjs()->at(4)->trans[1]+=.00045;
+    track->getRoadObjs()->at(0)->trans[0]+=.00045;
+    track->getRoadObjs()->at(1)->trans[0]-=.00045;
+    track->getRoadObjs()->at(2)->trans[0]+=.00045;
+    track->getRoadObjs()->at(3)->trans[0]-=.00045;
+
+  }
+  else if(frameCounter%100&&frameCounter>=500){
+  track->getRoadObjs()->at(4)->trans[1]-=.00045; 
+  track->getRoadObjs()->at(0)->trans[0]-=.00045;
+  track->getRoadObjs()->at(1)->trans[0]+=.00045; 
+  track->getRoadObjs()->at(2)->trans[0]-=.00045; 
+  track->getRoadObjs()->at(3)->trans[0]+=.00045; 
+
+  }
+  if(frameCounter>1000){
+    frameCounter = 0;
+  }
   if (!pause) {
     if (!mode) {
       cam->setEye(track->getPoint(cam->eye_t, 0.006, cam->eyeCurve));
@@ -282,6 +307,12 @@ void processKeys (unsigned char key, int x, int y) {
     cam->setEye(track->getPoint(cam->eye_t, 0.01, cam->eyeCurve));
     cam->setCenter(track->getPoint(cam->center_t, 0.01, cam->centerCurve));
     modelCar->moveForward(track->getPoint(modelCar->t, 0.01, modelCar->curve));
+    track->getRoadObjs()->at(1)->trans=track->getPoint(geode_t[1], 0.0, geodeCurve[1]);
+    track->getRoadObjs()->at(2)->trans=track->getPoint(geode_t[2], 0.0, geodeCurve[2]);
+    track->getRoadObjs()->at(3)->trans=track->getPoint(geode_t[3], 0.0, geodeCurve[3]);
+    track->getRoadObjs()->at(4)->trans=track->getPoint(geode_t[4], 0.0, geodeCurve[4]);
+    track->getRoadObjs()->at(0)->trans=track->getPoint(geode_t[0], 0.0, geodeCurve[0]);
+    frameCounter = 0;
     pause = false;
   }
   if (key == 'd') {

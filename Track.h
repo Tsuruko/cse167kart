@@ -68,6 +68,7 @@ public:
   void drawTerrainHelper(std::vector<Vector3> v1, std::vector<Vector3> v2, int level, std::vector<Vector3> n1, std::vector<Vector3> n2);
   Vector3 getPoint(GLfloat &t, GLfloat step, int &curve);
   void setVertN(bool flag);
+  std::vector<geode*>* getRoadObjs();
 };
 
 #endif /* defined(__cse167kart__Track__) */
