@@ -47,6 +47,9 @@ bool textureOn = false;
 //toggle per vertex normals
 bool vertNormal = true;
 
+GLboolean leftPressed = false;
+GLboolean rightPressed = false;
+
 bool pause = false;
 
 Camera *cam = new Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
@@ -146,6 +149,10 @@ void idleCallback(void)
       cam->setEye(track->getPoint(cam->eye_t, 0.006, cam->eyeCurve));
       cam->setCenter(track->getPoint(cam->center_t, 0.006, cam->centerCurve));
       modelCar->moveForward(track->getPoint(modelCar->t, 0.006, modelCar->curve));
+      if (leftPressed)
+        modelCar->moveSide(-0.07);
+      if (rightPressed)
+        modelCar->moveSide(0.07);
     }
     displayCallback();  // call display routine to re-draw
   }
@@ -349,16 +356,26 @@ void processKeys (unsigned char key, int x, int y) {
 
 void processSpecialKeys(int key, int x, int y) {
   switch(key) {
-    case GLUT_KEY_UP:
-      cam->setEye(track->getPoint(cam->eye_t, 0.01, cam->eyeCurve));
-      cam->setCenter(track->getPoint(cam->center_t, 0.01, cam->centerCurve));
-      modelCar->moveForward(track->getPoint(modelCar->t, 0.01, modelCar->curve));
-      break;
     case GLUT_KEY_LEFT:
-      modelCar->moveSide(-0.4);
+      leftPressed = true;
+      //modelCar->moveSide(-0.4);
       break;
     case GLUT_KEY_RIGHT:
-      modelCar->moveSide(0.4);
+      rightPressed = true;
+      //modelCar->moveSide(0.4);
+      break;
+    default:
+      break;
+  }
+}
+
+void processSpecialUpKeys(int key, int x, int y) {
+  switch(key) {
+    case GLUT_KEY_LEFT:
+      leftPressed = false;
+      break;
+    case GLUT_KEY_RIGHT:
+      rightPressed = false;
       break;
     default:
       break;
@@ -421,6 +438,7 @@ int main(int argc, char *argv[])
   //process keystrokes
   glutKeyboardFunc(processKeys);
   glutSpecialFunc(processSpecialKeys);
+  glutSpecialUpFunc(processSpecialUpKeys);
   
   //initialize matrices
   mouse.identity();
