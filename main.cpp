@@ -41,9 +41,9 @@ bool mode = false;
 //toggle control points on/off in edit mode
 bool ctrlpts = true;
 //toggle terrain on/off in car mode
-bool terrain = false;
+bool terrain = true;
 //toggle texture on/off
-bool textureOn = false;
+bool textureOn = true;
 //toggle per vertex normals
 bool vertNormal = true;
 
