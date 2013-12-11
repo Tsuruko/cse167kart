@@ -97,20 +97,30 @@ void makeTrack() {
                              new Vector3(2.5f, (2.5f*multy)+4, 0.0f),
                              new Vector3(-2.5f, (2.5f*multy)+4, 2.0f*multz),
                              start));
-  Vector3 * obj = new Vector3(-2.5f,  2.5/3.0f*multy, 2.0f*multz);
-  track->addGeode(new sphere(0.1, *middle1));
-  track->addGeode(new cube(0.2, *start));
-  track->addGeode(new sphere(0.1, *end));
-  track->addGeode(new cube(0.2, *middle2));
+  GLfloat geode_t[5] = {0,0,0.5,0,0.5};
+  int geodeCurve[5] = {1,2,2,3,3};
+  Vector3 geodeCenter[5];
+  geodeCenter[0] = track->getPoint(geode_t[0], 0.0, geodeCurve[0]);
+  geodeCenter[1] = track->getPoint(geode_t[1], 0.0, geodeCurve[1]);
+  geodeCenter[1][0] -= 0.2;
+  geodeCenter[2] = track->getPoint(geode_t[2], 0.0, geodeCurve[2]);
+  geodeCenter[2][0] += 0.2;
+  geodeCenter[3] = track->getPoint(geode_t[3], 0.0, geodeCurve[3]);
+  geodeCenter[4] = track->getPoint(geode_t[4], 0.0, geodeCurve[4]);
+  track->addGeode(new sphere(0.1, geodeCenter[0]));
+  track->addGeode(new cube(0.2, geodeCenter[1]));
+  track->addGeode(new sphere(0.1, geodeCenter[2]));
+  track->addGeode(new cube(0.2, geodeCenter[3]));
+  track->addGeode(new sphere(0.1, geodeCenter[4]));
 }
 
 void idleCallback(void)
 {
   if (!pause) {
     if (!mode) {
-      cam->setEye(track->getPoint(cam->eye_t, 0.005, cam->eyeCurve));
-      cam->setCenter(track->getPoint(cam->center_t, 0.005, cam->centerCurve));
-      modelCar->moveForward(track->getPoint(modelCar->t, 0.005, modelCar->curve));
+      cam->setEye(track->getPoint(cam->eye_t, 0.006, cam->eyeCurve));
+      cam->setCenter(track->getPoint(cam->center_t, 0.006, cam->centerCurve));
+      modelCar->moveForward(track->getPoint(modelCar->t, 0.006, modelCar->curve));
     }
     displayCallback();  // call display routine to re-draw
   }
