@@ -380,10 +380,11 @@ void processSpecialKeys(int key, int x, int y) {
   switch(key) {
     case GLUT_KEY_UP:
       speed--;
+      if(speed<0) speed = 0;
+      
       break;
      case GLUT_KEY_DOWN:
       speed++;
-      if(speed<0) speed = 0;
       break;
     case GLUT_KEY_LEFT:
       leftPressed = true;
