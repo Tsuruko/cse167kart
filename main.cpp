@@ -72,9 +72,19 @@ int frameCounter;
 int width  = 512;   // set window width in pixels here
 int height = 512;   // set window height in pixels here
 
+int widthS = 512;
+int heightS = 512;
+int widthHD = 910;
+int heightHD = 512;
+
+int frustWidth = 8;
  int geodeCurve[5] = {1,2,2,3,3};
  Vector3 geodeCenter[5];
  GLfloat geode_t[5] = {0,0,0.5,0,0.5};
+
+unsigned int time, timeEnd;
+
+int speed = 16;
 
 void idleCallback(void);
 void reshapeCallback(int, int);
@@ -123,38 +133,41 @@ void makeTrack() {
 
 void idleCallback(void)
 {
-  frameCounter++;
+  timeEnd = glutGet(GLUT_ELAPSED_TIME);
+  if(timeEnd-time>=speed){
+    time = glutGet(GLUT_ELAPSED_TIME);
+    frameCounter++;
+    if(frameCounter%100&&frameCounter<500){
+      track->getRoadObjs()->at(4)->trans[1]+=.00045;
+      track->getRoadObjs()->at(0)->trans[0]+=.00045;
+      track->getRoadObjs()->at(1)->trans[0]-=.00045;
+      track->getRoadObjs()->at(2)->trans[0]+=.00045;
+      track->getRoadObjs()->at(3)->trans[0]-=.00045;
 
-  if(frameCounter%100&&frameCounter<500){
-    track->getRoadObjs()->at(4)->trans[1]+=.00045;
-    track->getRoadObjs()->at(0)->trans[0]+=.00045;
-    track->getRoadObjs()->at(1)->trans[0]-=.00045;
-    track->getRoadObjs()->at(2)->trans[0]+=.00045;
-    track->getRoadObjs()->at(3)->trans[0]-=.00045;
-
-  }
-  else if(frameCounter%100&&frameCounter>=500){
-  track->getRoadObjs()->at(4)->trans[1]-=.00045; 
-  track->getRoadObjs()->at(0)->trans[0]-=.00045;
-  track->getRoadObjs()->at(1)->trans[0]+=.00045; 
-  track->getRoadObjs()->at(2)->trans[0]-=.00045; 
-  track->getRoadObjs()->at(3)->trans[0]+=.00045; 
-
-  }
-  if(frameCounter>1000){
-    frameCounter = 0;
-  }
-  if (!pauseGame) {
-    if (!mode) {
-      cam->setEye(track->getPoint(cam->eye_t, 0.006, cam->eyeCurve));
-      cam->setCenter(track->getPoint(cam->center_t, 0.006, cam->centerCurve));
-      modelCar->moveForward(track->getPoint(modelCar->t, 0.006, modelCar->curve));
-      if (leftPressed)
-        modelCar->moveSide(-0.07);
-      if (rightPressed)
-        modelCar->moveSide(0.07);
     }
-    displayCallback();  // call display routine to re-draw
+    else if(frameCounter%100&&frameCounter>=500){
+    track->getRoadObjs()->at(4)->trans[1]-=.00045; 
+    track->getRoadObjs()->at(0)->trans[0]-=.00045;
+    track->getRoadObjs()->at(1)->trans[0]+=.00045; 
+    track->getRoadObjs()->at(2)->trans[0]-=.00045; 
+    track->getRoadObjs()->at(3)->trans[0]+=.00045; 
+
+    }
+    if(frameCounter>1000){
+      frameCounter = 0;
+    }
+    if (!pauseGame) {
+      if (!mode) {
+        cam->setEye(track->getPoint(cam->eye_t, 0.006, cam->eyeCurve));
+        cam->setCenter(track->getPoint(cam->center_t, 0.006, cam->centerCurve));
+        modelCar->moveForward(track->getPoint(modelCar->t, 0.006, modelCar->curve));
+        if (leftPressed)
+          modelCar->moveSide(-0.07);
+        if (rightPressed)
+          modelCar->moveSide(0.07);
+      }
+      displayCallback();  // call display routine to re-draw
+    }
   }
 }
 
@@ -207,7 +220,7 @@ void reshapeCallback(int w, int h)
   glViewport(0, 0, w, h);  // set new viewport size
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0); // set perspective projection viewing frustum
+  glFrustum(-10.0, 10.0, -frustWidth, frustWidth, 10, 1000.0); // set perspective projection viewing frustum
   if (mode) glTranslatef(0, 0, -20);
   glMatrixMode(GL_MODELVIEW);
 }
@@ -320,6 +333,7 @@ void processKeys (unsigned char key, int x, int y) {
     track->getRoadObjs()->at(4)->trans=track->getPoint(geode_t[4], 0.0, geodeCurve[4]);
     track->getRoadObjs()->at(0)->trans=track->getPoint(geode_t[0], 0.0, geodeCurve[0]);
     frameCounter = 0;
+    speed = 16;
     pauseGame = false;
   }
   if (key == 'd') {
@@ -352,10 +366,25 @@ void processKeys (unsigned char key, int x, int y) {
     else vertNormal = true;
     track->setVertN(vertNormal);
   }
+  if (key=='s'){
+    glutReshapeWindow(widthS,heightS);
+    frustWidth = 10;
+  }
+  if(key=='h'){
+    glutReshapeWindow(widthHD,heightHD);
+    frustWidth = 8;
+  }
 }
 
 void processSpecialKeys(int key, int x, int y) {
   switch(key) {
+    case GLUT_KEY_UP:
+      speed--;
+      break;
+     case GLUT_KEY_DOWN:
+      speed++;
+      if(speed<0) speed = 0;
+      break;
     case GLUT_KEY_LEFT:
       leftPressed = true;
       //modelCar->moveSide(-0.4);
@@ -403,7 +432,7 @@ int main(int argc, char *argv[])
   
   glutInit(&argc, argv);      	      	      // initialize GLUT
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);   // open an OpenGL context with double buffering, RGB colors, and depth buffering
-  glutInitWindowSize(width, height);      // set initial window size
+  glutInitWindowSize(widthHD, heightHD);      // set initial window size
   glutCreateWindow("OpenGL Kart for CSE167");    	      // open window and set window title
   
   glEnable(GL_DEPTH_TEST);            	      // enable depth buffering
@@ -451,7 +480,7 @@ int main(int argc, char *argv[])
                      &modelCar->normals, &modelCar->texcoords,
                      modelCar->nIndices, &modelCar->indices);
   modelCar->findMinMax(); 
-  
+  time = glutGet(GLUT_ELAPSED_TIME);
   /* To Calculate Max Texture Size
    GLint texSize;
    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
