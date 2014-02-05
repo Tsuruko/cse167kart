@@ -8,6 +8,7 @@
 #endif
 #include "BCurve.h"
 
+
 BCurve *curve1 = new BCurve(Vector3(3.0f, 3.0f, 0.0f),
                     Vector3(2.0f, 2.0f , 0.0f),
                     Vector3(3.0f, 1.0f, 0.0f),
