@@ -82,7 +82,7 @@ int frustWidth = 8;
  Vector3 geodeCenter[5];
  GLfloat geode_t[5] = {0,0,0.5,0,0.5};
 
-unsigned int time, timeEnd;
+unsigned int timeStart, timeEnd;
 
 int speed = 16;
 
@@ -134,8 +134,8 @@ void makeTrack() {
 void idleCallback(void)
 {
   timeEnd = glutGet(GLUT_ELAPSED_TIME);
-  if(timeEnd-time>=speed){
-    time = glutGet(GLUT_ELAPSED_TIME);
+  if(timeEnd - timeStart >= speed){
+    timeStart = glutGet(GLUT_ELAPSED_TIME);
     frameCounter++;
     if(frameCounter%100&&frameCounter<500){
       track->getRoadObjs()->at(4)->trans[1]+=.00045;
@@ -481,7 +481,7 @@ int main(int argc, char *argv[])
                      &modelCar->normals, &modelCar->texcoords,
                      modelCar->nIndices, &modelCar->indices);
   modelCar->findMinMax(); 
-  time = glutGet(GLUT_ELAPSED_TIME);
+  timeStart = glutGet(GLUT_ELAPSED_TIME);
   /* To Calculate Max Texture Size
    GLint texSize;
    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
