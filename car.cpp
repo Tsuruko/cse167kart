@@ -57,12 +57,13 @@ void car::draw() {
   calculateBoundingSphere();
 
   glPushMatrix();
-  glTranslatef(0.5*xmax, ymin*scale, -zmin);
+  glTranslatef(0.5*xmin, ymin*scale, -zmin);
   fire->draw();
   glPopMatrix();
 
-  glTranslatef(0.5*xmin, ymin*scale, -zmin);
+  glTranslatef(-0.5*xmin, ymin*scale, -zmin);
   fire->draw();
+
 }
 
 void car::moveSide(GLfloat xtrans) {

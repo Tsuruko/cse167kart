@@ -316,7 +316,7 @@ void Track::drawTerrain(){
         if((j)==(innerLevels[i]->size()-1)){ j1 = 0;}
         else{j1 = j+1;};
 
-        if((j==0)){ j2 = (innerLevels[i]->size()-1);}
+        if(j==0){ j2 = (innerLevels[i]->size()-1);}
         else{j2 = j-1;}
         
       
@@ -343,7 +343,7 @@ void Track::drawTerrain(){
         if((j)==(outerLevels[i]->size()-1)){ j1 = 0;}
         else{j1 = j+1;};
 
-        if((j==0)){ j2 = (outerLevels[i]->size()-1);}
+        if(j==0){ j2 = (outerLevels[i]->size()-1);}
         else{j2 = j-1;}
 
       

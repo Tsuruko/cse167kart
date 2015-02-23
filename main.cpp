@@ -26,7 +26,11 @@
 #include "cube.cpp"
 #include "car.h"
 
+#define WINDOWTITLE "OpenGL Kart for CSE167"
 using namespace std;
+
+string APP_PATH = "";
+string appName = "carGame";
 
 GLuint trackTex;
 GLuint rockTex;
@@ -50,7 +54,8 @@ bool vertNormal = true;
 GLboolean leftPressed = false;
 GLboolean rightPressed = false;
 
-bool pauseGame = false;
+bool pauseGame = true;
+bool startScreen = true;
 
 Camera *cam = new Camera(Vector3(0,0,0), Vector3(0,0,0), Vector3(0,0,1));
 
@@ -71,6 +76,7 @@ int *indices;
 int frameCounter;
 int width  = 512;   // set window width in pixels here
 int height = 512;   // set window height in pixels here
+int WindowHandle;
 
 int widthS = 512;
 int heightS = 512;
@@ -229,7 +235,20 @@ void printTest(Vector4 t, const char* n) {
   std::cout << n << t[0] << ", " << t[1] << ", " << t[2] << ", " <<t[3] << std::endl;
 }
 
-void printWindow(string s) {
+void drawText(int x, int y, string text, float r, float g, float b, void * font) {
+    glColor3f(r, g, b);//needs to be called before RasterPos
+    glRasterPos2i(x, y);
+    
+    for (std::string::iterator i = text.begin(); i != text.end(); ++i)
+    {
+        char c = *i;
+        //this does nothing, color is fixed for Bitmaps when calling glRasterPos
+        //glColor3f(1.0, 0.0, 1.0);
+        glutBitmapCharacter(font, c);
+    }
+}
+
+void printWindow() {
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
@@ -240,14 +259,35 @@ void printWindow(string s) {
   glLoadIdentity();
   
   glDisable(GL_LIGHTING);
-  glColor3f(1.0, 0.0, 0.0);
-  glRasterPos2i(20, 20);
-  void * font = GLUT_BITMAP_HELVETICA_18;
-  for (string::iterator i = s.begin(); i != s.end(); ++i)
-  {
-    char c = *i;
-    glutBitmapCharacter(font, c);
-  }
+  glDisable(GL_DEPTH_TEST);
+    
+  float r = 1.0;
+  float g = 1.0;
+  float b = 1.0;
+  int w_off = 20;
+  int h_off = height*4/5;
+  if (!startScreen) drawText(w_off, 20, "CRASH! Game Over", 1.0, 0.0, 0.0, GLUT_BITMAP_HELVETICA_18);
+
+  drawText(w_off, height-20, "Press ESC to exit", r, g, b, GLUT_BITMAP_HELVETICA_18);
+  
+  drawText(w_off, h_off, "Game Controls", r, g, b, GLUT_BITMAP_HELVETICA_18);
+  drawText(w_off, h_off-20, "Press 'r' to restart game", r, g, b, GLUT_BITMAP_HELVETICA_12);
+  drawText(w_off, h_off-40,
+           "Use left and right arrow keys to move the car", r, g, b, GLUT_BITMAP_HELVETICA_12);
+  drawText(w_off, h_off-55,
+           "Use up and down arrow keys to change the car's speed", r, g, b, GLUT_BITMAP_HELVETICA_12);
+  
+  drawText(w_off, h_off-80, "Debugging Controls", r, g, b, GLUT_BITMAP_HELVETICA_18);
+  drawText(w_off, h_off-100, "Press 's' and 'h' to toggle viewing size", r, g, b, GLUT_BITMAP_HELVETICA_12);
+  drawText(w_off, h_off-115, "Press 't' to toggle viewing terrain", r, g, b, GLUT_BITMAP_HELVETICA_12);
+  drawText(w_off, h_off-130, "Press 'x' to toggle viewing textures", r, g, b, GLUT_BITMAP_HELVETICA_12);
+  drawText(w_off, h_off-145, "Press 'n' to toggle normals", r, g, b, GLUT_BITMAP_HELVETICA_12);
+  drawText(w_off, h_off-160, "Press 'd' to switch to debug edit mode", r, g, b, GLUT_BITMAP_HELVETICA_12);
+    
+  drawText(w_off, h_off-190, "In edit mode", r, g, b, GLUT_BITMAP_HELVETICA_18);
+  drawText(w_off, h_off-205, "Press 'c' to toggle viewing control points", r, g, b, GLUT_BITMAP_HELVETICA_12);
+    
+  glEnable(GL_DEPTH_TEST);
   glEnable(GL_LIGHTING);
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
@@ -270,8 +310,8 @@ void checkCollision() {
     GLfloat distance = sqrt(dx*dx + dy*dy + dz*dz);
     
     if (distance <= (carCenter[3] + objCenter[3])) {
-      printWindow("CRASH");
       pauseGame = true;
+      printWindow();
     }
   }
 }
@@ -335,6 +375,7 @@ void processKeys (unsigned char key, int x, int y) {
     frameCounter = 0;
     speed = 16;
     pauseGame = false;
+    startScreen = false;
   }
   if (key == 'd') {
     if (mode) {
@@ -401,6 +442,11 @@ void processSpecialKeys(int key, int x, int y) {
 
 void processSpecialUpKeys(int key, int x, int y) {
   switch(key) {
+      case 0x1b:		// Escape
+        glFinish();
+        glutDestroyWindow(WindowHandle);
+        exit(0);
+        break;
     case GLUT_KEY_LEFT:
       leftPressed = false;
       break;
@@ -428,13 +474,27 @@ void mouseMotion(int x, int y) {
 
 int main(int argc, char *argv[])
 {
+  APP_PATH = argv[0];
+    
+  if (APP_PATH.find("Xcode") == std::string::npos) {
+    string::size_type i = APP_PATH.find(appName);
+        
+    if (i != std::string::npos)
+      APP_PATH.erase(i, appName.length());
+      APP_PATH = APP_PATH + "/";
+    } else {
+      APP_PATH = "";
+  }
+    
   float specular[]  = {1.0, 1.0, 1.0, 1.0};
   float shininess[] = {100.0};
   
   glutInit(&argc, argv);      	      	      // initialize GLUT
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);   // open an OpenGL context with double buffering, RGB colors, and depth buffering
   glutInitWindowSize(widthHD, heightHD);      // set initial window size
-  glutCreateWindow("OpenGL Kart for CSE167");    	      // open window and set window title
+  WindowHandle = glutCreateWindow(WINDOWTITLE);    	      // open window and set window title
+  glutSetWindowTitle( WINDOWTITLE );
+  glutSetWindow( WindowHandle );
   
   glEnable(GL_DEPTH_TEST);            	      // enable depth buffering
   glClear(GL_DEPTH_BUFFER_BIT);       	      // clear depth buffer
@@ -474,10 +534,12 @@ int main(int argc, char *argv[])
   trackSize.identity();
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack();
-  trackTex = loadTexture("road3.ppm");
-  rockTex = loadTexture("rock3.ppm");
-  
-  ObjReader::readObj("Porsche_911_GT2.obj", modelCar->nVerts, &modelCar->vertices,
+  string fileString = APP_PATH + "road3.ppm";
+  trackTex = loadTexture(fileString.c_str());
+  fileString = APP_PATH + "rock3.ppm";
+  rockTex = loadTexture(fileString.c_str());
+  fileString = APP_PATH + "Porsche_911_GT2.obj";
+  ObjReader::readObj(fileString.c_str(), modelCar->nVerts, &modelCar->vertices,
                      &modelCar->normals, &modelCar->texcoords,
                      modelCar->nIndices, &modelCar->indices);
   modelCar->findMinMax(); 
