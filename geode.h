@@ -11,12 +11,7 @@
 #ifndef _GEODE_H_
 #define _GEODE_H_
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <cstdlib>
-#include <GL/glut.h>
-#endif
+#include "core.h"
 
 #include <cmath>
 #include "Matrix4.h"

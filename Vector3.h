@@ -11,11 +11,7 @@
 #ifndef __cse167p6__Vector3__
 #define __cse167p6__Vector3__
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
+#include "core.h"
 
 class Vector3 {
 private:

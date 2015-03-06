@@ -11,19 +11,14 @@
 #ifndef __FireCone__FireCone__
 #define __FireCone__FireCone__
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <cstdlib>
-#include <GL/glut.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <vector>
 #include "Vector3.h"
 #include "Matrix4.h"
+#include "core.h"
+
 #define PI 3.14159265
 
 class Particle

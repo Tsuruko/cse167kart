@@ -11,7 +11,6 @@
 #ifndef _CAR_H_
 #define _CAR_H_
 
-
 #include "FireCone.h"
 
 class car {

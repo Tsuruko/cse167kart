@@ -11,12 +11,7 @@
 #ifndef __cse167p6__Matrix4__
 #define __cse167p6__Matrix4__
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#define M_PI 3.1415
-#endif
+#include "core.h"
 
 #include "Vector3.h"
 #include "Vector4.h"

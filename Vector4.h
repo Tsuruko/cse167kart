@@ -11,11 +11,7 @@
 #ifndef __cse167p6__Vector4__
 #define __cse167p6__Vector4__
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
+#include "core.h"
 
 class Vector4
 {
