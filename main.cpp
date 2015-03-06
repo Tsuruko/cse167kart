@@ -530,11 +530,11 @@ int main(int argc, char *argv[])
   trackSize.identity();
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack();
-  string fileString = APP_PATH + "road3.ppm";
+  string fileString = APP_PATH + "data/road3.ppm";
   trackTex = loadTexture(fileString.c_str());
-  fileString = APP_PATH + "rock3.ppm";
+  fileString = APP_PATH + "data/rock3.ppm";
   rockTex = loadTexture(fileString.c_str());
-  fileString = APP_PATH + "Porsche_911_GT2.obj";
+  fileString = APP_PATH + "data/Porsche_911_GT2.obj";
   ObjReader::readObj(fileString.c_str(), modelCar->nVerts, &modelCar->vertices,
                      &modelCar->normals, &modelCar->texcoords,
                      modelCar->nIndices, &modelCar->indices);
