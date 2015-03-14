@@ -25,8 +25,14 @@
 #define WINDOWTITLE "OpenGL Kart for CSE167"
 using namespace std;
 
-string APP_PATH = "";
-string appName = "carGame";
+#ifdef _WIN32
+#define FILE_SEP    0
+#else
+#define FILE_SEP    1
+#endif
+
+std::string fSEP = "/";
+std::string APP_PATH = "";
 
 GLuint trackTex;
 GLuint rockTex;
@@ -470,17 +476,11 @@ void mouseMotion(int x, int y) {
 
 int main(int argc, char *argv[])
 {
-  APP_PATH = argv[0];
+    if (FILE_SEP == 0) fSEP = "\\";
+    APP_PATH = argv[0];
     
-  if (APP_PATH.find("Xcode") == std::string::npos) {
-    string::size_type i = APP_PATH.find(appName);
-        
-    if (i != std::string::npos)
-      APP_PATH.erase(i, appName.length());
-      APP_PATH = APP_PATH + "/";
-    } else {
-      APP_PATH = "";
-  }
+    std::string::size_type i = APP_PATH.find_last_of(fSEP);
+    if (i != std::string::npos) APP_PATH.erase(i+1, i);
     
   float specular[]  = {1.0, 1.0, 1.0, 1.0};
   float shininess[] = {100.0};
@@ -530,11 +530,11 @@ int main(int argc, char *argv[])
   trackSize.identity();
   trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
   makeTrack();
-  string fileString = APP_PATH + "data/road3.ppm";
+  string fileString = APP_PATH + "data"+fSEP+"road3.ppm";
   trackTex = loadTexture(fileString.c_str());
-  fileString = APP_PATH + "data/rock3.ppm";
+  fileString = APP_PATH + "data"+fSEP+"rock3.ppm";
   rockTex = loadTexture(fileString.c_str());
-  fileString = APP_PATH + "data/Porsche_911_GT2.obj";
+  fileString = APP_PATH + "data"+fSEP+"Porsche_911_GT2.obj";
   ObjReader::readObj(fileString.c_str(), modelCar->nVerts, &modelCar->vertices,
                      &modelCar->normals, &modelCar->texcoords,
                      modelCar->nIndices, &modelCar->indices);
