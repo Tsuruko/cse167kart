@@ -299,179 +299,180 @@ void printWindow() {
 }
 
 void checkCollision() {
-  Vector4 carCenter = modelCar->getBoundingSphere();
-  geode * currObj;
-  Vector4 objCenter;
-  for (int i = 0; i < track->getNumObj(); i++) {
-    currObj = track->getObj(i);
-    objCenter = currObj->getBoundingSphere();
-    GLfloat dx = carCenter[0] - objCenter[0];
-    GLfloat dy = carCenter[1] - objCenter[1];
-    GLfloat dz = carCenter[2] - objCenter[2];
-    
-    GLfloat distance = sqrt(dx*dx + dy*dy + dz*dz);
-    
-    if (distance <= (carCenter[3] + objCenter[3])) {
-      pauseGame = true;
-      printWindow();
+    Vector4 carCenter = modelCar->getBoundingSphere();
+    geode * currObj;
+    Vector4 objCenter;
+    for (int i = 0; i < track->getNumObj(); i++) {
+        currObj = track->getObj(i);
+        objCenter = currObj->getBoundingSphere();
+        GLfloat dx = carCenter[0] - objCenter[0];
+        GLfloat dy = carCenter[1] - objCenter[1];
+        GLfloat dz = carCenter[2] - objCenter[2];
+        
+        GLfloat distance = sqrt(dx*dx + dy*dy + dz*dz);
+        
+        if (distance <= (carCenter[3] + objCenter[3])) {
+            pauseGame = true;
+            printWindow();
+        }
     }
-  }
 }
 
 void displayCallback(void)
 {
-  if(!mode) ModifyProjectionMatrix(new Vector4(0,-1,-2,-1));
-  //clear color and depth buffers
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  if (mode) {
-    glDisable(GL_LIGHTING);
-    glLoadMatrixf(mouse.getPointer());
-    glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
-    gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
-    if (ctrlpts) track->drawPoints();
-    track->drawCurves();
-    track->drawObjects();
-  } else {
-    glLoadMatrixf(trackSize.getPointer());
-    glEnable(GL_LIGHTING);
-    glClearColor(0.0, 0.5, 1.0, 0.0);           // set clear color to blue
-    gluLookAt(cam->getEye()[0], cam->getEye()[1], cam->getEye()[2],
-              cam->getCenter()[0], cam->getCenter()[1], cam->getCenter()[2],
-              cam->getUp()[0], cam->getUp()[1], cam->getUp()[2]);
+    if(!mode) ModifyProjectionMatrix(new Vector4(0,-1,-2,-1));
+    //clear color and depth buffers
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    glBindTexture(GL_TEXTURE_2D, trackTex);
-    if (textureOn) glEnable(GL_TEXTURE_2D);
-    track->drawTrack();
-    if (terrain){
-      glBindTexture(GL_TEXTURE_2D, rockTex);
-      track->drawTerrain();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    if (mode) {
+        glDisable(GL_LIGHTING);
+        glLoadMatrixf(mouse.getPointer());
+        glClearColor(0.0, 0.0, 0.0, 0.0);           // set clear color to black
+        gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1, 0.0, 1.0, 0.0);
+        if (ctrlpts) track->drawPoints();
+        track->drawCurves();
+        track->drawObjects();
+    } else {
+        glLoadMatrixf(trackSize.getPointer());
+        glEnable(GL_LIGHTING);
+        glClearColor(0.0, 0.5, 1.0, 0.0);           // set clear color to blue
+        gluLookAt(cam->getEye()[0], cam->getEye()[1], cam->getEye()[2],
+                  cam->getCenter()[0], cam->getCenter()[1], cam->getCenter()[2],
+                  cam->getUp()[0], cam->getUp()[1], cam->getUp()[2]);
+        
+        glBindTexture(GL_TEXTURE_2D, trackTex);
+        if (textureOn) glEnable(GL_TEXTURE_2D);
+        track->drawTrack();
+        if (terrain){
+            glBindTexture(GL_TEXTURE_2D, rockTex);
+            track->drawTerrain();
+        }
+        if (textureOn) glDisable(GL_TEXTURE_2D);
+        
+        track->drawObjects();
+        modelCar->draw();
+        
+        checkCollision();
     }
-    if (textureOn) glDisable(GL_TEXTURE_2D);
     
-    track->drawObjects();
-    modelCar->draw();
-    
-    checkCollision();
-  }
-  
-  glFlush();
-  glutSwapBuffers();
+    glFlush();
+    glutSwapBuffers();
 }
 
 
 void processKeys (unsigned char key, int x, int y) {
-  if (key == 'r') {
-    cam->reset();
-    modelCar->reset();
-    cam->setEye(track->getPoint(cam->eye_t, 0.01, cam->eyeCurve));
-    cam->setCenter(track->getPoint(cam->center_t, 0.01, cam->centerCurve));
-    modelCar->moveForward(track->getPoint(modelCar->t, 0.01, modelCar->curve));
-    track->getRoadObjs()->at(1)->trans=track->getPoint(geode_t[1], 0.0, geodeCurve[1]);
-    track->getRoadObjs()->at(2)->trans=track->getPoint(geode_t[2], 0.0, geodeCurve[2]);
-    track->getRoadObjs()->at(3)->trans=track->getPoint(geode_t[3], 0.0, geodeCurve[3]);
-    track->getRoadObjs()->at(4)->trans=track->getPoint(geode_t[4], 0.0, geodeCurve[4]);
-    track->getRoadObjs()->at(0)->trans=track->getPoint(geode_t[0], 0.0, geodeCurve[0]);
-    frameCounter = 0;
-    speed = 16;
-    pauseGame = false;
-    startScreen = false;
-  }
-  if (key == 'd') {
-    if (mode) {
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
-      mode = false;
-    } else {
-      glMatrixMode(GL_PROJECTION);
-      glLoadIdentity();
-      glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
-      glTranslatef(0, 0, -20);
-      mode = true;
+    switch (key) {
+        case 0x1b:		// Escape
+            glFinish();
+            glutDestroyWindow(WindowHandle);
+            exit(0);
+            break;
+        case 'r':
+            cam->reset();
+            modelCar->reset();
+            cam->setEye(track->getPoint(cam->eye_t, 0.01, cam->eyeCurve));
+            cam->setCenter(track->getPoint(cam->center_t, 0.01, cam->centerCurve));
+            modelCar->moveForward(track->getPoint(modelCar->t, 0.01, modelCar->curve));
+            track->getRoadObjs()->at(1)->trans=track->getPoint(geode_t[1], 0.0, geodeCurve[1]);
+            track->getRoadObjs()->at(2)->trans=track->getPoint(geode_t[2], 0.0, geodeCurve[2]);
+            track->getRoadObjs()->at(3)->trans=track->getPoint(geode_t[3], 0.0, geodeCurve[3]);
+            track->getRoadObjs()->at(4)->trans=track->getPoint(geode_t[4], 0.0, geodeCurve[4]);
+            track->getRoadObjs()->at(0)->trans=track->getPoint(geode_t[0], 0.0, geodeCurve[0]);
+            frameCounter = 0;
+            speed = 16;
+            pauseGame = false;
+            startScreen = false;
+            break;
+        case 'd':
+            if (mode) {
+                glMatrixMode(GL_PROJECTION);
+                glLoadIdentity();
+                glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
+                mode = false;
+            } else {
+                glMatrixMode(GL_PROJECTION);
+                glLoadIdentity();
+                glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
+                glTranslatef(0, 0, -20);
+                mode = true;
+            }
+            break;
+        case 'c':
+            if (ctrlpts) ctrlpts = false;
+            else ctrlpts = true;
+            break;
+        case 't':
+            if (terrain) terrain = false;
+            else terrain = true;
+            break;
+        case 'x':
+            textureOn = !textureOn;
+            break;
+        case 'n':
+            if(vertNormal) vertNormal = false;
+            else vertNormal = true;
+            track->setVertN(vertNormal);
+            break;
+        case 's':
+            glutReshapeWindow(widthS,heightS);
+            frustWidth = 10;
+            break;
+        case 'h':
+            glutReshapeWindow(widthHD,heightHD);
+            frustWidth = 8;
+            break;
+        default:
+            break;
     }
-  }
-  if (key == 'c') {
-    if (ctrlpts) ctrlpts = false;
-    else ctrlpts = true;
-  }
-  if (key == 't') {
-    if (terrain) terrain = false;
-    else terrain = true;
-  }
-  if (key == 'x') {
-    textureOn = !textureOn;
-  }
-  if (key=='n'){
-    if(vertNormal) vertNormal = false;
-    else vertNormal = true;
-    track->setVertN(vertNormal);
-  }
-  if (key=='s'){
-    glutReshapeWindow(widthS,heightS);
-    frustWidth = 10;
-  }
-  if(key=='h'){
-    glutReshapeWindow(widthHD,heightHD);
-    frustWidth = 8;
-  }
 }
 
 void processSpecialKeys(int key, int x, int y) {
-  switch(key) {
-    case GLUT_KEY_UP:
-      speed--;
-      if(speed<0) speed = 0;
-      
-      break;
-     case GLUT_KEY_DOWN:
-      speed++;
-      break;
-    case GLUT_KEY_LEFT:
-      leftPressed = true;
-      //modelCar->moveSide(-0.4);
-      break;
-    case GLUT_KEY_RIGHT:
-      rightPressed = true;
-      //modelCar->moveSide(0.4);
-      break;
-    default:
-      break;
-  }
+    switch(key) {
+        case GLUT_KEY_UP:
+            speed--;
+            if(speed<0) speed = 0;
+            break;
+        case GLUT_KEY_DOWN:
+            speed++;
+            break;
+        case GLUT_KEY_LEFT:
+            leftPressed = true;
+            break;
+        case GLUT_KEY_RIGHT:
+            rightPressed = true;
+            break;
+        default:
+            break;
+    }
 }
 
 void processSpecialUpKeys(int key, int x, int y) {
-  switch(key) {
-      case 0x1b:		// Escape
-        glFinish();
-        glutDestroyWindow(WindowHandle);
-        exit(0);
-        break;
-    case GLUT_KEY_LEFT:
-      leftPressed = false;
-      break;
-    case GLUT_KEY_RIGHT:
-      rightPressed = false;
-      break;
-    default:
-      break;
-  }
+    switch(key) {
+        case GLUT_KEY_LEFT:
+            leftPressed = false;
+            break;
+        case GLUT_KEY_RIGHT:
+            rightPressed = false;
+            break;
+        default:
+            break;
+    }
 }
 
 void mouseButton(int button, int state, int x, int y) {
-  if (button == GLUT_LEFT_BUTTON) {
-    lrb = true;
-  } else if (button == GLUT_RIGHT_BUTTON) {
-    lrb = false;
-  }
-  clickx = x;
-  clicky = y;
+    if (button == GLUT_LEFT_BUTTON) {
+        lrb = true;
+    } else if (button == GLUT_RIGHT_BUTTON) {
+        lrb = false;
+    }
+    clickx = x;
+    clicky = y;
 }
 
 void mouseMotion(int x, int y) {
-  if (lrb) mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);
+    if (lrb) mouse = mouse.trackballRotation(512,512,x,y,clickx,clicky);
 }
 
 int main(int argc, char *argv[])
@@ -482,69 +483,65 @@ int main(int argc, char *argv[])
     std::string::size_type i = APP_PATH.find_last_of(fSEP);
     if (i != std::string::npos) APP_PATH.erase(i+1);
     
-  float specular[]  = {1.0, 1.0, 1.0, 1.0};
-  float shininess[] = {100.0};
-  
-  glutInit(&argc, argv);      	      	      // initialize GLUT
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);   // open an OpenGL context with double buffering, RGB colors, and depth buffering
-  glutInitWindowSize(widthHD, heightHD);      // set initial window size
-  WindowHandle = glutCreateWindow(WINDOWTITLE);    	      // open window and set window title
-  glutSetWindowTitle( WINDOWTITLE );
-  glutSetWindow( WindowHandle );
-  
-  glEnable(GL_DEPTH_TEST);            	      // enable depth buffering
-  glClear(GL_DEPTH_BUFFER_BIT);       	      // clear depth buffer
-  glClearColor(0.0, 0.0, 0.0, 0.0);   	      // set clear color to black
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);  // set polygon drawing mode to fill front and back of each polygon
-  glDisable(GL_CULL_FACE);     // disable backface culling to render both sides of polygons
-  glShadeModel(GL_SMOOTH);             	      // set shading to smooth
-  
-  // Generate material properties:
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-  glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-  glEnable(GL_COLOR_MATERIAL);
-  
-  // Generate light source:
-  float ambLight0[4] = {0.4f, 0.4f, 0.4f, 1.0f};
-  glLightfv(GL_LIGHT0, GL_AMBIENT, ambLight0);
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
-  
-  // Install callback functions:
-  glutDisplayFunc(displayCallback);
-  glutReshapeFunc(reshapeCallback);
-  glutIdleFunc(idleCallback);
-  
-  //process mouse press and motion
-  glutMouseFunc(mouseButton);
-  glutMotionFunc(mouseMotion);
-  
-  //process keystrokes
-  glutKeyboardFunc(processKeys);
-  glutSpecialFunc(processSpecialKeys);
-  glutSpecialUpFunc(processSpecialUpKeys);
-  
-  //initialize matrices
-  mouse.identity();
-  trackSize.identity();
-  trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
-  makeTrack();
-  string fileString = APP_PATH + "data"+fSEP+"road3.ppm";
-  trackTex = loadTexture(fileString.c_str());
-  fileString = APP_PATH + "data"+fSEP+"rock3.ppm";
-  rockTex = loadTexture(fileString.c_str());
-  fileString = APP_PATH + "data"+fSEP+"Porsche_911_GT2.obj";
-  ObjReader::readObj(fileString.c_str(), modelCar->nVerts, &modelCar->vertices,
-                     &modelCar->normals, &modelCar->texcoords,
-                     modelCar->nIndices, &modelCar->indices);
-  modelCar->findMinMax(); 
-  timeStart = glutGet(GLUT_ELAPSED_TIME);
-  /* To Calculate Max Texture Size
-   GLint texSize;
-   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize);
-   cout<<texSize<<endl;*/
-  
-  glutMainLoop();
-  return 0;
+    float specular[]  = {1.0, 1.0, 1.0, 1.0};
+    float shininess[] = {100.0};
+    
+    glutInit(&argc, argv);      	      	      // initialize GLUT
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);   // open an OpenGL context with double buffering, RGB colors, and depth buffering
+    glutInitWindowSize(widthHD, heightHD);      // set initial window size
+    WindowHandle = glutCreateWindow(WINDOWTITLE);    	      // open window and set window title
+    glutSetWindowTitle( WINDOWTITLE );
+    glutSetWindow( WindowHandle );
+    
+    glEnable(GL_DEPTH_TEST);            	      // enable depth buffering
+    glClear(GL_DEPTH_BUFFER_BIT);       	      // clear depth buffer
+    glClearColor(0.0, 0.0, 0.0, 0.0);   	      // set clear color to black
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);  // set polygon drawing mode to fill front and back of each polygon
+    glDisable(GL_CULL_FACE);     // disable backface culling to render both sides of polygons
+    glShadeModel(GL_SMOOTH);             	      // set shading to smooth
+    
+    // Generate material properties:
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
+    
+    // Generate light source:
+    float ambLight0[4] = {0.4f, 0.4f, 0.4f, 1.0f};
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambLight0);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    
+    // Install callback functions:
+    glutDisplayFunc(displayCallback);
+    glutReshapeFunc(reshapeCallback);
+    glutIdleFunc(idleCallback);
+    
+    //process mouse press and motion
+    glutMouseFunc(mouseButton);
+    glutMotionFunc(mouseMotion);
+    
+    //process keystrokes
+    glutKeyboardFunc(processKeys);
+    glutSpecialFunc(processSpecialKeys);
+    glutSpecialUpFunc(processSpecialUpKeys);
+    
+    //initialize matrices
+    mouse.identity();
+    trackSize.identity();
+    trackSize = Matrix4::scale(trackScale, trackScale, trackScale);
+    makeTrack();
+    string fileString = APP_PATH + "data"+fSEP+"road3.ppm";
+    trackTex = loadTexture(fileString.c_str());
+    fileString = APP_PATH + "data"+fSEP+"rock3.ppm";
+    rockTex = loadTexture(fileString.c_str());
+    fileString = APP_PATH + "data"+fSEP+"Porsche_911_GT2.obj";
+    ObjReader::readObj(fileString.c_str(), modelCar->nVerts, &modelCar->vertices,
+                       &modelCar->normals, &modelCar->texcoords,
+                       modelCar->nIndices, &modelCar->indices);
+    modelCar->findMinMax(); 
+    timeStart = glutGet(GLUT_ELAPSED_TIME);
+    
+    glutMainLoop();
+    return 0;
 }
