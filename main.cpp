@@ -480,7 +480,7 @@ int main(int argc, char *argv[])
     APP_PATH = argv[0];
     
     std::string::size_type i = APP_PATH.find_last_of(fSEP);
-    if (i != std::string::npos) APP_PATH.erase(i+1, i);
+    if (i != std::string::npos) APP_PATH.erase(i+1);
     
   float specular[]  = {1.0, 1.0, 1.0, 1.0};
   float shininess[] = {100.0};
