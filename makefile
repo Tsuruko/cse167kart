@@ -20,3 +20,10 @@ win: carGame_win
 
 carGame_win: core.h main.cpp car.h car.cpp cube.cpp FireCone.cpp FireCone.h sphere.cpp objreader.h objreader.cpp Texture.h Camera.h Camera.cpp Track.h Track.cpp BCurve.h BCurve.cpp Matrix4.h Matrix4.cpp Vector3.h Vector3.cpp Vector4.h Vector4.cpp
 	$(CC) -o carGame.exe $(FLAGS) cube.cpp main.cpp car.cpp sphere.cpp Track.cpp FireCone.cpp objreader.cpp BCurve.cpp Camera.cpp Matrix4.cpp Vector4.cpp Vector3.cpp $(LIBS_WIN)
+
+LIBS_LIN = -lGL -lglut -lGLU
+
+lin: carGame_lin
+
+carGame_lin: core.h main.cpp car.h car.cpp cube.cpp FireCone.cpp FireCone.h sphere.cpp objreader.h objreader.cpp Texture.h Camera.h Camera.cpp Track.h Track.cpp BCurve.h BCurve.cpp Matrix4.h Matrix4.cpp Vector3.h Vector3.cpp Vector4.h Vector4.cpp
+	g++ -o carGame $(FLAGS) cube.cpp main.cpp car.cpp sphere.cpp Track.cpp FireCone.cpp objreader.cpp BCurve.cpp Camera.cpp Matrix4.cpp Vector4.cpp Vector3.cpp $(LIBS_LIN)
